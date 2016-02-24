@@ -1,2 +1,2 @@
-# conv_arithmetic
+# Convolution arithmetic
 A technical report on convolution arithmetic in the context of deep learning
