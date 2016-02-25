@@ -1,0 +1,37 @@
+\documentclass[class=minimal,border=10pt]{{standalone}}
+\usepackage{{tikz}}
+\usepackage{{xcolor}}
+\definecolor{{blue}}{{RGB}}{{38,139,210}}
+\definecolor{{cyan}}{{RGB}}{{42,161,152}}
+\definecolor{{base01}}{{RGB}}{{88,110,117}}
+\definecolor{{base02}}{{RGB}}{{7,54,66}}
+\definecolor{{base03}}{{RGB}}{{0,43,54}}
+\usetikzlibrary{{calc,shapes,positioning}}
+\begin{{document}}
+\begin{{tikzpicture}}[scale=.5,every node/.style={{minimum size=1cm}},on grid]
+    \begin{{scope}}[node/.append style={{yslant=0.5,xslant=-0.7}},
+                    yslant=0.5,xslant=-0.7]
+        \draw[step=10mm, base03, dashed, thick] (0,0) grid ({PADDING_TO});
+        {INPUT_UNITS}
+        \draw[fill=base02, opacity=0.4] ({INPUT_GRID_FROM}) rectangle
+                                        ({INPUT_GRID_TO});
+        \draw[step=10mm, base03, thick] ({INPUT_GRID_FROM}) grid
+                                        ({INPUT_GRID_TO});
+        \coordinate (BL) at ({INPUT_BOTTOM_LEFT});
+        \coordinate (BR) at ({INPUT_BOTTOM_RIGHT});
+        \coordinate (TL) at ({INPUT_TOP_LEFT});
+        \coordinate (TR) at ({INPUT_TOP_RIGHT});
+    \end{{scope}}
+    \begin{{scope}}[xshift=-5, yshift={OUTPUT_ELEVATION},
+                    every node/.append style={{yslant=0.5,xslant=-0.7}},
+                    yslant=0.5,xslant=-0.7]
+        \draw (BL) -- ({OUTPUT_BOTTOM_LEFT}) (BR) -- ({OUTPUT_BOTTOM_RIGHT})
+              (TL) -- ({OUTPUT_TOP_LEFT})    (TR) -- ({OUTPUT_TOP_RIGHT});
+        \draw[fill=cyan] (0,0) rectangle ({OUTPUT_TO});
+        \draw[step=10mm, base03, thick] (0,0) grid ({OUTPUT_TO});
+        \draw[fill=base02, opacity=0.4] ({OUTPUT_GRID_FROM}) rectangle
+                                        ({OUTPUT_GRID_TO});
+        \draw[base03, thick] ({OUTPUT_GRID_FROM}) rectangle ({OUTPUT_GRID_TO});
+    \end{{scope}}
+\end{{tikzpicture}}
+\end{{document}}

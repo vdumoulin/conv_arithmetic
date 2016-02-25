@@ -1,0 +1,1 @@
+\draw[draw=base03, fill=blue, thick] ({0},{1}) rectangle ({2},{3});

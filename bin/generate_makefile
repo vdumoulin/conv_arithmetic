@@ -1,0 +1,98 @@
+#!/usr/bin/env python
+from six import iteritems
+from six.moves import range
+
+arithmetic_files = ('bin/produce_figure templates/arithmetic_figure.txt '
+                    'templates/unit.txt')
+numerical_files = 'bin/produce_figure templates/numerical_figure.txt'
+
+animations = (
+    ('no_padding_no_strides', ('arithmetic', 4, 2, 0, 3, 1, False)),
+    ('no_padding_no_strides_transposed', ('arithmetic', 4, 2, 0, 3, 1, True)),
+    ('arbitrary_padding_no_strides', ('arithmetic', 5, 6, 2, 4, 1, False)),
+    ('arbitrary_padding_no_strides_transposed',
+     ('arithmetic', 5, 6, 2, 4, 1, True)),
+    ('same_padding_no_strides', ('arithmetic', 5, 5, 1, 3, 1, False)),
+    ('same_padding_no_strides_transposed',
+     ('arithmetic', 5, 5, 1, 3, 1, True)),
+    ('full_padding_no_strides', ('arithmetic', 5, 7, 2, 3, 1, False)),
+    ('full_padding_no_strides_transposed',
+     ('arithmetic', 5, 7, 2, 3, 1, True)),
+    ('no_padding_strides', ('arithmetic', 5, 2, 0, 3, 2, False)),
+    ('no_padding_strides_transposed', ('arithmetic', 5, 2, 0, 3, 2, True)),
+    ('padding_strides', ('arithmetic', 5, 3, 1, 3, 2, False)),
+    ('padding_strides_transposed', ('arithmetic', 5, 3, 1, 3, 2, True)),
+    ('padding_strides_odd', ('arithmetic', 6, 3, 1, 3, 2, False)),
+    ('padding_strides_odd_transposed', ('arithmetic', 6, 3, 1, 3, 2, True))
+)
+
+fields = ('type', 'input-size', 'output-size', 'padding', 'kernel-size',
+          'stride', 'transposed')
+animations = dict([(name, dict(zip(fields, config)))
+                   for name, config in animations])
+
+
+def make_header():
+    return ('.PHONY : all_animations\nall_animations : {}\n\n'.format(
+                ' '.join(['gif/{}.gif'.format(name)
+                          for name in animations.keys()])) +
+            '.SECONDARY : \n')
+
+
+def make_gif_section():
+    rules = []
+    for name, config in iteritems(animations):
+        if config['transposed']:
+            steps = config['input-size'] ** 2
+        else:
+            steps = config['output-size'] ** 2
+        rules.append(
+            'gif/{}.gif : '.format(name) +
+            ' '.join(['png/{}_{:02d}.png'.format(name, i)
+                      for i in range(steps)]) + '\n' +
+            '\tconvert -delay 100 -loop 0 -layers Optimize +map $^ $@\n' +
+            '\tgifsicle --batch -O3 $@\n')
+    return '\n'.join(rules)
+
+
+def make_png_section():
+    return ('png/%.png : pdf/%.pdf\n'
+            '\tconvert -density 600 -resize 25% -flatten -background white '
+            '$< -quality 90 $@\n')
+
+
+def make_pdf_section():
+    rules = []
+    for name, config in iteritems(animations):
+        if config['transposed']:
+            steps = config['input-size'] ** 2
+        else:
+            steps = config['output-size'] ** 2
+        if config['type'] == 'arithmetic':
+            dependencies = arithmetic_files
+        else:
+            dependencies = numerical_files
+        subrules = []
+        for i in range(steps):
+            subrules.append(
+                'pdf/{}_{:02d}.pdf : {}\n'.format(name, i, dependencies) +
+                '\t./bin/produce_figure ' +
+                '{} {} {} '.format(config['type'], name, i) +
+                '--input-size={} '.format(config['input-size']) +
+                '--output-size={} '.format(config['output-size']) +
+                '--padding={} '.format(config['padding']) +
+                '--kernel-size={} '.format(config['kernel-size']) +
+                '--stride={} '.format(config['stride']) +
+                ('--transposed\n' if config['transposed'] else '\n'))
+        rules.append('\n'.join(subrules))
+    return '\n'.join(rules)
+
+
+def main():
+    with open('Makefile', 'w') as makefile:
+        makefile.write('\n'.join([make_header(), make_gif_section(),
+                                  make_png_section(), make_pdf_section()]))
+
+
+if __name__ == "__main__":
+    main()

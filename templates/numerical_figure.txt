@@ -1,0 +1,32 @@
+\documentclass[class=article,border=10pt]{{standalone}}
+\usepackage{{tikz}}
+\usepackage{{xcolor}}
+\definecolor{{blue}}{{RGB}}{{38,139,210}}
+\definecolor{{cyan}}{{RGB}}{{42,161,152}}
+\definecolor{{base01}}{{RGB}}{{88,110,117}}
+\definecolor{{base02}}{{RGB}}{{7,54,66}}
+\definecolor{{base03}}{{RGB}}{{0,43,54}}
+\usetikzlibrary{{calc,shapes,positioning}}
+\begin{{document}}
+\begin{{tikzpicture}}[scale=.5,every node/.style={{minimum size=1cm}},on grid]
+    \begin{{scope}}
+        \draw[step=10mm, base03, dashed, thick] (0,0) grid ({PADDING_TO});
+        \draw[fill=blue] ({INPUT_FROM}) rectangle ({INPUT_TO});
+        \draw[draw=base03, thick] ({INPUT_FROM}) grid ({INPUT_TO});
+        {INPUT_VALUES}
+        \draw[fill=base02, opacity=0.4] ({INPUT_GRID_FROM}) rectangle
+                                        ({INPUT_GRID_TO});
+        \draw[step=10mm, base03, thick] ({INPUT_GRID_FROM}) grid
+                                        ({INPUT_GRID_TO});
+        {KERNEL_VALUES}
+    \end{{scope}}
+    \begin{{scope}}[xshift={XSHIFT}, yshift={YSHIFT}]
+        \draw[fill=cyan] (0,0) rectangle ({OUTPUT_TO});
+        \draw[step=10mm, base03, thick] (0,0) grid ({OUTPUT_TO});
+        \draw[fill=base02, opacity=0.4] ({OUTPUT_GRID_FROM}) rectangle
+                                        ({OUTPUT_GRID_TO});
+        \draw[base03, thick] ({OUTPUT_GRID_FROM}) rectangle ({OUTPUT_GRID_TO});
+        {OUTPUT_VALUES}
+    \end{{scope}}
+\end{{tikzpicture}}
+\end{{document}}
