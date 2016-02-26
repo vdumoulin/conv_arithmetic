@@ -2,6 +2,7 @@
 \usepackage{amsmath,amsfonts}
 \usepackage{authblk}
 \usepackage[T1]{fontenc}
+\usepackage[letterpaper, margin=1.5in]{geometry}
 \usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage[utf8]{inputenc}
@@ -23,8 +24,40 @@
 \maketitle
 
 \begin{abstract}
-\todo{WRITEME} \cite{lecun1998gradient}.
+\todo{WRITEME}
 \end{abstract}
+
+\section{Introduction}
+
+Deep convolutional neural networks (CNNs) have been at the heard of spectacular
+advances in deep learning. Although CNNs have been used as early as the nineties
+\citep{lecun1998gradient} to solve character recognition tasks, their current
+widespread application is due to much more recent work, when a deep CNN was used
+to beat state-of-the-art in the ImageNet image classification challenge
+\citep{krizhevsky2012imagenet}.
+
+Convolutional neural networks therefore constitute a very useful tool for
+machine learning practitioners. However, learning to use CNNs for the first time
+is generally an intimidating experience. A convolutional layer's output shape is
+affected by the shape of its input as well as the choice of kernel shape, zero
+padding and strides, and the relationship between these properties is not
+trivial to infer. This contrasts with fully-connected layers, whose output size
+is independent of its input size.
+
+Additionally, so-called transposed convolutional layers (also known as
+fractionally strided convolutional layers) have been employed in more and more
+work as of late, and their relationship with convolutional layers has been
+explained with various degrees of clarity.
+
+This guide's objective is twofold:
+
+\begin{enumerate}
+    \item Explain the relationship between convolutional layers and transposed
+        convolutional layers.
+    \item Provide an intuitive understanding of the relationship between input
+        shape, kernel shape, zero padding, strides and output shape in
+        convolutional layers and transposed convolutional layers.
+\end{enumerate}
 
 \bibliography{bibliography}
 \bibliographystyle{natbib}
