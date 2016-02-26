@@ -17,6 +17,8 @@
 \newtheorem{prop}{Property}
 \providecommand*{\propautorefname}{Property}
 
+\setcounter{MaxMatrixCols}{16}
+
 \title{A guide to convolution arithmetic for deep learning}
 \author[1]{Vincent Dumoulin\thanks{dumouliv@iro.umontreal.ca}}
 \author[1]{Francesco Visin\thanks{fvisin@gmail.com}}
@@ -414,6 +416,386 @@ same output size.
 
 While this doesn't affect the analysis for {\em convolutions}, this will
 complicate the analysis in the case of {\em transposed convolutions}.
+
+\section{Transposed convolution arithmetic}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.2\textwidth]
+        {pdf/no_padding_no_strides_transposed_00.pdf}
+    \includegraphics[width=0.2\textwidth]
+        {pdf/no_padding_no_strides_transposed_01.pdf}
+    \includegraphics[width=0.2\textwidth]
+        {pdf/no_padding_no_strides_transposed_02.pdf}
+    \includegraphics[width=0.2\textwidth]
+        {pdf/no_padding_no_strides_transposed_03.pdf}
+    \caption{\label{fig:no_padding_no_strides_transposed} The transpose of
+        convolving a $3 \times 3$ kernel over a $4 \times 4$ input using unit
+        strides (i.e. $i = 4$, $k = 3$, $s = 1$ and $p = 0$) is equivalent to
+        convolving a $3 \times 3$ kernel over a $2 \times 2$ input padded with
+        a $2 \times 2$ border of zeros using unit strides (i.e. $i' = 2$, $k' =
+        k$, $s' = 1$ and $p' = 2$).}
+\end{figure}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.2\textwidth]
+        {pdf/arbitrary_padding_no_strides_transposed_00.pdf}
+    \includegraphics[width=0.2\textwidth]
+        {pdf/arbitrary_padding_no_strides_transposed_01.pdf}
+    \includegraphics[width=0.2\textwidth]
+        {pdf/arbitrary_padding_no_strides_transposed_02.pdf}
+    \includegraphics[width=0.2\textwidth]
+        {pdf/arbitrary_padding_no_strides_transposed_03.pdf}
+    \caption{\label{fig:arbitrary_padding_no_strides_transposed} The transpose
+        of convolving a $4 \times 4$ kernel over a $5 \times 5$ input padded
+        with a $2 \times 2$ border of zeros using unit strides (i.e. $i = 5$,
+        $k = 4$, $s = 1$ and $p = 2$) is equivalent to convolving a $4 \times 4$
+        kernel over a $6 \times 6$ input padded with a $1 \times 1$ border of
+        zeros using unit strides (i.e. $i' = 6$, $k' = k$, $s' = 1$ and $p' =
+        1$).}
+\end{figure}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.2\textwidth]
+        {pdf/same_padding_no_strides_transposed_00.pdf}
+    \includegraphics[width=0.2\textwidth]
+        {pdf/same_padding_no_strides_transposed_01.pdf}
+    \includegraphics[width=0.2\textwidth]
+        {pdf/same_padding_no_strides_transposed_02.pdf}
+    \includegraphics[width=0.2\textwidth]
+        {pdf/same_padding_no_strides_transposed_03.pdf}
+    \caption{\label{fig:same_padding_no_strides_transposed} The transpose
+        of convolving a $3 \times 3$ kernel over a $5 \times 5$ input using half
+        padding and unit strides (i.e. $i = 5$, $k = 3$, $s = 1$ and $p = 1$) is
+        equivalent to convolving a $3 \times 3$ kernel over a $5 \times 5$ input
+        using half padding and unit strides (i.e. $i' = 5$, $k' = k$, $s' = 1$
+        and $p' = 1$).}
+\end{figure}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.2\textwidth]
+        {pdf/full_padding_no_strides_transposed_00.pdf}
+    \includegraphics[width=0.2\textwidth]
+        {pdf/full_padding_no_strides_transposed_01.pdf}
+    \includegraphics[width=0.2\textwidth]
+        {pdf/full_padding_no_strides_transposed_02.pdf}
+    \includegraphics[width=0.2\textwidth]
+        {pdf/full_padding_no_strides_transposed_03.pdf}
+    \caption{\label{fig:full_padding_no_strides_transposed} The transpose
+        of convolving a $3 \times 3$ kernel over a $5 \times 5$ input using full
+        padding and unit strides (i.e. $i = 5$, $k = 3$, $s = 1$ and $p = 2$) is
+        equivalent to convolving a $3 \times 3$ kernel over a $7 \times 7$ input
+        using unit strides (i.e. $i' = 7$, $k' = k$, $s' = 1$ and $p' = 0$).}
+\end{figure}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.2\textwidth]
+        {pdf/no_padding_strides_transposed_00.pdf}
+    \includegraphics[width=0.2\textwidth]
+        {pdf/no_padding_strides_transposed_01.pdf}
+    \includegraphics[width=0.2\textwidth]
+        {pdf/no_padding_strides_transposed_02.pdf}
+    \includegraphics[width=0.2\textwidth]
+        {pdf/no_padding_strides_transposed_03.pdf}
+    \caption{\label{fig:no_padding_strides_transposed} The transpose of
+        convolving a $3 \times 3$ kernel over a $5 \times 5$ input using $2
+        \times 2$ strides (i.e. $i = 5$, $k = 3$, $s = 2$ and $p = 0$) is
+        equivalent to convolving a $3 \times 3$ kernel over a $2 \times 2$ input
+        padded with a $2 \times 2$ border of zeros with $1$ zero inserted
+        between inputs using unit strides (i.e. $i' = 2$, $\tilde{i}' = 3$, $k'
+        = k$, $s' = 1$ and $p' = 2$).}
+\end{figure}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.2\textwidth]{pdf/padding_strides_transposed_00.pdf}
+    \includegraphics[width=0.2\textwidth]{pdf/padding_strides_transposed_01.pdf}
+    \includegraphics[width=0.2\textwidth]{pdf/padding_strides_transposed_02.pdf}
+    \includegraphics[width=0.2\textwidth]{pdf/padding_strides_transposed_03.pdf}
+    \caption{\label{fig:padding_strides_transposed} The transpose of convolving
+        a $3 \times 3$ kernel over a $5 \times 5$ input padded with a $1 \times
+        1$ border of zeros using $2 \times 2$ strides (i.e. $i = 5$, $k = 3$, $s
+        = 2$ and $p = 1$) is equivalent to convolving a $3 \times 3$ kernel over
+        a $2 \times 2$ input padded with a $1 \times 1$ border of zeros with $1$
+        zero inserted between inputs using unit strides (i.e. $i' = 2$,
+        $\tilde{i}' = 3$, $k' = k$, $s' = 1$ and $p' = 1$).}
+\end{figure}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.2\textwidth]
+        {pdf/padding_strides_odd_transposed_00.pdf}
+    \includegraphics[width=0.2\textwidth]
+        {pdf/padding_strides_odd_transposed_01.pdf}
+    \includegraphics[width=0.2\textwidth]
+        {pdf/padding_strides_odd_transposed_02.pdf}
+    \includegraphics[width=0.2\textwidth]
+        {pdf/padding_strides_odd_transposed_03.pdf}
+    \caption{\label{fig:padding_strides_odd_transposed} \todo{FIXME} The
+        transpose of convolving a $3 \times 3$ kernel over a $6 \times 6$ input
+        padded with a $1 \times 1$ border of zeros using $2 \times 2$ strides
+        (i.e. $i = 6$, $k = 3$, $s = 2$ and $p = 1$) is equivalent to convolving
+        a $3 \times 3$ kernel over a $2 \times 2$ input padded with a $1 \times
+        1$ border of zeros with $1$ zero inserted between inputs using unit
+        strides (i.e. $i' = 2$, $\tilde{i}' = 3$, $a = 1$, $k' = k$, $s' = 1$
+        and $p' = 1$).}
+\end{figure}
+
+\subsection{Convolution vs. transposed convolution}
+
+The need for transposed convolutions generally arises from the desire to use a
+transformation going from something that has the output shape of some
+convolution to something that has the input shape of the same convolution while
+maintaining a connectivity pattern that is compatible with said convolution.
+For instance, one might use such a transformation as the decoding layer of a
+convolutional autoencoder in order to obtain a learned inverse of the encoding
+convolution.
+
+Once again, the convolutional case is considerably more complex than the
+fully-connected case, which only requires to use a weight matrix whose shape has
+been transposed. However, since every convolution boils down to an efficient
+implementation of a matrix operation, the insights gained from the
+fully-connected case are useful in solving the convolutional case.
+
+Take for instance the convolution represented in
+\autoref{fig:no_padding_no_strides}. If the input and output were to be unrolled
+into vectors from left to right, top to bottom, the matrix representation of the
+convolution would look like
+
+\begin{equation*}
+    \begin{pmatrix}
+    w_{0,0} & w_{0,1} & w_{0,1} & 0       & w_{1,0} & w_{1,1} & w_{1,2} & 0       &
+    w_{2,0} & w_{2,1} & w_{2,2} & 0       & 0       & 0       & 0       & 0       \\
+    0       & w_{0,0} & w_{0,1} & w_{0,1} & 0       & w_{1,0} & w_{1,1} & w_{1,2} &
+    0       & w_{2,0} & w_{2,1} & w_{2,2} & 0       & 0       & 0       & 0       \\
+    0       & 0       & 0       & 0       & w_{0,0} & w_{0,1} & w_{0,1} & 0       &
+    w_{1,0} & w_{1,1} & w_{1,2} & 0       & w_{2,0} & w_{2,1} & w_{2,2} & 0       \\
+    0       & 0       & 0       & 0       & 0       & w_{0,0} & w_{0,1} & w_{0,1} &
+    0       & w_{1,0} & w_{1,1} & w_{1,2} & 0       & w_{2,0} & w_{2,1} & w_{2,2} \\
+    \end{pmatrix}
+\end{equation*}
+
+where $w_{i,j}$ is the element of the kernel located at row $i$ and column $j$.
+This linear operation takes a 16-dimensional vector as input and produces a
+4-dimensional vector as output.
+
+What would happen if this matrix was transposed and the values for $\mathbf{w}$
+were replaced with the values of another $3 \times 3$ kernel $\mathbf{u}$? The
+transformation would take a 4-dimensional vector as input and produce a
+16-dimensional vector as output {\em while keeping a connectivity pattern
+compatible with the convolution presented in
+\autoref{fig:no_padding_no_strides}}. This is what is referred to as a {\em
+transposed convolution}.
+
+Note that if $\mathbf{w}$ is {\em not} replaced with $\mathbf{u}$, the resulting
+operation is a direct transpose of the convolution defined by $\mathbf{w}$,
+which is {\em exactly} what is needed for gradient backpropagation. In other
+words, the transposed convolution operation can be thought of as the gradient of
+{\em some} convolution with respect to its input.
+
+The fortunate thing about transposed convolutions is that they are themselves
+convolutions, albeit with some additional processing on the input.
+
+This section will proceed somewhat backwards with respect to the convolution
+arithmetic section. Case by case, the analysis will concentrate on how the
+transpose of convolutions can be expressed in terms of convolutions.
+
+\subsection{No zero-padding, unit strides, transposed}
+
+\autoref{fig:no_padding_no_strides_transposed} shows the effect of applying the
+transpose of the matrix above on a $4 \times 4$ input (i.e. $i = 4$, $k = 3$, $s
+= 1$ and $p = 0$).
+
+Note that although equivalent to the transposed matrix, this visualization adds
+a lot of zero multiplications in the form of zero padding. This is done for
+illustration purposes, but it is inefficient, and software implementations will
+normally not perform the useless zero multiplications.
+
+The transposed convolution is equivalent to convolving a $3 \times 3$ kernel
+over a $2 \times 2$ input padded with a $2 \times 2$ border of zeros using unit
+strides (i.e. $i' = 2$, $k' = k$, $s' = 1$ and $p' = 2$). The kernel size and
+stride remain the same, but the input to the transposed convolution is now
+zero-padded.
+
+One way to understand the logic behind zero padding is to consider what would be
+necessary to produce a transposed convolution with the same connectivity pattern
+as its converse convolution.
+
+In particular, the corner pixels of the input only contribute to the corner
+pixels of the output: the top left input pixel is only connected to the top left
+output pixel, the top right pixel is only connected to the top right output
+pixel, and so on. This is achieved by zero padding the input such that the
+kernel only touches a corner pixel when it is in the associated corner position.
+
+These observations give rise to the following property:
+
+\begin{prop}\label{prop:no_padding_no_strides_transposed}
+A convolution described by $k$, $s = 1$ and $p = 0$ has an associated transposed
+convolution described by $k' = k$, $s = 1$ and $p' = k - 1$ and its output size
+is
+
+\begin{equation}
+    o' = i' + (k - 1).
+\end{equation}
+\end{prop}
+
+Note that this corresponds to a fully padded convolution with unit strides on
+the transposed convolution's input.
+
+\subsection{Zero padding, unit strides, transposed}
+
+Knowing that the transpose of a non-padded convolution involves convolving a
+zero-padded input, it would be reasonable to assume that the transpose of a
+zero-padded convolution involves convolving an input padded with {\em less}
+zeros.
+
+\autoref{fig:arbitrary_padding_no_strides_transposed} shows that it is indeed
+the case by providing an example for $i = 5$, $k = 4$ and $p = 2$.
+
+The following property applies for zero-padded convolutions:
+
+\begin{prop}\label{prop:arbitrary_padding_no_strides_transposed}
+A convolution described by $k$, $s = 1$ and $p$ has an associated transposed
+convolution described by $k' = k$, $s = 1$ and $p' = k - p - 1$ and its output
+size is
+
+\begin{equation}
+    o' = i' + (k - 1) - 2p.
+\end{equation}
+\end{prop}
+
+The transposes of convolutions with half and full padding have elegant
+properties.
+
+\subsubsection{Half padding, transposed}
+
+Knowing that a half padded convolution produces an output with the same size as
+the input, it is unsurprising that the transpose of a half padded convolution
+is itself a half padded convolution:
+
+\begin{prop}\label{prop:half_padding_no_strides_transposed}
+A convolution described by $k = 2n + 1, \quad n \in \mathbb{N}$, $s = 1$ and $p
+= \lfloor k / 2 \rfloor = n$ has an associated transposed convolution described
+by $k' = k$, $s = 1$ and $p' = \lfloor k / 2 \rfloor$ and its output size is
+
+\begin{equation}
+\begin{split}
+    o' &= i' + (k - 1) - 2p \\
+       &= i' + 2n - 2n \\
+       &= i'.
+\end{split}
+\end{equation}
+\end{prop}
+
+\autoref{fig:same_padding_no_strides_transposed} provides an example for $i =
+5$, $k = 3$ and $p = 1$.
+
+\subsubsection{Full padding, transposed}
+
+Knowing that a non-padded convolution has a transpose which involves full
+padding, it is also unsurprising that the transpose of a fully padded
+convolution is a non-padded convolution:
+
+\begin{prop}\label{prop:full_padding_no_strides_transposed}
+A convolution described by $k$, $s = 1$ and $p = k - 1$ has an associated
+transposed convolution described by $k' = k$, $s = 1$ and $p' = 0$ and its
+output size is
+
+\begin{equation}
+\begin{split}
+    o' &= i' + (k - 1) - 2p \\
+       &= i' + (k - 1)
+\end{split}
+\end{equation}
+\end{prop}
+
+\autoref{fig:full_padding_no_strides_transposed} provides an example for $i =
+5$, $k = 3$ and $p = 2$.
+
+\subsection{No zero-padding, non-unit strides, transposed}
+
+Using the same kind of deductive logic as for zero-padded convolutions, one
+might expect that the transpose of a convolution with $s > 1$ involves a
+convolution with $s < 1$. As will be explained, this is a valid intuition, which
+is why transposed convolutions have sometimes been called {\em fractionally
+strided convolutions}.
+
+\autoref{fig:no_padding_strides_transposed} provides an example for $i = 5$, $k
+= 3$ and $s = 2$ which helps understand what fractional strides involve: zeros
+are inserted {\em between} input units, which makes the kernel move around at a
+slower pace than with unit strides.
+
+Doing so is inefficient and real-world implementations avoid useless
+multiplications by zero, but conceptually it is how the transpose of a strided
+convolution can be thought of.
+
+For the moment, we will assume that the convolution is non-padded ($p = 0$) and
+that its input size $i$ is such that $i - k$ is a multiple of $s$. In that case,
+the following property holds:
+
+\begin{prop}\label{prop:no_padding_strides_transposed}
+A convolution described by $k$, $s$ and $p = 0$ and whose input size is such
+that $i - k$ is a multiple of $s$ has an associated transposed convolution
+described by $\tilde{i}'$, $k' = k$, $s = 1$ and $p' = k - 1$, where
+$\tilde{i}'$ is the size of the stretched input obtained by adding $s - 1$ zeros
+between each input unit, and its output size is
+
+\begin{equation}
+\begin{split}
+    o' = s (i' - 1) + k.
+\end{split}
+\end{equation}
+\end{prop}
+
+\subsection{Zero-padding, non-unit strides, transposed}
+
+Still assuming that the convolution's input size $i$ is such that $i - k$ is a
+multiple of $s$, the analysis is extended to the zero-padded case by combining
+\autoref{prop:arbitrary_padding_no_strides_transposed} and
+\autoref{prop:no_padding_strides_transposed}:
+
+\begin{prop}\label{prop:padding_strides_transposed}
+A convolution described by $k$, $s$ and $p$ and whose input size is such
+that $i - k$ is a multiple of $s$ has an associated transposed convolution
+described by $\tilde{i}'$, $k' = k$, $s = 1$ and $p' = k - p - 1$, where
+$\tilde{i}'$ is the size of the stretched input obtained by adding $s - 1$ zeros
+between each input unit, and its output size is
+
+\begin{equation}
+\begin{split}
+    o' = s (i' - 1) + k - 2p.
+\end{split}
+\end{equation}
+\end{prop}
+
+\autoref{fig:padding_strides_transposed} provides an example for $i = 5$, $k =
+3$, $s = 2$ and $p = 1$.
+
+The assumption that $i$ is such that $i - k$ is a multiple of $s$ is relaxed by
+introducing another parameter $a \in \{0, \ldots, s - 1\}$ that allows to
+distinguish between the $s$ different cases leading to $i'$:
+
+\begin{prop}\label{prop:padding_strides_transposed_odd}
+A convolution described by $k$, $s$ and $p$, with $a = \mod s$,
+has an associated transposed convolution described by $a$, $\tilde{i}'$,
+$k' = k$, $s = 1$ and $p' = k - p - 1$, where
+$\tilde{i}'$ is the size of the stretched input obtained by adding $s - 1$ zeros
+between each input unit, and $a = (i + 2p - k) \mod s$ represents the number of
+zeros added to the right and bottom edge of the input, and its output size is
+
+\begin{equation}
+\begin{split}
+    o' = s (i' - 1) + a + k - 2p.
+\end{split}
+\end{equation}
+\end{prop}
+
+\autoref{fig:padding_strides_odd_transposed} provides an example for $i = 6$, $k
+= 3$, $s = 2$ and $p = 1$.
 
 \bibliography{bibliography}
 \bibliographystyle{natbib}
