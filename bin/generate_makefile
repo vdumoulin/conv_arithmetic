@@ -41,6 +41,18 @@ def make_header():
             '.SECONDARY : \n')
 
 
+def make_report_section():
+    return ('conv_arithmetic.pdf : conv_arithmetic.tex\n'
+            '\tpdflatex conv_arithmetic\n'
+            '\tpdflatex conv_arithmetic\n'
+            '\tbibtex conv_arithmetic\n'
+            '\tpdflatex conv_arithmetic\n'
+            '\tpdflatex conv_arithmetic\n\n'
+            '.PHONY : clean\n'
+            'clean : \n'
+            '\trm -f conv_arithmetic.{aux,bbl,blg,log}\n')
+
+
 def make_gif_section():
     rules = []
     for name, config in iteritems(animations):
@@ -92,8 +104,9 @@ def make_pdf_section():
 
 def main():
     with open('Makefile', 'w') as makefile:
-        makefile.write('\n'.join([make_header(), make_gif_section(),
-                                  make_png_section(), make_pdf_section()]))
+        makefile.write('\n'.join([make_report_section(), make_header(),
+                                  make_gif_section(), make_png_section(),
+                                  make_pdf_section()]))
 
 
 if __name__ == "__main__":
