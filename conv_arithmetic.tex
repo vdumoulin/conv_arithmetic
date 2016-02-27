@@ -566,13 +566,13 @@ convolution would look like
 
 \begin{equation*}
     \begin{pmatrix}
-    w_{0,0} & w_{0,1} & w_{0,1} & 0       & w_{1,0} & w_{1,1} & w_{1,2} & 0       &
+    w_{0,0} & w_{0,1} & w_{0,2} & 0       & w_{1,0} & w_{1,1} & w_{1,2} & 0       &
     w_{2,0} & w_{2,1} & w_{2,2} & 0       & 0       & 0       & 0       & 0       \\
-    0       & w_{0,0} & w_{0,1} & w_{0,1} & 0       & w_{1,0} & w_{1,1} & w_{1,2} &
+    0       & w_{0,0} & w_{0,1} & w_{0,2} & 0       & w_{1,0} & w_{1,1} & w_{1,2} &
     0       & w_{2,0} & w_{2,1} & w_{2,2} & 0       & 0       & 0       & 0       \\
-    0       & 0       & 0       & 0       & w_{0,0} & w_{0,1} & w_{0,1} & 0       &
+    0       & 0       & 0       & 0       & w_{0,0} & w_{0,1} & w_{0,2} & 0       &
     w_{1,0} & w_{1,1} & w_{1,2} & 0       & w_{2,0} & w_{2,1} & w_{2,2} & 0       \\
-    0       & 0       & 0       & 0       & 0       & w_{0,0} & w_{0,1} & w_{0,1} &
+    0       & 0       & 0       & 0       & 0       & w_{0,0} & w_{0,1} & w_{0,2} &
     0       & w_{1,0} & w_{1,1} & w_{1,2} & 0       & w_{2,0} & w_{2,1} & w_{2,2} \\
     \end{pmatrix}
 \end{equation*}
@@ -633,7 +633,7 @@ These observations give rise to the following property:
 
 \begin{prop}\label{prop:no_padding_no_strides_transposed}
 A convolution described by $k$, $s = 1$ and $p = 0$ has an associated transposed
-convolution described by $k' = k$, $s = 1$ and $p' = k - 1$ and its output size
+convolution described by $k' = k$, $s' = 1$ and $p' = k - 1$ and its output size
 is
 \begin{equation*}
     o' = i' + (k - 1).
@@ -657,7 +657,7 @@ The following property applies for zero-padded convolutions:
 
 \begin{prop}\label{prop:arbitrary_padding_no_strides_transposed}
 A convolution described by $k$, $s = 1$ and $p$ has an associated transposed
-convolution described by $k' = k$, $s = 1$ and $p' = k - p - 1$ and its output
+convolution described by $k' = k$, $s' = 1$ and $p' = k - p - 1$ and its output
 size is
 \begin{equation*}
     o' = i' + (k - 1) - 2p.
@@ -687,7 +687,7 @@ by $k' = k$, $s' = 1$ and $p' = \lfloor k / 2 \rfloor$ and its output size is
 \end{prop}
 
 \autoref{fig:same_padding_no_strides_transposed} provides an example for $i =
-5$, $k = 3$ and $p = 1$.
+5$, $k = 3$ and (therefore) $p = 1$.
 
 \subsubsection{Full padding, transposed}
 
@@ -702,13 +702,13 @@ output size is
 \begin{equation*}
 \begin{split}
     o' &= i' + (k - 1) - 2p \\
-       &= i' + (k - 1)
+       &= i' - (k - 1)
 \end{split}
 \end{equation*}
 \end{prop}
 
 \autoref{fig:full_padding_no_strides_transposed} provides an example for $i =
-5$, $k = 3$ and $p = 2$.
+5$, $k = 3$ and (therefore) $p = 2$.
 
 \subsection{No zero-padding, non-unit strides, transposed}
 
@@ -734,7 +734,7 @@ the following property holds:
 \begin{prop}\label{prop:no_padding_strides_transposed}
 A convolution described by $k$, $s$ and $p = 0$ and whose input size is such
 that $i - k$ is a multiple of $s$ has an associated transposed convolution
-described by $\tilde{i}'$, $k' = k$, $s = 1$ and $p' = k - 1$, where
+described by $\tilde{i}'$, $k' = k$, $s' = 1$ and $p' = k - 1$, where
 $\tilde{i}'$ is the size of the stretched input obtained by adding $s - 1$ zeros
 between each input unit, and its output size is
 \begin{equation*}
@@ -754,7 +754,7 @@ multiple of $s$, the analysis is extended to the zero-padded case by combining
 \begin{prop}\label{prop:padding_strides_transposed}
 A convolution described by $k$, $s$ and $p$ and whose input size is such
 that $i - k$ is a multiple of $s$ has an associated transposed convolution
-described by $\tilde{i}'$, $k' = k$, $s = 1$ and $p' = k - p - 1$, where
+described by $\tilde{i}'$, $k' = k$, $s' = 1$ and $p' = k - p - 1$, where
 $\tilde{i}'$ is the size of the stretched input obtained by adding $s - 1$ zeros
 between each input unit, and its output size is
 \begin{equation*}
@@ -774,7 +774,7 @@ distinguish between the $s$ different cases leading to $i'$:
 \begin{prop}\label{prop:padding_strides_transposed_odd}
 A convolution described by $k$, $s$ and $p$, with $a = \mod s$,
 has an associated transposed convolution described by $a$, $\tilde{i}'$,
-$k' = k$, $s = 1$ and $p' = k - p - 1$, where
+$k' = k$, $s' = 1$ and $p' = k - p - 1$, where
 $\tilde{i}'$ is the size of the stretched input obtained by adding $s - 1$ zeros
 between each input unit, and $a = (i + 2p - k) \mod s$ represents the number of
 zeros added to the right and bottom edge of the input, and its output size is
