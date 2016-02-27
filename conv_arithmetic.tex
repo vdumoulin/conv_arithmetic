@@ -6,6 +6,7 @@
 \usepackage{graphicx}
 \usepackage[utf8]{inputenc}
 \usepackage{natbib}
+\usepackage{shadethm}
 \usepackage{xcolor}
 
 \usepackage{hyperref}
@@ -14,8 +15,11 @@
 
 \newcommand{\todo}[1]{\textcolor{red}{TODO: #1}}
 
-\newtheorem{prop}{Property}
-\providecommand*{\propautorefname}{Property}
+\newshadetheorem{prop}{Property}
+\definecolor{shadethmcolor}{HTML}{F0F0F0}
+\definecolor{shaderulecolor}{HTML}{F0F0F0}
+\setlength{\shadeboxrule}{0pt}
+\providecommand*{\shadepropautorefname}{Property}
 
 \setcounter{MaxMatrixCols}{16}
 
@@ -284,10 +288,9 @@ the following property is inferred:
 
 \begin{prop}\label{prop:no_padding_no_strides}
 For $i$, $k$, $s = 1$ and $p = 0$,
-
-\begin{equation}
+\begin{equation*}
     o = (i - k) + 1.
-\end{equation}
+\end{equation*}
 \end{prop}
 
 \subsection{Zero-padding, unit strides}
@@ -302,10 +305,9 @@ property:
 
 \begin{prop}\label{prop:arbitrary_padding_no_strides}
 For $i$, $k$, $s = 1$ and $p$,
-
-\begin{equation}
+\begin{equation*}
     o = (i - k) + 2p + 1.
-\end{equation}
+\end{equation*}
 \end{prop}
 
 Two specific instances of zero padding are used quite extensively in practice
@@ -319,14 +321,13 @@ property:
 \begin{prop}\label{prop:same_padding_no_strides}
 If $k$ is odd ($k = 2n + 1, \quad n \in \mathbb{N}$), and for $i$, $s = 1$ and
 $p = \lfloor k / 2 \rfloor = n$,
-
-\begin{equation}
+\begin{equation*}
 \begin{split}
     o &= i + 2 \lfloor k / 2 \rfloor - (k - 1) \\
       &= i + 2n - 2n \\
       &= i.
 \end{split}
-\end{equation}
+\end{equation*}
 \end{prop}
 
 This is sometimes referred to as {\em half} (or {\em same}) padding.
@@ -340,13 +341,12 @@ to the input size, sometimes the opposite is required:
 
 \begin{prop}\label{prop:full_padding_no_strides}
 If $p = k - 1$, and for $i$, $k$ and $s = 1$,
-
-\begin{equation}
+\begin{equation*}
 \begin{split}
     o &= i + 2(k - 1) - (k - 1) \\
       &= i + (k - 1).
 \end{split}
-\end{equation}
+\end{equation*}
 \end{prop}
 
 This is sometimes referred to as {\em full} padding, because in this setting
@@ -372,10 +372,9 @@ axis. From this, the following property is inferred:
 
 \begin{prop}\label{prop:no_padding_strides}
 For $i$, $k$, $p = 0$ and $s$,
-
-\begin{equation}
+\begin{equation*}
     o = \left\lfloor \frac{i - k}{s} \right\rfloor + 1.
-\end{equation}
+\end{equation*}
 \end{prop}
 
 The floor function accounts for the fact that sometimes the last possible step
@@ -392,10 +391,9 @@ effective input of size $i + 2p$, just as was done for
 
 \begin{prop}\label{prop:padding_strides}
 For $i$, $k$, $p$ and $s$,
-
-\begin{equation}
+\begin{equation*}
     o = \left\lfloor \frac{i + 2p - k}{s} \right\rfloor + 1.
-\end{equation}
+\end{equation*}
 \end{prop}
 
 \autoref{fig:padding_strides} provides an example for $i = 5$, $k = 3$, $s = 2$
@@ -637,10 +635,9 @@ These observations give rise to the following property:
 A convolution described by $k$, $s = 1$ and $p = 0$ has an associated transposed
 convolution described by $k' = k$, $s = 1$ and $p' = k - 1$ and its output size
 is
-
-\begin{equation}
+\begin{equation*}
     o' = i' + (k - 1).
-\end{equation}
+\end{equation*}
 \end{prop}
 
 Note that this corresponds to a fully padded convolution with unit strides on
@@ -662,10 +659,9 @@ The following property applies for zero-padded convolutions:
 A convolution described by $k$, $s = 1$ and $p$ has an associated transposed
 convolution described by $k' = k$, $s = 1$ and $p' = k - p - 1$ and its output
 size is
-
-\begin{equation}
+\begin{equation*}
     o' = i' + (k - 1) - 2p.
-\end{equation}
+\end{equation*}
 \end{prop}
 
 The transposes of convolutions with half and full padding have elegant
@@ -680,15 +676,14 @@ is itself a half padded convolution:
 \begin{prop}\label{prop:half_padding_no_strides_transposed}
 A convolution described by $k = 2n + 1, \quad n \in \mathbb{N}$, $s = 1$ and $p
 = \lfloor k / 2 \rfloor = n$ has an associated transposed convolution described
-by $k' = k$, $s = 1$ and $p' = \lfloor k / 2 \rfloor$ and its output size is
-
-\begin{equation}
+by $k' = k$, $s' = 1$ and $p' = \lfloor k / 2 \rfloor$ and its output size is
+\begin{equation*}
 \begin{split}
     o' &= i' + (k - 1) - 2p \\
        &= i' + 2n - 2n \\
        &= i'.
 \end{split}
-\end{equation}
+\end{equation*}
 \end{prop}
 
 \autoref{fig:same_padding_no_strides_transposed} provides an example for $i =
@@ -702,15 +697,14 @@ convolution is a non-padded convolution:
 
 \begin{prop}\label{prop:full_padding_no_strides_transposed}
 A convolution described by $k$, $s = 1$ and $p = k - 1$ has an associated
-transposed convolution described by $k' = k$, $s = 1$ and $p' = 0$ and its
+transposed convolution described by $k' = k$, $s' = 1$ and $p' = 0$ and its
 output size is
-
-\begin{equation}
+\begin{equation*}
 \begin{split}
     o' &= i' + (k - 1) - 2p \\
        &= i' + (k - 1)
 \end{split}
-\end{equation}
+\end{equation*}
 \end{prop}
 
 \autoref{fig:full_padding_no_strides_transposed} provides an example for $i =
@@ -743,12 +737,11 @@ that $i - k$ is a multiple of $s$ has an associated transposed convolution
 described by $\tilde{i}'$, $k' = k$, $s = 1$ and $p' = k - 1$, where
 $\tilde{i}'$ is the size of the stretched input obtained by adding $s - 1$ zeros
 between each input unit, and its output size is
-
-\begin{equation}
+\begin{equation*}
 \begin{split}
     o' = s (i' - 1) + k.
 \end{split}
-\end{equation}
+\end{equation*}
 \end{prop}
 
 \subsection{Zero-padding, non-unit strides, transposed}
@@ -764,12 +757,11 @@ that $i - k$ is a multiple of $s$ has an associated transposed convolution
 described by $\tilde{i}'$, $k' = k$, $s = 1$ and $p' = k - p - 1$, where
 $\tilde{i}'$ is the size of the stretched input obtained by adding $s - 1$ zeros
 between each input unit, and its output size is
-
-\begin{equation}
+\begin{equation*}
 \begin{split}
     o' = s (i' - 1) + k - 2p.
 \end{split}
-\end{equation}
+\end{equation*}
 \end{prop}
 
 \autoref{fig:padding_strides_transposed} provides an example for $i = 5$, $k =
@@ -786,12 +778,11 @@ $k' = k$, $s = 1$ and $p' = k - p - 1$, where
 $\tilde{i}'$ is the size of the stretched input obtained by adding $s - 1$ zeros
 between each input unit, and $a = (i + 2p - k) \mod s$ represents the number of
 zeros added to the right and bottom edge of the input, and its output size is
-
-\begin{equation}
+\begin{equation*}
 \begin{split}
     o' = s (i' - 1) + a + k - 2p.
 \end{split}
-\end{equation}
+\end{equation*}
 \end{prop}
 
 \autoref{fig:padding_strides_odd_transposed} provides an example for $i = 6$, $k
