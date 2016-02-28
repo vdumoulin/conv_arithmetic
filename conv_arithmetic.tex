@@ -7,11 +7,19 @@
 \usepackage[utf8]{inputenc}
 \usepackage{natbib}
 \usepackage{shadethm}
+\usepackage{tikz}
 \usepackage{xcolor}
 
 \usepackage{hyperref}
 
+\definecolor{blue}{RGB}{38,139,210}
+\definecolor{cyan}{RGB}{42,161,152}
 \definecolor{red}{RGB}{220,50,47}
+\definecolor{base01}{RGB}{88,110,117}
+\definecolor{base02}{RGB}{7,54,66}
+\definecolor{base03}{RGB}{0,43,54}
+
+\usetikzlibrary{calc,shapes,positioning}
 
 \newcommand{\todo}[1]{\textcolor{red}{TODO: #1}}
 
@@ -212,8 +220,29 @@ the kernel on the input. Consider the width axis: the left side of the kernel
 starts at the left side of the input, and the kernel slides by steps of one
 until its right side touches the right side of the input. The size of the output
 is equal to the number of steps made, plus one, accounting for the initial
-position of the kernel. The same logic applies for the height axis. From this,
-the following property is inferred:
+position of the kernel (\autoref{fig:no_padding_no_strides_explained}). The same
+logic applies for the height axis.
+
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}[scale=.4,every node/.style={minimum size=1cm},on grid]
+        \draw[fill=blue] (0,0) rectangle (5,5);
+        \draw[draw=base03, thick] (0,0) grid (5,5);
+        \draw[fill=base02, opacity=0.4] (0,2) rectangle (3,5);
+        \draw[step=10mm, base03, thick] (0,2) grid (3,5);
+        \draw[draw=base03, ->, thick] (2.6,3.5) to  (3.5,3.5);
+        \draw[draw=base03, ->, thick] (3.6,3.5) to  (4.5,3.5);
+        \draw[draw=base03, ->, thick] (1.5,2.4) to  (1.5,1.5);
+        \draw[draw=base03, ->, thick] (1.5,1.4) to  (1.5,0.5);
+    \end{tikzpicture}
+    \caption{\label{fig:no_padding_no_strides_explained} The kernel has to slide
+        two steps to the right to touch the right side of the input and two
+        steps downwards to touch the bottom side of the input. Adding one to
+        account for the initial kernel position, the output size is $3 \times
+        3$.}
+\end{figure}
+
+From this, the following property is inferred:
 
 \begin{prop}\label{prop:no_padding_no_strides}
 For $i$, $k$, $s = 1$ and $p = 0$,
@@ -344,8 +373,28 @@ placements of the kernel on the input. Consider the width axis: the left side of
 the kernel starts at the left side of the input, but this time the kernel slides
 by steps of $s$ until its right side touches the right side of the input. The
 size of the output is equal to the number of steps made, plus one, accounting
-for the initial position of the kernel. The same logic applies for the height
-axis. From this, the following property is inferred:
+for the initial position of the kernel
+(\autoref{fig:no_padding_strides_explained}). The same logic applies for the
+height axis.
+
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}[scale=.4,every node/.style={minimum size=1cm},on grid]
+        \draw[fill=blue] (0,0) rectangle (5,5);
+        \draw[draw=base03, thick] (0,0) grid (5,5);
+        \draw[fill=base02, opacity=0.4] (0,2) rectangle (3,5);
+        \draw[step=10mm, base03, thick] (0,2) grid (3,5);
+        \draw[draw=base03, ->, thick] (2.5,3.5) to  (4.5,3.5);
+        \draw[draw=base03, ->, thick] (1.5,2.5) to  (1.5,0.5);
+    \end{tikzpicture}
+    \caption{\label{fig:no_padding_strides_explained} The kernel has to slide
+        one step of size two to the right to touch the right side of the input
+        and one step of size two downwards to touch the bottom side of the
+        input. Adding one to account for the initial kernel position, the output
+        size is $2 \times 2$.}
+\end{figure}
+
+From this, the following property is inferred:
 
 \begin{prop}\label{prop:no_padding_strides}
 For $i$, $k$, $p = 0$ and $s$,
