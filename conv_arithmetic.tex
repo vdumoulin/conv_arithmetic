@@ -187,9 +187,12 @@ Because of this, the guide will concentrate on 2-D convolutional layers acting
 on square inputs, and the kernel size, stride and zero-padding will always be
 the same along both axes.
 
+\newpage
 \section{Convolution arithmetic}
 
-\begin{figure}[t]
+\subsection{No zero-padding, unit strides}
+
+\begin{figure}[h]
     \centering
     \includegraphics[width=0.2\textwidth]{pdf/no_padding_no_strides_00.pdf}
     \includegraphics[width=0.2\textwidth]{pdf/no_padding_no_strides_01.pdf}
@@ -199,80 +202,6 @@ the same along both axes.
         over a $4 \times 4$ input using unit strides (i.e. $i = 4$, $k = 3$,
         $s = 1$ and $p = 0$).}
 \end{figure}
-
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=0.2\textwidth]
-        {pdf/arbitrary_padding_no_strides_00.pdf}
-    \includegraphics[width=0.2\textwidth]
-        {pdf/arbitrary_padding_no_strides_01.pdf}
-    \includegraphics[width=0.2\textwidth]
-        {pdf/arbitrary_padding_no_strides_02.pdf}
-    \includegraphics[width=0.2\textwidth]
-        {pdf/arbitrary_padding_no_strides_03.pdf}
-    \caption{\label{fig:arbitrary_padding_no_strides} Convolving a $4 \times 4$
-        kernel over a $5 \times 5$ input padded with a $2 \times 2$ border of
-        zeros using unit strides (i.e. $i = 5$, $k = 4$, $s = 1$ and $p = 2$).}
-\end{figure}
-
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=0.2\textwidth]{pdf/same_padding_no_strides_00.pdf}
-    \includegraphics[width=0.2\textwidth]{pdf/same_padding_no_strides_01.pdf}
-    \includegraphics[width=0.2\textwidth]{pdf/same_padding_no_strides_02.pdf}
-    \includegraphics[width=0.2\textwidth]{pdf/same_padding_no_strides_03.pdf}
-    \caption{\label{fig:same_padding_no_strides} Convolving a $3 \times 3$
-        kernel over a $5 \times 5$ input using half padding and unit strides
-        (i.e. $i = 5$, $k = 3$, $s = 1$ and $p = 1$).}
-\end{figure}
-
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=0.2\textwidth]{pdf/full_padding_no_strides_00.pdf}
-    \includegraphics[width=0.2\textwidth]{pdf/full_padding_no_strides_01.pdf}
-    \includegraphics[width=0.2\textwidth]{pdf/full_padding_no_strides_02.pdf}
-    \includegraphics[width=0.2\textwidth]{pdf/full_padding_no_strides_03.pdf}
-    \caption{\label{fig:full_padding_no_strides} Convolving a $3 \times 3$
-        kernel over a $5 \times 5$ input using full padding and unit strides
-        (i.e. $i = 5$, $k = 3$, $s = 1$ and $p = 2$).}
-\end{figure}
-
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=0.2\textwidth]{pdf/no_padding_strides_00.pdf}
-    \includegraphics[width=0.2\textwidth]{pdf/no_padding_strides_01.pdf}
-    \includegraphics[width=0.2\textwidth]{pdf/no_padding_strides_02.pdf}
-    \includegraphics[width=0.2\textwidth]{pdf/no_padding_strides_03.pdf}
-    \caption{\label{fig:no_padding_strides} Convolving a $3 \times 3$
-        kernel over a $5 \times 5$ input using $2 \times 2$ strides (i.e.
-        $i = 5$, $k = 3$, $s = 2$ and $p = 0$).}
-\end{figure}
-
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=0.2\textwidth]{pdf/padding_strides_00.pdf}
-    \includegraphics[width=0.2\textwidth]{pdf/padding_strides_01.pdf}
-    \includegraphics[width=0.2\textwidth]{pdf/padding_strides_02.pdf}
-    \includegraphics[width=0.2\textwidth]{pdf/padding_strides_03.pdf}
-    \caption{\label{fig:padding_strides} Convolving a $3 \times 3$ kernel over a
-        $5 \times 5$ input padded with a $1 \times 1$ border of zeros using $2
-        \times 2$ strides (i.e.  $i = 5$, $k = 3$, $s = 2$ and $p = 1$).}
-\end{figure}
-
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=0.2\textwidth]{pdf/padding_strides_odd_00.pdf}
-    \includegraphics[width=0.2\textwidth]{pdf/padding_strides_odd_01.pdf}
-    \includegraphics[width=0.2\textwidth]{pdf/padding_strides_odd_02.pdf}
-    \includegraphics[width=0.2\textwidth]{pdf/padding_strides_odd_03.pdf}
-    \caption{\label{fig:padding_strides_odd} Convolving a $3 \times 3$ kernel
-        over a $6 \times 6$ input padded with a $1 \times 1$ border of zeros
-        using $2 \times 2$ strides (i.e.  $i = 6$, $k = 3$, $s = 2$ and
-        $p = 1$). In this case, the bottom row and right column of the
-        zero-padded input are not covered by the kernel.}
-\end{figure}
-
-\subsection{No zero-padding, unit strides}
 
 The simplest case to analyze is when a kernel just slides across the input (i.e.
 $s = 1$ and $p = 0$). \autoref{fig:no_padding_no_strides} provides an example
@@ -295,6 +224,21 @@ For $i$, $k$, $s = 1$ and $p = 0$,
 
 \subsection{Zero-padding, unit strides}
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.2\textwidth]
+        {pdf/arbitrary_padding_no_strides_00.pdf}
+    \includegraphics[width=0.2\textwidth]
+        {pdf/arbitrary_padding_no_strides_01.pdf}
+    \includegraphics[width=0.2\textwidth]
+        {pdf/arbitrary_padding_no_strides_02.pdf}
+    \includegraphics[width=0.2\textwidth]
+        {pdf/arbitrary_padding_no_strides_03.pdf}
+    \caption{\label{fig:arbitrary_padding_no_strides} Convolving a $4 \times 4$
+        kernel over a $5 \times 5$ input padded with a $2 \times 2$ border of
+        zeros using unit strides (i.e. $i = 5$, $k = 4$, $s = 1$ and $p = 2$).}
+\end{figure}
+
 To factor in zero-padding (i.e. only restricting that $s = 0$), consider its
 effect on the effective input size. \autoref{fig:arbitrary_padding_no_strides}
 provides an example for $i = 5$, $k = 4$ and $p = 2$.
@@ -314,6 +258,17 @@ Two specific instances of zero padding are used quite extensively in practice
 because of their respective properties.
 
 \subsubsection{Half padding}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.2\textwidth]{pdf/same_padding_no_strides_00.pdf}
+    \includegraphics[width=0.2\textwidth]{pdf/same_padding_no_strides_01.pdf}
+    \includegraphics[width=0.2\textwidth]{pdf/same_padding_no_strides_02.pdf}
+    \includegraphics[width=0.2\textwidth]{pdf/same_padding_no_strides_03.pdf}
+    \caption{\label{fig:same_padding_no_strides} Convolving a $3 \times 3$
+        kernel over a $5 \times 5$ input using half padding and unit strides
+        (i.e. $i = 5$, $k = 3$, $s = 1$ and $p = 1$).}
+\end{figure}
 
 Having the output size be the same as the input size can be a desireable
 property:
@@ -336,6 +291,17 @@ and (therefore) $p = 1$.
 
 \subsubsection{Full padding}
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.2\textwidth]{pdf/full_padding_no_strides_00.pdf}
+    \includegraphics[width=0.2\textwidth]{pdf/full_padding_no_strides_01.pdf}
+    \includegraphics[width=0.2\textwidth]{pdf/full_padding_no_strides_02.pdf}
+    \includegraphics[width=0.2\textwidth]{pdf/full_padding_no_strides_03.pdf}
+    \caption{\label{fig:full_padding_no_strides} Convolving a $3 \times 3$
+        kernel over a $5 \times 5$ input using full padding and unit strides
+        (i.e. $i = 5$, $k = 3$, $s = 1$ and $p = 2$).}
+\end{figure}
+
 While convolving a kernel generally {\em decreases} the output size with respect
 to the input size, sometimes the opposite is required:
 
@@ -355,6 +321,17 @@ feature map. \autoref{fig:full_padding_no_strides} provides an example for $i =
 5$, $k = 3$ and (therefore) $p = 2$.
 
 \subsection{No zero-padding, non-unit strides}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.2\textwidth]{pdf/no_padding_strides_00.pdf}
+    \includegraphics[width=0.2\textwidth]{pdf/no_padding_strides_01.pdf}
+    \includegraphics[width=0.2\textwidth]{pdf/no_padding_strides_02.pdf}
+    \includegraphics[width=0.2\textwidth]{pdf/no_padding_strides_03.pdf}
+    \caption{\label{fig:no_padding_strides} Convolving a $3 \times 3$
+        kernel over a $5 \times 5$ input using $2 \times 2$ strides (i.e.
+        $i = 5$, $k = 3$, $s = 2$ and $p = 0$).}
+\end{figure}
 
 So far, all properties derived only apply for unit-strided convolutions.
 Incorporating non-unit strides requires another inference leap. To facilitate
@@ -384,6 +361,17 @@ example of such a case).
 
 \subsection{Zero-padding, non-unit strides}
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.2\textwidth]{pdf/padding_strides_00.pdf}
+    \includegraphics[width=0.2\textwidth]{pdf/padding_strides_01.pdf}
+    \includegraphics[width=0.2\textwidth]{pdf/padding_strides_02.pdf}
+    \includegraphics[width=0.2\textwidth]{pdf/padding_strides_03.pdf}
+    \caption{\label{fig:padding_strides} Convolving a $3 \times 3$ kernel over a
+        $5 \times 5$ input padded with a $1 \times 1$ border of zeros using $2
+        \times 2$ strides (i.e.  $i = 5$, $k = 3$, $s = 2$ and $p = 1$).}
+\end{figure}
+
 The most general case (convolving over a zero-padded input using non-unit
 strides) is analyzed by applying \autoref{prop:no_padding_strides} on an
 effective input of size $i + 2p$, just as was done for
@@ -407,6 +395,19 @@ More specifically, if $i + 2p - k$ is a multiple of $s$, then any input size $j
 = i + a, \quad a \in \{0,\ldots,s - 1\}$ will produce the same output size. Note
 that this ambiguity applies only for $s > 1$.
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.2\textwidth]{pdf/padding_strides_odd_00.pdf}
+    \includegraphics[width=0.2\textwidth]{pdf/padding_strides_odd_01.pdf}
+    \includegraphics[width=0.2\textwidth]{pdf/padding_strides_odd_02.pdf}
+    \includegraphics[width=0.2\textwidth]{pdf/padding_strides_odd_03.pdf}
+    \caption{\label{fig:padding_strides_odd} Convolving a $3 \times 3$ kernel
+        over a $6 \times 6$ input padded with a $1 \times 1$ border of zeros
+        using $2 \times 2$ strides (i.e.  $i = 6$, $k = 3$, $s = 2$ and
+        $p = 1$). In this case, the bottom row and right column of the
+        zero-padded input are not covered by the kernel.}
+\end{figure}
+
 \autoref{fig:padding_strides_odd} provides an example for $i = 6$, $k = 3$, $s =
 2$ and $p = 1$. Despite having different input sizes, the convolutions presented
 in \autoref{fig:padding_strides} and \autoref{fig:padding_strides_odd} share the
@@ -415,133 +416,8 @@ same output size.
 While this doesn't affect the analysis for {\em convolutions}, this will
 complicate the analysis in the case of {\em transposed convolutions}.
 
+\newpage
 \section{Transposed convolution arithmetic}
-
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=0.2\textwidth]
-        {pdf/no_padding_no_strides_transposed_00.pdf}
-    \includegraphics[width=0.2\textwidth]
-        {pdf/no_padding_no_strides_transposed_01.pdf}
-    \includegraphics[width=0.2\textwidth]
-        {pdf/no_padding_no_strides_transposed_02.pdf}
-    \includegraphics[width=0.2\textwidth]
-        {pdf/no_padding_no_strides_transposed_03.pdf}
-    \caption{\label{fig:no_padding_no_strides_transposed} The transpose of
-        convolving a $3 \times 3$ kernel over a $4 \times 4$ input using unit
-        strides (i.e. $i = 4$, $k = 3$, $s = 1$ and $p = 0$) is equivalent to
-        convolving a $3 \times 3$ kernel over a $2 \times 2$ input padded with
-        a $2 \times 2$ border of zeros using unit strides (i.e. $i' = 2$, $k' =
-        k$, $s' = 1$ and $p' = 2$).}
-\end{figure}
-
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=0.2\textwidth]
-        {pdf/arbitrary_padding_no_strides_transposed_00.pdf}
-    \includegraphics[width=0.2\textwidth]
-        {pdf/arbitrary_padding_no_strides_transposed_01.pdf}
-    \includegraphics[width=0.2\textwidth]
-        {pdf/arbitrary_padding_no_strides_transposed_02.pdf}
-    \includegraphics[width=0.2\textwidth]
-        {pdf/arbitrary_padding_no_strides_transposed_03.pdf}
-    \caption{\label{fig:arbitrary_padding_no_strides_transposed} The transpose
-        of convolving a $4 \times 4$ kernel over a $5 \times 5$ input padded
-        with a $2 \times 2$ border of zeros using unit strides (i.e. $i = 5$,
-        $k = 4$, $s = 1$ and $p = 2$) is equivalent to convolving a $4 \times 4$
-        kernel over a $6 \times 6$ input padded with a $1 \times 1$ border of
-        zeros using unit strides (i.e. $i' = 6$, $k' = k$, $s' = 1$ and $p' =
-        1$).}
-\end{figure}
-
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=0.2\textwidth]
-        {pdf/same_padding_no_strides_transposed_00.pdf}
-    \includegraphics[width=0.2\textwidth]
-        {pdf/same_padding_no_strides_transposed_01.pdf}
-    \includegraphics[width=0.2\textwidth]
-        {pdf/same_padding_no_strides_transposed_02.pdf}
-    \includegraphics[width=0.2\textwidth]
-        {pdf/same_padding_no_strides_transposed_03.pdf}
-    \caption{\label{fig:same_padding_no_strides_transposed} The transpose
-        of convolving a $3 \times 3$ kernel over a $5 \times 5$ input using half
-        padding and unit strides (i.e. $i = 5$, $k = 3$, $s = 1$ and $p = 1$) is
-        equivalent to convolving a $3 \times 3$ kernel over a $5 \times 5$ input
-        using half padding and unit strides (i.e. $i' = 5$, $k' = k$, $s' = 1$
-        and $p' = 1$).}
-\end{figure}
-
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=0.2\textwidth]
-        {pdf/full_padding_no_strides_transposed_00.pdf}
-    \includegraphics[width=0.2\textwidth]
-        {pdf/full_padding_no_strides_transposed_01.pdf}
-    \includegraphics[width=0.2\textwidth]
-        {pdf/full_padding_no_strides_transposed_02.pdf}
-    \includegraphics[width=0.2\textwidth]
-        {pdf/full_padding_no_strides_transposed_03.pdf}
-    \caption{\label{fig:full_padding_no_strides_transposed} The transpose
-        of convolving a $3 \times 3$ kernel over a $5 \times 5$ input using full
-        padding and unit strides (i.e. $i = 5$, $k = 3$, $s = 1$ and $p = 2$) is
-        equivalent to convolving a $3 \times 3$ kernel over a $7 \times 7$ input
-        using unit strides (i.e. $i' = 7$, $k' = k$, $s' = 1$ and $p' = 0$).}
-\end{figure}
-
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=0.2\textwidth]
-        {pdf/no_padding_strides_transposed_00.pdf}
-    \includegraphics[width=0.2\textwidth]
-        {pdf/no_padding_strides_transposed_01.pdf}
-    \includegraphics[width=0.2\textwidth]
-        {pdf/no_padding_strides_transposed_02.pdf}
-    \includegraphics[width=0.2\textwidth]
-        {pdf/no_padding_strides_transposed_03.pdf}
-    \caption{\label{fig:no_padding_strides_transposed} The transpose of
-        convolving a $3 \times 3$ kernel over a $5 \times 5$ input using $2
-        \times 2$ strides (i.e. $i = 5$, $k = 3$, $s = 2$ and $p = 0$) is
-        equivalent to convolving a $3 \times 3$ kernel over a $2 \times 2$ input
-        padded with a $2 \times 2$ border of zeros with $1$ zero inserted
-        between inputs using unit strides (i.e. $i' = 2$, $\tilde{i}' = 3$, $k'
-        = k$, $s' = 1$ and $p' = 2$).}
-\end{figure}
-
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=0.2\textwidth]{pdf/padding_strides_transposed_00.pdf}
-    \includegraphics[width=0.2\textwidth]{pdf/padding_strides_transposed_01.pdf}
-    \includegraphics[width=0.2\textwidth]{pdf/padding_strides_transposed_02.pdf}
-    \includegraphics[width=0.2\textwidth]{pdf/padding_strides_transposed_03.pdf}
-    \caption{\label{fig:padding_strides_transposed} The transpose of convolving
-        a $3 \times 3$ kernel over a $5 \times 5$ input padded with a $1 \times
-        1$ border of zeros using $2 \times 2$ strides (i.e. $i = 5$, $k = 3$, $s
-        = 2$ and $p = 1$) is equivalent to convolving a $3 \times 3$ kernel over
-        a $2 \times 2$ input padded with a $1 \times 1$ border of zeros with $1$
-        zero inserted between inputs using unit strides (i.e. $i' = 2$,
-        $\tilde{i}' = 3$, $k' = k$, $s' = 1$ and $p' = 1$).}
-\end{figure}
-
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=0.2\textwidth]
-        {pdf/padding_strides_odd_transposed_00.pdf}
-    \includegraphics[width=0.2\textwidth]
-        {pdf/padding_strides_odd_transposed_01.pdf}
-    \includegraphics[width=0.2\textwidth]
-        {pdf/padding_strides_odd_transposed_02.pdf}
-    \includegraphics[width=0.2\textwidth]
-        {pdf/padding_strides_odd_transposed_03.pdf}
-    \caption{\label{fig:padding_strides_odd_transposed} \todo{FIXME} The
-        transpose of convolving a $3 \times 3$ kernel over a $6 \times 6$ input
-        padded with a $1 \times 1$ border of zeros using $2 \times 2$ strides
-        (i.e. $i = 6$, $k = 3$, $s = 2$ and $p = 1$) is equivalent to convolving
-        a $3 \times 3$ kernel over a $2 \times 2$ input padded with a $1 \times
-        1$ border of zeros with $1$ zero inserted between inputs using unit
-        strides (i.e. $i' = 2$, $\tilde{i}' = 3$, $a = 1$, $k' = k$, $s' = 1$
-        and $p' = 1$).}
-\end{figure}
 
 \subsection{Convolution vs. transposed convolution}
 
@@ -604,6 +480,24 @@ transpose of convolutions can be expressed in terms of convolutions.
 
 \subsection{No zero-padding, unit strides, transposed}
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.2\textwidth]
+        {pdf/no_padding_no_strides_transposed_00.pdf}
+    \includegraphics[width=0.2\textwidth]
+        {pdf/no_padding_no_strides_transposed_01.pdf}
+    \includegraphics[width=0.2\textwidth]
+        {pdf/no_padding_no_strides_transposed_02.pdf}
+    \includegraphics[width=0.2\textwidth]
+        {pdf/no_padding_no_strides_transposed_03.pdf}
+    \caption{\label{fig:no_padding_no_strides_transposed} The transpose of
+        convolving a $3 \times 3$ kernel over a $4 \times 4$ input using unit
+        strides (i.e. $i = 4$, $k = 3$, $s = 1$ and $p = 0$) is equivalent to
+        convolving a $3 \times 3$ kernel over a $2 \times 2$ input padded with
+        a $2 \times 2$ border of zeros using unit strides (i.e. $i' = 2$, $k' =
+        k$, $s' = 1$ and $p' = 2$).}
+\end{figure}
+
 \autoref{fig:no_padding_no_strides_transposed} shows the effect of applying the
 transpose of the matrix above on a $4 \times 4$ input (i.e. $i = 4$, $k = 3$, $s
 = 1$ and $p = 0$).
@@ -645,6 +539,25 @@ the transposed convolution's input.
 
 \subsection{Zero padding, unit strides, transposed}
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.2\textwidth]
+        {pdf/arbitrary_padding_no_strides_transposed_00.pdf}
+    \includegraphics[width=0.2\textwidth]
+        {pdf/arbitrary_padding_no_strides_transposed_01.pdf}
+    \includegraphics[width=0.2\textwidth]
+        {pdf/arbitrary_padding_no_strides_transposed_02.pdf}
+    \includegraphics[width=0.2\textwidth]
+        {pdf/arbitrary_padding_no_strides_transposed_03.pdf}
+    \caption{\label{fig:arbitrary_padding_no_strides_transposed} The transpose
+        of convolving a $4 \times 4$ kernel over a $5 \times 5$ input padded
+        with a $2 \times 2$ border of zeros using unit strides (i.e. $i = 5$,
+        $k = 4$, $s = 1$ and $p = 2$) is equivalent to convolving a $4 \times 4$
+        kernel over a $6 \times 6$ input padded with a $1 \times 1$ border of
+        zeros using unit strides (i.e. $i' = 6$, $k' = k$, $s' = 1$ and $p' =
+        1$).}
+\end{figure}
+
 Knowing that the transpose of a non-padded convolution involves convolving a
 zero-padded input, it would be reasonable to assume that the transpose of a
 zero-padded convolution involves convolving an input padded with {\em less}
@@ -669,6 +582,24 @@ properties.
 
 \subsubsection{Half padding, transposed}
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.2\textwidth]
+        {pdf/same_padding_no_strides_transposed_00.pdf}
+    \includegraphics[width=0.2\textwidth]
+        {pdf/same_padding_no_strides_transposed_01.pdf}
+    \includegraphics[width=0.2\textwidth]
+        {pdf/same_padding_no_strides_transposed_02.pdf}
+    \includegraphics[width=0.2\textwidth]
+        {pdf/same_padding_no_strides_transposed_03.pdf}
+    \caption{\label{fig:same_padding_no_strides_transposed} The transpose
+        of convolving a $3 \times 3$ kernel over a $5 \times 5$ input using half
+        padding and unit strides (i.e. $i = 5$, $k = 3$, $s = 1$ and $p = 1$) is
+        equivalent to convolving a $3 \times 3$ kernel over a $5 \times 5$ input
+        using half padding and unit strides (i.e. $i' = 5$, $k' = k$, $s' = 1$
+        and $p' = 1$).}
+\end{figure}
+
 Knowing that a half padded convolution produces an output with the same size as
 the input, it is unsurprising that the transpose of a half padded convolution
 is itself a half padded convolution:
@@ -691,6 +622,23 @@ by $k' = k$, $s' = 1$ and $p' = \lfloor k / 2 \rfloor$ and its output size is
 
 \subsubsection{Full padding, transposed}
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.2\textwidth]
+        {pdf/full_padding_no_strides_transposed_00.pdf}
+    \includegraphics[width=0.2\textwidth]
+        {pdf/full_padding_no_strides_transposed_01.pdf}
+    \includegraphics[width=0.2\textwidth]
+        {pdf/full_padding_no_strides_transposed_02.pdf}
+    \includegraphics[width=0.2\textwidth]
+        {pdf/full_padding_no_strides_transposed_03.pdf}
+    \caption{\label{fig:full_padding_no_strides_transposed} The transpose
+        of convolving a $3 \times 3$ kernel over a $5 \times 5$ input using full
+        padding and unit strides (i.e. $i = 5$, $k = 3$, $s = 1$ and $p = 2$) is
+        equivalent to convolving a $3 \times 3$ kernel over a $7 \times 7$ input
+        using unit strides (i.e. $i' = 7$, $k' = k$, $s' = 1$ and $p' = 0$).}
+\end{figure}
+
 Knowing that a non-padded convolution has a transpose which involves full
 padding, it is also unsurprising that the transpose of a fully padded
 convolution is a non-padded convolution:
@@ -711,6 +659,25 @@ output size is
 5$, $k = 3$ and (therefore) $p = 2$.
 
 \subsection{No zero-padding, non-unit strides, transposed}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.2\textwidth]
+        {pdf/no_padding_strides_transposed_00.pdf}
+    \includegraphics[width=0.2\textwidth]
+        {pdf/no_padding_strides_transposed_01.pdf}
+    \includegraphics[width=0.2\textwidth]
+        {pdf/no_padding_strides_transposed_02.pdf}
+    \includegraphics[width=0.2\textwidth]
+        {pdf/no_padding_strides_transposed_03.pdf}
+    \caption{\label{fig:no_padding_strides_transposed} The transpose of
+        convolving a $3 \times 3$ kernel over a $5 \times 5$ input using $2
+        \times 2$ strides (i.e. $i = 5$, $k = 3$, $s = 2$ and $p = 0$) is
+        equivalent to convolving a $3 \times 3$ kernel over a $2 \times 2$ input
+        padded with a $2 \times 2$ border of zeros with $1$ zero inserted
+        between inputs using unit strides (i.e. $i' = 2$, $\tilde{i}' = 3$, $k'
+        = k$, $s' = 1$ and $p' = 2$).}
+\end{figure}
 
 Using the same kind of deductive logic as for zero-padded convolutions, one
 might expect that the transpose of a convolution with $s > 1$ involves a
@@ -746,6 +713,21 @@ between each input unit, and its output size is
 
 \subsection{Zero-padding, non-unit strides, transposed}
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.2\textwidth]{pdf/padding_strides_transposed_00.pdf}
+    \includegraphics[width=0.2\textwidth]{pdf/padding_strides_transposed_01.pdf}
+    \includegraphics[width=0.2\textwidth]{pdf/padding_strides_transposed_02.pdf}
+    \includegraphics[width=0.2\textwidth]{pdf/padding_strides_transposed_03.pdf}
+    \caption{\label{fig:padding_strides_transposed} The transpose of convolving
+        a $3 \times 3$ kernel over a $5 \times 5$ input padded with a $1 \times
+        1$ border of zeros using $2 \times 2$ strides (i.e. $i = 5$, $k = 3$, $s
+        = 2$ and $p = 1$) is equivalent to convolving a $3 \times 3$ kernel over
+        a $2 \times 2$ input padded with a $1 \times 1$ border of zeros with $1$
+        zero inserted between inputs using unit strides (i.e. $i' = 2$,
+        $\tilde{i}' = 3$, $k' = k$, $s' = 1$ and $p' = 1$).}
+\end{figure}
+
 Still assuming that the convolution's input size $i$ is such that $i - k$ is a
 multiple of $s$, the analysis is extended to the zero-padded case by combining
 \autoref{prop:arbitrary_padding_no_strides_transposed} and
@@ -766,6 +748,26 @@ between each input unit, and its output size is
 
 \autoref{fig:padding_strides_transposed} provides an example for $i = 5$, $k =
 3$, $s = 2$ and $p = 1$.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.2\textwidth]
+        {pdf/padding_strides_odd_transposed_00.pdf}
+    \includegraphics[width=0.2\textwidth]
+        {pdf/padding_strides_odd_transposed_01.pdf}
+    \includegraphics[width=0.2\textwidth]
+        {pdf/padding_strides_odd_transposed_02.pdf}
+    \includegraphics[width=0.2\textwidth]
+        {pdf/padding_strides_odd_transposed_03.pdf}
+    \caption{\label{fig:padding_strides_odd_transposed} \todo{FIXME} The
+        transpose of convolving a $3 \times 3$ kernel over a $6 \times 6$ input
+        padded with a $1 \times 1$ border of zeros using $2 \times 2$ strides
+        (i.e. $i = 6$, $k = 3$, $s = 2$ and $p = 1$) is equivalent to convolving
+        a $3 \times 3$ kernel over a $2 \times 2$ input padded with a $1 \times
+        1$ border of zeros with $1$ zero inserted between inputs using unit
+        strides (i.e. $i' = 2$, $\tilde{i}' = 3$, $a = 1$, $k' = k$, $s' = 1$
+        and $p' = 1$).}
+\end{figure}
 
 The assumption that $i$ is such that $i - k$ is a multiple of $s$ is relaxed by
 introducing another parameter $a \in \{0, \ldots, s - 1\}$ that allows to
@@ -788,6 +790,7 @@ zeros added to the right and bottom edge of the input, and its output size is
 \autoref{fig:padding_strides_odd_transposed} provides an example for $i = 6$, $k
 = 3$, $s = 2$ and $p = 1$.
 
+\newpage
 \bibliography{bibliography}
 \bibliographystyle{natbib}
 \end{document}
