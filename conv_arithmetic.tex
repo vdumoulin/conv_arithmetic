@@ -136,7 +136,8 @@ value\footnote{
 If there are multiple input feature maps, each input feature map is convolved
 with a distinct kernel, and the resulting feature maps are summed up elementwise
 to produce the output feature map. The procedure can be repeated using different
-kernels to form as many output feature maps as desired.
+kernels to form as many output feature maps as desired \todo{illustrate this in
+a figure}.
 
 The convolution presented in \autoref{fig:numerical_no_padding_no_strides} is an
 instance of a 2-D convolution, but it can be generalized to N-D convolutions.
@@ -173,7 +174,6 @@ zeros using $2 \times 2$ strides.
 The analysis of the relationship between these parameters is simplified by the
 fact that they don't interact across axes, i.e. choices of kernel size, stride
 and zero padding along axis $j$ only affect the output size of axis $j$.
-
 Because of this, the guide will concentrate on 2-D convolutional layers acting
 on square inputs, and the kernel size, stride and zero-padding will always be
 the same along both axes.
@@ -189,7 +189,7 @@ the same along both axes.
     \includegraphics[width=0.32\textwidth]{pdf/numerical_no_padding_no_strides_06.pdf}
     \includegraphics[width=0.32\textwidth]{pdf/numerical_no_padding_no_strides_07.pdf}
     \includegraphics[width=0.32\textwidth]{pdf/numerical_no_padding_no_strides_08.pdf}
-    \caption{\label{fig:numerical_no_padding_no_strides} Computing three output
+    \caption{\label{fig:numerical_no_padding_no_strides} Computing the output
         values of a discrete convolution.}
 \end{figure}
 
@@ -204,7 +204,7 @@ the same along both axes.
     \includegraphics[width=0.32\textwidth]{pdf/numerical_padding_strides_06.pdf}
     \includegraphics[width=0.32\textwidth]{pdf/numerical_padding_strides_07.pdf}
     \includegraphics[width=0.32\textwidth]{pdf/numerical_padding_strides_08.pdf}
-    \caption{\label{fig:numerical_padding_strides} Computing three output values
+    \caption{\label{fig:numerical_padding_strides} Computing the output values
         of a discrete convolution for $N = 2$, $i_1 = i_2 = 5$, $k_1 = k_2 = 3$,
         $s_1 = s_2 = 2$, and $p_1 = p_2 = 1$.}
 \end{figure}
@@ -533,7 +533,8 @@ Note that if $\mathbf{w}$ is {\em not} replaced with $\mathbf{u}$, the resulting
 operation is a direct transpose of the convolution defined by $\mathbf{w}$,
 which is {\em exactly} what is needed for gradient backpropagation. In other
 words, the transposed convolution operation can be thought of as the gradient of
-{\em some} convolution with respect to its input.
+{\em some} convolution with respect to its input\footnote{
+    In practice, this is how transposed convolutions are implemented.}.
 
 The fortunate thing about transposed convolutions is that they are themselves
 convolutions, albeit with some additional processing on the input.
