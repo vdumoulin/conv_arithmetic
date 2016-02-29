@@ -111,9 +111,9 @@ transformation is applied to multiple locations in the input).
 
 \autoref{fig:numerical_no_padding_no_strides} provides an example of a discrete
 convolution. The blue grid is called the input {\em feature map}\footnote{
-    What we referred to earlier as {\em channels} is a name for the {\em feature
-    maps} of input data.}.
-We slide a {\em kernel} (dark blue) of value
+    What was referred to earlier as {\em channels} is a name for the {\em
+    feature maps} of input data.}.
+A {\em kernel} (dark blue) of value
 
 \begin{equation}
 \begin{pmatrix}
@@ -123,9 +123,10 @@ We slide a {\em kernel} (dark blue) of value
 \end{pmatrix}
 \end{equation}
 
-across the input feature map. At each location, we compute the product between
-the kernel elements and the overlapped input elements and sum the results up
-to obtain the corresponding output {\em feature map} value\footnote{
+slides across the input feature map. At each location, the product between the
+kernel elements and the overlapped input elements is computed and the results
+are summed up to obtain the corresponding output {\em feature map}
+value\footnote{
     While there is a distinction between convolution and cross-correlation from
     a signal processing perspective, the two become interchangeable when the
     kernel is learned. For the sake of simplicity and to stay consistent with
@@ -666,9 +667,9 @@ Doing so is inefficient and real-world implementations avoid useless
 multiplications by zero, but conceptually it is how the transpose of a strided
 convolution can be thought of.
 
-For the moment, we will assume that the convolution is non-padded ($p = 0$) and
-that its input size $i$ is such that $i - k$ is a multiple of $s$. In that case,
-the following property holds:
+For the moment, it will be assumed that the convolution is non-padded ($p = 0$)
+and that its input size $i$ is such that $i - k$ is a multiple of $s$. In that
+case, the following property holds:
 
 \begin{prop}\label{prop:no_padding_strides_transposed}
 A convolution described by $k$, $s$ and $p = 0$ and whose input size is such
