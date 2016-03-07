@@ -14,6 +14,7 @@
 
 \definecolor{blue}{RGB}{38,139,210}
 \definecolor{cyan}{RGB}{42,161,152}
+\definecolor{violet}{RGB}{108,113,196}
 \definecolor{red}{RGB}{220,50,47}
 \definecolor{base01}{RGB}{88,110,117}
 \definecolor{base02}{RGB}{7,54,66}
@@ -136,8 +137,8 @@ value\footnote{
 If there are multiple input feature maps, each input feature map is convolved
 with a distinct kernel, and the resulting feature maps are summed up elementwise
 to produce the output feature map. The procedure can be repeated using different
-kernels to form as many output feature maps as desired \todo{illustrate this in
-a figure}.
+kernels to form as many output feature maps as desired
+(\autoref{fig:full_picture}).
 
 The convolution presented in \autoref{fig:numerical_no_padding_no_strides} is an
 instance of a 2-D convolution, but it can be generalized to N-D convolutions.
@@ -211,6 +212,64 @@ the same along both axes.
     \caption{\label{fig:numerical_padding_strides} Computing the output values
         of a discrete convolution for $N = 2$, $i_1 = i_2 = 5$, $k_1 = k_2 = 3$,
         $s_1 = s_2 = 2$, and $p_1 = p_2 = 1$.}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \begin{tikzpicture}[scale=.35,every node/.style={minimum size=1cm}, on grid]
+        \begin{scope}[xshift=0cm,yshift=0cm]
+            \begin{scope}[xshift=0cm,yshift=0cm]
+                \draw[draw=base03,fill=blue,thick]
+                    (0,0) grid (5,5) rectangle (0,0);
+            \end{scope}
+            \begin{scope}[xshift=0.5cm,yshift=0.5cm]
+                \draw[draw=base03,fill=violet,thick]
+                    (0,0) grid (5,5) rectangle (0,0);
+            \end{scope}
+        \end{scope}
+        \foreach \x in {-10,1,11} {
+            \begin{scope}[xshift=\x cm,yshift=10cm]
+                \begin{scope}[xshift=0cm,yshift=0cm]
+                    \draw[draw=base03,fill=blue,thick]
+                        (0,0) grid (3,3) rectangle (0,0);
+                \end{scope}
+                \begin{scope}[xshift=0.5cm,yshift=0.5cm]
+                    \draw[draw=base03,fill=violet,thick]
+                        (0,0) grid (3,3) rectangle (0,0);
+                \end{scope}
+            \end{scope}
+            \begin{scope}[xshift=\x cm,yshift=20cm]\begin{scope}[xshift=0.5cm]
+                \draw[draw=base03,fill=cyan,thick]
+                    (0,0) grid (3,3) rectangle (0,0);
+            \end{scope}\end{scope}
+        }
+        \begin{scope}[xshift=1cm,yshift=30cm]
+            \foreach \s in {0,0.5,1.0} {
+                \begin{scope}[xshift=\s cm,yshift=\s cm]
+                    \draw[draw=base03,fill=cyan,thick]
+                        (0,0) grid (3,3) rectangle (0,0);
+                \end{scope}
+            }
+        \end{scope}
+        \draw[->, thick] (-0.5,2.5) to (-8.5,9.5);
+        \draw[->, thick] (3,6) to (3,9.5);
+        \draw[->, thick] (6,3.5) to (12.5,9.5);
+        \draw[->, thick]  (-8,14.5) to (-8,19.5);
+        \draw[->, thick]  (3,14.5) to (3,19.5);
+        \draw[->, thick]  (13,14.5) to (13,19.5);
+        \draw[->, thick]  (-8,23.5) to (2,29.5);
+        \draw[->, thick]  (3,23.5) to (2.5,29.5);
+        \draw[->, thick]  (13,23.5) to (3,29.5);
+    \end{tikzpicture}
+    \caption{\label{fig:full_picture} A convolution mapping from two input
+        feature maps to three output feature maps using a $3 \times 2 \times 3
+        \times 3$ collection of kernels $\mathbf{w}$. In the left pathway, input
+        feature map 1 is convolved with kernel $\mathbf{w}_{1,1}$ and input
+        feature map 2 is convolved with kernel $\mathbf{w}_{1,2}$, and the
+        results are summed together elementwise to form the first output feature
+        map. The same is repeated for the middle and right pathways to form the
+        second and third feature maps, and all three output feature maps are
+        grouped together to form the output.}
 \end{figure}
 
 \chapter{Convolution arithmetic}
