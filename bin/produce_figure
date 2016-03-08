@@ -12,7 +12,7 @@ numpy.random.seed(1234)
 
 
 def make_numerical_tex_string(step, input_size, output_size, padding,
-                              kernel_size, stride, transposed=False):
+                              kernel_size, stride, mode):
     """Creates a LaTeX string for a numerical convolution animation.
 
     Parameters
@@ -29,6 +29,8 @@ def make_numerical_tex_string(step, input_size, output_size, padding,
         Convolution kernel size.
     stride : int
         Convolution stride.
+    mode : str
+        Kernel mode, one of {'convolution', 'average', 'max'}.
 
     Returns
     -------
@@ -37,6 +39,9 @@ def make_numerical_tex_string(step, input_size, output_size, padding,
         animation.
 
     """
+    if mode not in ('convolution', 'average', 'max'):
+        raise ValueError("wrong convolution mode, choices are 'convolution', "
+                         "'average' or 'max'")
     max_steps = output_size ** 2
     if step >= max_steps:
         raise ValueError('step {} out of bounds (there are '.format(step) +
@@ -53,16 +58,35 @@ def make_numerical_tex_string(step, input_size, output_size, padding,
         low=0, high=4, size=(input_size, input_size))
     kernel = numpy.random.randint(
         low=0, high=3, size=(kernel_size, kernel_size))
-    output = numpy.empty((output_size, output_size), dtype='int32')
+    output = numpy.empty((output_size, output_size), dtype='float32')
     for offset_x, offset_y in itertools.product(range(output_size),
                                                 range(output_size)):
-        output[offset_x, offset_y] = (
-            input_[offset_x: offset_x + kernel_size,
-                   offset_y: offset_y + kernel_size] * kernel).sum()
+        if mode == 'convolution':
+            output[offset_x, offset_y] = (
+                input_[offset_x: offset_x + kernel_size,
+                       offset_y: offset_y + kernel_size] * kernel).sum()
+        elif mode == 'average':
+            output[offset_x, offset_y] = (
+                input_[offset_x: offset_x + kernel_size,
+                       offset_y: offset_y + kernel_size]).mean()
+        else:
+            output[offset_x, offset_y] = (
+                input_[offset_x: offset_x + kernel_size,
+                       offset_y: offset_y + kernel_size]).max()
 
     offsets = list(itertools.product(range(output_size - 1, -1, -1),
                                      range(output_size)))
     offset_y, offset_x = offsets[step]
+
+    if mode == 'convolution':
+        kernel_values_string = ''.join(
+            "\\node (node) at ({0},{1}) {{\\tiny {2}}};\n".format(
+                i + 0.8 + stride * offset_x, j + 0.2 + stride * offset_y,
+                kernel[kernel_size - 1 - j, i])
+            for i, j in itertools.product(range(kernel_size),
+                                          range(kernel_size)))
+    else:
+        kernel_values_string = '\n'
 
     return six.b(tex_template.format(**{
         'PADDING_TO': '{0},{0}'.format(total_input_size),
@@ -77,17 +101,12 @@ def make_numerical_tex_string(step, input_size, output_size, padding,
                                           stride * offset_y),
         'INPUT_GRID_TO': '{},{}'.format(stride * offset_x + kernel_size,
                                         stride * offset_y + kernel_size),
-        'KERNEL_VALUES': ''.join(
-            "\\node (node) at ({0},{1}) {{\\tiny {2}}};\n".format(
-                i + 0.8 + stride * offset_x, j + 0.2 + stride * offset_y,
-                kernel[kernel_size - 1 - j, i])
-            for i, j in itertools.product(range(kernel_size),
-                                          range(kernel_size))),
+        'KERNEL_VALUES': kernel_values_string,
         'OUTPUT_TO': '{0},{0}'.format(output_size),
         'OUTPUT_GRID_FROM': '{},{}'.format(offset_x, offset_y),
         'OUTPUT_GRID_TO': '{},{}'.format(offset_x + 1, offset_y + 1),
         'OUTPUT_VALUES': ''.join(
-            "\\node (node) at ({0},{1}) {{{2}}};\n".format(
+            "\\node (node) at ({0},{1}) {{\\tiny {2:.1f}}};\n".format(
                 i + 0.5, j + 0.5, output[output_size - 1 - j, i])
             for i, j in itertools.product(range(output_size),
                                           range(output_size))),
@@ -229,6 +248,9 @@ if __name__ == "__main__":
 
     subparser = subparsers.add_parser('numerical', parents=[parent_parser],
                                       help='numerical convolution animation')
+    subparser.add_argument("-m", "--mode", type=str, default='convolution',
+                           choices=('convolution', 'average', 'max'),
+                           help="kernel mode")
     subparser.set_defaults(which_='numerical')
 
     args = parser.parse_args()
