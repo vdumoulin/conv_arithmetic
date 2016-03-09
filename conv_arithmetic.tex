@@ -65,12 +65,12 @@ is generally an intimidating experience. A convolutional layer's output shape is
 affected by the shape of its input as well as the choice of kernel shape, zero
 padding and strides, and the relationship between these properties is not
 trivial to infer. This contrasts with fully-connected layers, whose output size
-is independent of its input size.
-
-Additionally, so-called transposed convolutional layers (also known as
-fractionally strided convolutional layers) have been employed in more and more
-work as of late, and their relationship with convolutional layers has been
-explained with various degrees of clarity.
+is independent of its input size. Additionally, CNNs also usually feature a {\em
+pooling} stage, adding yet another level of complexity with respect to
+fully-connected networks.  Finally, so-called transposed convolutional layers
+(also known as fractionally strided convolutional layers) have been employed in
+more and more work as of late, and their relationship with convolutional layers
+has been explained with various degrees of clarity.
 
 This guide's objective is twofold:
 
@@ -182,71 +182,35 @@ For instance, \autoref{fig:numerical_padding_strides} shows a $3 \times 3$
 kernel applied to a $5 \times 5$ input padded with a $1 \times 1$ border of
 zeros using $2 \times 2$ strides.
 
-\section{Subsampling operations}
+Note that strides constitute a form of subsampling. In addition to being a
+measure of how the kernel is translated, strides can be viewed as how much of
+the output is retained. For instance, moving the kernel by hops of two is
+equivalent to moving the kernel by hops of one but retaining only even output
+elements \todo{illustrate that}.
 
-In addition to discrete convolutions themselves, {\em subsampling} operations
-make up another important building block in CNNs. Subsampling operations reduce
-the size of feature maps by summarizing subregions through some {\em pooling}
-operation (usually averaging out or taking the maximum value).
+\section{Pooling}
 
-Subsampling can be viewed as a convolution operation with a different type of
-{\em kernel function}. Whereas in convolutional layers the kernel function
-computes a linear combination of the elements of an input subregion, subsampling
-kernel functions may compute the average
-(\autoref{fig:numerical_average_pooling}) or retain the maximum value
-(\autoref{fig:numerical_max_pooling}) over the same subregion.
+In addition to discrete convolutions themselves, {\em pooling} operations
+make up another important building block in CNNs. Pooling operations reduce
+the size of feature maps by using some function to summarize subregions, such
+as taking the average or the maximum value.
 
-The following properties affect the output size $o_j$ of a subsampling layer
+Pooling works by sliding a window across the input and feeding the content of
+the window to a {\em pooling function}. In some sense, pooling works very much
+like a discrete convolution, but replaces the linear combination described by
+the kernel with some other function. \autoref{fig:numerical_average_pooling}
+provides an example for average pooling, and \autoref{fig:numerical_max_pooling}
+does the same for max pooling.
+
+The following properties affect the output size $o_j$ of a pooling layer
 along axis $j$:
 
 \begin{itemize}
     \item $i_j$: input size along axis $j$,
-    \item $k_j$: kernel size along axis $j$,
-    \item $s_j$: stride along axis $j$.
+    \item $k_j$: pooling window size along axis $j$,
+    \item $s_j$: stride (distance between two consecutive positions of the
+        pooling window) along axis $j$.
 \end{itemize}
-
-\subsection{Average pooling as a convolution layer}
-
-Average pooling can be seen as applying a convolution layer with a fixed kernel
-whose elements have value $1/n_k$, where $n_k$ is the number of kernel elements.
-For instance, $3 \times 3$ average pooling can be represented as a $3 \times 3$
-convolution layer whose kernel has value
-
-\begin{equation*}
-\begin{pmatrix}
-    1/9 & 1/9 & 1/9 \\
-    1/9 & 1/9 & 1/9 \\
-    1/9 & 1/9 & 1/9
-\end{pmatrix}
-\end{equation*}
-
-\section{A generalized view of convolution and subsampling}
-
-Since both convolution and subsampling layers can be seen as discrete
-convolutions using some arbitrary kernel function, and since a subsampling
-layer's adjustable properties are a subset of a convolution layer's adjustable
-properties, it makes sense to abstract out the specific nature of the kernel
-function being convolved.
-
-Additionally, the analysis of the relationship between these hyperparameters is
-simplified by the fact that they don't interact across axes, i.e. choices of
-kernel size, stride and zero padding along axis $j$ only affect the output size
-of axis $j$.
-
-Because of this, the guide will focus on the following setting:
-
-\begin{itemize}
-    \item 2-D discrete convolutions,
-    \item arbitrary kernel function,
-    \item square inputs ($i_1 = i_2 = i$),
-    \item square kernel size ($k_1 = k_2 = k$),
-    \item same strides along both axes ($s_1 = s_2 = s$),
-    \item same zero-padding along both axes ($p_1 = p_2 = p$).
-\end{itemize}
-
-This simplifies the analysis and the visualization, but keep in mind that the
-results shown apply to both convolution and subsampling layers, and generalize
-to the N-D and non-square cases.
 
 \begin{figure}[p]
     \centering
@@ -639,6 +603,25 @@ complicate the analysis in the case of {\em transposed convolutions}.
     \end{subfigure}
     \caption{Counting kernel positions.}
 \end{figure}
+
+\chapter{Pooling arithmetic}
+
+Some readers may have noticed that the treatment of convolution arithmetic only
+relies on the assumption that some function is repeatedly applied onto subsets
+of the input. This means that the relationships derived in the previous chapter
+can be reused in the case of pooling arithmetic.
+
+Since pooling does not involve zero-padding, the relationship describing the
+general case is as follows:
+
+\begin{relationship}\label{rel:pooling}
+For $i$, $k$ and $s$,
+\begin{equation*}
+    o = \left\lfloor \frac{i - k}{s} \right\rfloor + 1.
+\end{equation*}
+\end{relationship}
+
+This relationship holds for any type of pooling.
 
 \chapter{Transposed convolution arithmetic}
 
