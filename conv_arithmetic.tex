@@ -79,12 +79,18 @@ This guide's objective is twofold:
         convolutional layers.
     \item Provide an intuitive understanding of the relationship between input
         shape, kernel shape, zero padding, strides and output shape in
-        convolutional, subsampling and transposed convolutional layers.
+        convolutional, pooling and transposed convolutional layers.
 \end{enumerate}
 
 In order to remain broadly applicable, the results shown in this guide are
 independent of implementation details and apply to all commonly used machine
-learning frameworks (e.g. Theano, Torch, Tensorflow, Caffe).
+learning frameworks, such as Theano
+\citep{bergstra2010theano,bastien2012theano}, Torch \citep{collobert2011torch7},
+Tensorflow \citep{abaditensorflow} and Caffe \citep{jia2014caffe}.
+
+This chapter briefly reviews the main building blocks of CNNs, namely discrete
+convolutions and pooling. For an in-depth treatment of the subject, see Chapter
+9 of the Deep Learning textbook \citep{Goodfellow-et-al-2016-Book}.
 
 \section{Discrete convolutions}
 
