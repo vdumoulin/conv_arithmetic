@@ -24,8 +24,8 @@
 
 \newcommand{\todo}[1]{\textcolor{red}{TODO: #1}}
 
-\newtheorem{prop}{Property}
-\providecommand*{\propautorefname}{Property}
+\newtheorem{relationship}{Relationship}
+\providecommand*{\relationshipautorefname}{Relationship}
 \surroundwithmdframed[
     topline=false,
     bottomline=false,
@@ -36,7 +36,7 @@
     leftmargin=15pt,
     rightmargin=15pt,
     nobreak=true,
-]{prop}
+]{relationship}
 
 \setcounter{MaxMatrixCols}{16}
 
@@ -335,6 +335,24 @@ along axis $j$:
 
 \chapter{Convolution arithmetic}
 
+The analysis of the relationship between convolutional layer properties is
+simplified by the fact that they don't interact across axes, i.e. choices of
+kernel size, stride and zero padding along axis $j$ only affect the output size
+of axis $j$.
+
+Because of this, the chapter will focus on the following setting:
+
+\begin{itemize}
+    \item 2-D discrete convolutions ($N = 2$),
+    \item square inputs ($i_1 = i_2 = i$),
+    \item square kernel size ($k_1 = k_2 = k$),
+    \item same strides along both axes ($s_1 = s_2 = s$),
+    \item same zero-padding along both axes ($p_1 = p_2 = p$).
+\end{itemize}
+
+This simplifies the analysis and the visualization, but keep in mind that the
+results outlined also generalize to the N-D and non-square cases.
+
 \section{No zero-padding, unit strides}
 
 The simplest case to analyze is when a kernel just slides across the input (i.e.
@@ -349,14 +367,14 @@ is equal to the number of steps made, plus one, accounting for the initial
 position of the kernel (\autoref{fig:no_padding_no_strides_explained}). The same
 logic applies for the height axis.
 
-From this, the following property is inferred:
+From this, the following relationship is inferred:
 
-\begin{prop}\label{prop:no_padding_no_strides}
+\begin{relationship}\label{rel:no_padding_no_strides}
 For $i$, $k$, $s = 1$ and $p = 0$,
 \begin{equation*}
     o = (i - k) + 1.
 \end{equation*}
-\end{prop}
+\end{relationship}
 
 \section{Zero-padding, unit strides}
 
@@ -365,15 +383,15 @@ effect on the effective input size. \autoref{fig:arbitrary_padding_no_strides}
 provides an example for $i = 5$, $k = 4$ and $p = 2$.
 
 Noting that padding with $p$ zeros changes the effective input size from $i$ to
-$i + 2p$, \autoref{prop:no_padding_no_strides} is used to infer the following
-property:
+$i + 2p$, \autoref{rel:no_padding_no_strides} is used to infer the following
+relationship:
 
-\begin{prop}\label{prop:arbitrary_padding_no_strides}
+\begin{relationship}\label{rel:arbitrary_padding_no_strides}
 For $i$, $k$, $s = 1$ and $p$,
 \begin{equation*}
     o = (i - k) + 2p + 1.
 \end{equation*}
-\end{prop}
+\end{relationship}
 
 Two specific instances of zero padding are used quite extensively in practice
 because of their respective properties.
@@ -383,7 +401,7 @@ because of their respective properties.
 Having the output size be the same as the input size can be a desireable
 property:
 
-\begin{prop}\label{prop:same_padding_no_strides}
+\begin{relationship}\label{rel:same_padding_no_strides}
 If $k$ is odd ($k = 2n + 1, \quad n \in \mathbb{N}$), and for $i$, $s = 1$ and
 $p = \lfloor k / 2 \rfloor = n$,
 \begin{equation*}
@@ -393,7 +411,7 @@ $p = \lfloor k / 2 \rfloor = n$,
       &= i.
 \end{split}
 \end{equation*}
-\end{prop}
+\end{relationship}
 
 This is sometimes referred to as {\em half} (or {\em same}) padding.
 \autoref{fig:same_padding_no_strides} provides an example for $i = 5$, $k = 3$
@@ -404,7 +422,7 @@ and (therefore) $p = 1$.
 While convolving a kernel generally {\em decreases} the output size with respect
 to the input size, sometimes the opposite is required:
 
-\begin{prop}\label{prop:full_padding_no_strides}
+\begin{relationship}\label{rel:full_padding_no_strides}
 If $p = k - 1$, and for $i$, $k$ and $s = 1$,
 \begin{equation*}
 \begin{split}
@@ -412,7 +430,7 @@ If $p = k - 1$, and for $i$, $k$ and $s = 1$,
       &= i + (k - 1).
 \end{split}
 \end{equation*}
-\end{prop}
+\end{relationship}
 
 This is sometimes referred to as {\em full} padding, because in this setting
 every element of the kernel is superimposed on every element of the input
@@ -421,7 +439,7 @@ feature map. \autoref{fig:full_padding_no_strides} provides an example for $i =
 
 \section{No zero-padding, non-unit strides}
 
-So far, all properties derived only apply for unit-strided convolutions.
+So far, all relationships derived only apply for unit-strided convolutions.
 Incorporating non-unit strides requires another inference leap. To facilitate
 the analysis, let's momentarily ignore zero-padding (i.e.  $s > 1$ and $p = 0$).
 \autoref{fig:no_padding_strides} provides an example for $i = 5$, $k = 3$ and $s
@@ -436,14 +454,14 @@ for the initial position of the kernel
 (\autoref{fig:no_padding_strides_explained}). The same logic applies for the
 height axis.
 
-From this, the following property is inferred:
+From this, the following relationship is inferred:
 
-\begin{prop}\label{prop:no_padding_strides}
+\begin{relationship}\label{rel:no_padding_strides}
 For $i$, $k$, $p = 0$ and $s$,
 \begin{equation*}
     o = \left\lfloor \frac{i - k}{s} \right\rfloor + 1.
 \end{equation*}
-\end{prop}
+\end{relationship}
 
 The floor function accounts for the fact that sometimes the last possible step
 does {\em not} coincide with the kernel reaching the end of the input, i.e.
@@ -453,21 +471,21 @@ example of such a case).
 \section{Zero-padding, non-unit strides}
 
 The most general case (convolving over a zero-padded input using non-unit
-strides) is analyzed by applying \autoref{prop:no_padding_strides} on an
+strides) is analyzed by applying \autoref{rel:no_padding_strides} on an
 effective input of size $i + 2p$, just as was done for
-\autoref{prop:arbitrary_padding_no_strides}:
+\autoref{rel:arbitrary_padding_no_strides}:
 
-\begin{prop}\label{prop:padding_strides}
+\begin{relationship}\label{rel:padding_strides}
 For $i$, $k$, $p$ and $s$,
 \begin{equation*}
     o = \left\lfloor \frac{i + 2p - k}{s} \right\rfloor + 1.
 \end{equation*}
-\end{prop}
+\end{relationship}
 
 \autoref{fig:padding_strides} provides an example for $i = 5$, $k = 3$, $s = 2$
 and $p = 1$.
 
-As was noted for \autoref{prop:no_padding_strides}, the floor function means
+As was noted for \autoref{rel:no_padding_strides}, the floor function means
 that in some cases a convolution will produce the same output size for multiple
 input sizes.
 
@@ -625,6 +643,21 @@ This relationship holds for any type of pooling.
 
 \chapter{Transposed convolution arithmetic}
 
+Like for convolution arithmetic, transposed convolution arithmetic is simplified
+by the fact that transposed convolution properties don't interact across axes.
+
+The chapter will focus on the following setting:
+
+\begin{itemize}
+    \item 2-D transposed convolutions ($N = 2$),
+    \item square inputs ($i_1 = i_2 = i$),
+    \item square kernel size ($k_1 = k_2 = k$),
+    \item same strides along both axes ($s_1 = s_2 = s$),
+    \item same zero-padding along both axes ($p_1 = p_2 = p$).
+\end{itemize}
+
+Once again, the results outlined generalize to the N-D and non-square cases.
+
 \section{Convolution vs. transposed convolution}
 
 The need for transposed convolutions generally arises from the desire to use a
@@ -713,16 +746,16 @@ output pixel, the top right pixel is only connected to the top right output
 pixel, and so on. This is achieved by zero padding the input such that the
 kernel only touches a corner pixel when it is in the associated corner position.
 
-These observations give rise to the following property:
+These observations give rise to the following relationship:
 
-\begin{prop}\label{prop:no_padding_no_strides_transposed}
+\begin{relationship}\label{rel:no_padding_no_strides_transposed}
 A convolution described by $k$, $s = 1$ and $p = 0$ has an associated transposed
 convolution described by $k' = k$, $s' = 1$ and $p' = k - 1$ and its output size
 is
 \begin{equation*}
     o' = i' + (k - 1).
 \end{equation*}
-\end{prop}
+\end{relationship}
 
 Note that this corresponds to a fully padded convolution with unit strides on
 the transposed convolution's input.
@@ -737,16 +770,16 @@ zeros.
 \autoref{fig:arbitrary_padding_no_strides_transposed} shows that it is indeed
 the case by providing an example for $i = 5$, $k = 4$ and $p = 2$.
 
-The following property applies for zero-padded convolutions:
+The following relationship applies for zero-padded convolutions:
 
-\begin{prop}\label{prop:arbitrary_padding_no_strides_transposed}
+\begin{relationship}\label{rel:arbitrary_padding_no_strides_transposed}
 A convolution described by $k$, $s = 1$ and $p$ has an associated transposed
 convolution described by $k' = k$, $s' = 1$ and $p' = k - p - 1$ and its output
 size is
 \begin{equation*}
     o' = i' + (k - 1) - 2p.
 \end{equation*}
-\end{prop}
+\end{relationship}
 
 The transposes of convolutions with half and full padding have elegant
 properties.
@@ -757,7 +790,7 @@ Knowing that a half padded convolution produces an output with the same size as
 the input, it is unsurprising that the transpose of a half padded convolution
 is itself a half padded convolution:
 
-\begin{prop}\label{prop:half_padding_no_strides_transposed}
+\begin{relationship}\label{rel:half_padding_no_strides_transposed}
 A convolution described by $k = 2n + 1, \quad n \in \mathbb{N}$, $s = 1$ and $p
 = \lfloor k / 2 \rfloor = n$ has an associated transposed convolution described
 by $k' = k$, $s' = 1$ and $p' = \lfloor k / 2 \rfloor$ and its output size is
@@ -768,7 +801,7 @@ by $k' = k$, $s' = 1$ and $p' = \lfloor k / 2 \rfloor$ and its output size is
        &= i'.
 \end{split}
 \end{equation*}
-\end{prop}
+\end{relationship}
 
 \autoref{fig:same_padding_no_strides_transposed} provides an example for $i =
 5$, $k = 3$ and (therefore) $p = 1$.
@@ -779,7 +812,7 @@ Knowing that a non-padded convolution has a transpose which involves full
 padding, it is also unsurprising that the transpose of a fully padded
 convolution is a non-padded convolution:
 
-\begin{prop}\label{prop:full_padding_no_strides_transposed}
+\begin{relationship}\label{rel:full_padding_no_strides_transposed}
 A convolution described by $k$, $s = 1$ and $p = k - 1$ has an associated
 transposed convolution described by $k' = k$, $s' = 1$ and $p' = 0$ and its
 output size is
@@ -789,7 +822,7 @@ output size is
        &= i' - (k - 1)
 \end{split}
 \end{equation*}
-\end{prop}
+\end{relationship}
 
 \autoref{fig:full_padding_no_strides_transposed} provides an example for $i =
 5$, $k = 3$ and (therefore) $p = 2$.
@@ -813,9 +846,9 @@ convolution can be thought of.
 
 For the moment, it will be assumed that the convolution is non-padded ($p = 0$)
 and that its input size $i$ is such that $i - k$ is a multiple of $s$. In that
-case, the following property holds:
+case, the following relationship holds:
 
-\begin{prop}\label{prop:no_padding_strides_transposed}
+\begin{relationship}\label{rel:no_padding_strides_transposed}
 A convolution described by $k$, $s$ and $p = 0$ and whose input size is such
 that $i - k$ is a multiple of $s$ has an associated transposed convolution
 described by $\tilde{i}'$, $k' = k$, $s' = 1$ and $p' = k - 1$, where
@@ -826,16 +859,16 @@ between each input unit, and its output size is
     o' = s (i' - 1) + k.
 \end{split}
 \end{equation*}
-\end{prop}
+\end{relationship}
 
 \section{Zero-padding, non-unit strides, transposed}
 
 Still assuming that the convolution's input size $i$ is such that $i - k$ is a
 multiple of $s$, the analysis is extended to the zero-padded case by combining
-\autoref{prop:arbitrary_padding_no_strides_transposed} and
-\autoref{prop:no_padding_strides_transposed}:
+\autoref{rel:arbitrary_padding_no_strides_transposed} and
+\autoref{rel:no_padding_strides_transposed}:
 
-\begin{prop}\label{prop:padding_strides_transposed}
+\begin{relationship}\label{rel:padding_strides_transposed}
 A convolution described by $k$, $s$ and $p$ and whose input size is such
 that $i - k$ is a multiple of $s$ has an associated transposed convolution
 described by $\tilde{i}'$, $k' = k$, $s' = 1$ and $p' = k - p - 1$, where
@@ -846,7 +879,7 @@ between each input unit, and its output size is
     o' = s (i' - 1) + k - 2p.
 \end{split}
 \end{equation*}
-\end{prop}
+\end{relationship}
 
 \autoref{fig:padding_strides_transposed} provides an example for $i = 5$, $k =
 3$, $s = 2$ and $p = 1$.
@@ -855,7 +888,7 @@ The assumption that $i$ is such that $i - k$ is a multiple of $s$ is relaxed by
 introducing another parameter $a \in \{0, \ldots, s - 1\}$ that allows to
 distinguish between the $s$ different cases leading to $i'$:
 
-\begin{prop}\label{prop:padding_strides_transposed_odd}
+\begin{relationship}\label{rel:padding_strides_transposed_odd}
 A convolution described by $k$, $s$ and $p$ has an associated transposed
 convolution described by $a$, $\tilde{i}'$, $k' = k$, $s' = 1$ and $p' = k - p -
 1$, where $\tilde{i}'$ is the size of the stretched input obtained by adding $s
@@ -867,7 +900,7 @@ size is
     o' = s (i' - 1) + a + k - 2p.
 \end{split}
 \end{equation*}
-\end{prop}
+\end{relationship}
 
 \autoref{fig:padding_strides_odd_transposed} provides an example for $i = 6$, $k
 = 3$, $s = 2$ and $p = 1$.
