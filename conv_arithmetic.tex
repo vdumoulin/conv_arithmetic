@@ -79,8 +79,12 @@ This guide's objective is twofold:
         convolutional layers.
     \item Provide an intuitive understanding of the relationship between input
         shape, kernel shape, zero padding, strides and output shape in
-        convolutional layers and transposed convolutional layers.
+        convolutional, subsampling and transposed convolutional layers.
 \end{enumerate}
+
+In order to remain broadly applicable, the results shown in this guide are
+independent of implementation details and apply to all commonly used machine
+learning frameworks (e.g. Theano, Torch, Tensorflow, Caffe).
 
 \section{Discrete convolutions}
 
@@ -116,13 +120,13 @@ convolution. The blue grid is called the input {\em feature map}\footnote{
     feature maps} of input data.}.
 A {\em kernel} (dark blue) of value
 
-\begin{equation}
+\begin{equation*}
 \begin{pmatrix}
     0 & 1 & 2 \\
     2 & 2 & 0 \\
     0 & 1 & 2
 \end{pmatrix}
-\end{equation}
+\end{equation*}
 
 slides across the input feature map. At each location, the product between the
 kernel elements and the overlapped input elements is computed and the results
@@ -148,13 +152,13 @@ slide across the height, width and depth of the input feature map.
 The collection of kernels defining a discrete convolution has a shape
 corresponding to some permutation of $(n, m, k_1, \ldots, k_N)$, where
 
-\begin{equation}
+\begin{equation*}
 \begin{split}
     n &\equiv \text{number of output feature maps},\\
     m &\equiv \text{number of input feature maps},\\
     k_j &\equiv \text{kernel size along axis $j$}.
 \end{split}
-\end{equation}
+\end{equation*}
 
 The following properties affect the output size $o_j$ of a convolutional layer
 along axis $j$:
@@ -172,16 +176,71 @@ For instance, \autoref{fig:numerical_padding_strides} shows a $3 \times 3$
 kernel applied to a $5 \times 5$ input padded with a $1 \times 1$ border of
 zeros using $2 \times 2$ strides.
 
-The analysis of the relationship between these parameters is simplified by the
-fact that they don't interact across axes, i.e. choices of kernel size, stride
-and zero padding along axis $j$ only affect the output size of axis $j$.
-Because of this, the guide will concentrate on 2-D convolutional layers acting
-on square inputs, and the kernel size, stride and zero-padding will always be
-the same along both axes.
-
 \section{Subsampling operations}
 
-\todo{WRITEME}
+In addition to discrete convolutions themselves, {\em subsampling} operations
+make up another important building block in CNNs. Subsampling operations reduce
+the size of feature maps by summarizing subregions through some {\em pooling}
+operation (usually averaging out or taking the maximum value).
+
+Subsampling can be viewed as a convolution operation with a different type of
+{\em kernel function}. Whereas in convolutional layers the kernel function
+computes a linear combination of the elements of an input subregion, subsampling
+kernel functions may compute the average
+(\autoref{fig:numerical_average_pooling}) or retain the maximum value
+(\autoref{fig:numerical_max_pooling}) over the same subregion.
+
+The following properties affect the output size $o_j$ of a subsampling layer
+along axis $j$:
+
+\begin{itemize}
+    \item $i_j$: input size along axis $j$,
+    \item $k_j$: kernel size along axis $j$,
+    \item $s_j$: stride along axis $j$.
+\end{itemize}
+
+\subsection{Average pooling as a convolution layer}
+
+Average pooling can be seen as applying a convolution layer with a fixed kernel
+whose elements have value $1/n_k$, where $n_k$ is the number of kernel elements.
+For instance, $3 \times 3$ average pooling can be represented as a $3 \times 3$
+convolution layer whose kernel has value
+
+\begin{equation*}
+\begin{pmatrix}
+    1/9 & 1/9 & 1/9 \\
+    1/9 & 1/9 & 1/9 \\
+    1/9 & 1/9 & 1/9
+\end{pmatrix}
+\end{equation*}
+
+\section{A generalized view of convolution and subsampling}
+
+Since both convolution and subsampling layers can be seen as discrete
+convolutions using some arbitrary kernel function, and since a subsampling
+layer's adjustable properties are a subset of a convolution layer's adjustable
+properties, it makes sense to abstract out the specific nature of the kernel
+function being convolved.
+
+Additionally, the analysis of the relationship between these hyperparameters is
+simplified by the fact that they don't interact across axes, i.e. choices of
+kernel size, stride and zero padding along axis $j$ only affect the output size
+of axis $j$.
+
+Because of this, the guide will focus on the following setting:
+
+\begin{itemize}
+    \item 2-D discrete convolutions,
+    \item arbitrary kernel function,
+    \item square inputs ($i_1 = i_2 = i$),
+    \item square kernel size ($k_1 = k_2 = k$),
+    \item same strides along both axes ($s_1 = s_2 = s$),
+    \item same zero-padding along both axes ($p_1 = p_2 = p$).
+\end{itemize}
+
+This simplifies the analysis and the visualization, but keep in mind that the
+results shown apply to both convolution and subsampling layers, and generalize
+to the N-D and non-square cases.
 
 \begin{figure}[p]
     \centering
@@ -927,15 +986,6 @@ size is
         unit strides (i.e. $i' = 2$, $\tilde{i}' = 3$, $a = 1$, $k' = k$, $s' =
         1$ and $p' = 1$).}
 \end{figure}
-
-\chapter{Subsampling arithmetic}
-
-\todo{WRITEME}
-
-\section{Strides seen as subsampling}
-
-\todo{WRITEME}
-
 
 \bibliography{bibliography}
 \bibliographystyle{natbib}
