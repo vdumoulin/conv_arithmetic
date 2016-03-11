@@ -188,7 +188,7 @@ Note that strides constitute a form of subsampling. In addition to being a
 measure of how the kernel is translated, strides can be viewed as how much of
 the output is retained. For instance, moving the kernel by hops of two is
 equivalent to moving the kernel by hops of one but retaining only even output
-elements \autoref{fig:strides_subsampling}.
+elements (\autoref{fig:strides_subsampling}).
 
 \section{Pooling}
 
@@ -369,8 +369,8 @@ along axis $j$:
 \chapter{Convolution arithmetic}
 
 The analysis of the relationship between convolutional layer properties is
-simplified by the fact that they don't interact across axes, i.e. choices of
-kernel size, stride and zero padding along axis $j$ only affect the output size
+simplified by the fact that they don't interact across axes, i.e. the choice of
+kernel size, stride and zero padding along axis $j$ only affects the output size
 of axis $j$.
 
 Because of this, the chapter will focus on the following setting:
@@ -1021,8 +1021,8 @@ size is
         1$ border of zeros using $2 \times 2$ strides (i.e. $i = 5$, $k = 3$, $s
         = 2$ and $p = 1$). It is equivalent to convolving a $3 \times 3$ kernel
         over a $2 \times 2$ input (with $1$ zero inserted between inputs) padded
-        with a $1 \times 1$ border of zeros using unit strides (i.e. $i' = 2$,
-        $\tilde{i}' = 3$, $k' = k$, $s' = 1$ and $p' = 1$).}
+        with a $1 \times 1$ border of zeros using unit strides (i.e. $i' = 3$,
+        $\tilde{i}' = 5$, $k' = k$, $s' = 1$ and $p' = 1$).}
 \end{figure}
 
 \begin{figure}[p]
@@ -1038,7 +1038,7 @@ size is
         \times 3$ kernel over a $2 \times 2$ input (with $1$ zero inserted
         between inputs) padded with a $1 \times 1$ border of zeros (with an
         additional border of size $1$ added to the top and right edges) using
-        unit strides (i.e. $i' = 2$, $\tilde{i}' = 3$, $a = 1$, $k' = k$, $s' =
+        unit strides (i.e. $i' = 3$, $\tilde{i}' = 5$, $a = 1$, $k' = k$, $s' =
         1$ and $p' = 1$).}
 \end{figure}
 
