@@ -81,15 +81,14 @@ def make_gif_section():
             'gif/{}.gif : '.format(name) +
             ' '.join(['png/{}_{:02d}.png'.format(name, i)
                       for i in range(steps)]) + '\n' +
-            '\tconvert -delay 100 -loop 0 -layers Optimize +map $^ $@\n' +
+            '\tconvert -delay 100 -loop 0 -layers Optimize +map -dispose previous $^ $@\n' +
             '\tgifsicle --batch -O3 $@\n')
     return '\n'.join(rules)
 
 
 def make_png_section():
     return ('png/%.png : pdf/%.pdf\n'
-            '\tconvert -density 600 -resize 25% -flatten -background white '
-            '$< -quality 90 $@\n')
+            '\tconvert -density 600 $< -flatten -resize 25% $@\n')
 
 
 def make_pdf_section():
