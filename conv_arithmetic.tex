@@ -12,6 +12,7 @@
 
 \usepackage{hyperref}
 
+
 \definecolor{blue}{RGB}{38,139,210}
 \definecolor{cyan}{RGB}{42,161,152}
 \definecolor{violet}{RGB}{108,113,196}
@@ -42,8 +43,9 @@
 
 \title{A guide to convolution arithmetic for deep learning}
 \author[*]{Vincent Dumoulin\thanks{dumouliv@iro.umontreal.ca}}
-\author[*]{Francesco Visin\thanks{fvisin@gmail.com}}
+\author[*$\dagger$]{Francesco Visin\thanks{francesco.visin@polimi.it}}
 \affil[*]{MILA, Universit\'{e} de Montr\'{e}al}
+\affil[$\dagger$]{AIRLab, Politecnico di Milano}
 \date{\today}
 
 \begin{document}
@@ -96,18 +98,16 @@ convolutions and pooling. For an in-depth treatment of the subject, see Chapter
 
 \section{Discrete convolutions}
 
-The bread and butter of neural networks is affine transformations: a vector is
-received as input and is multiplied with a matrix to produce an output (to which
-a bias vector is usually added before passing the result through a
-nonlinearity). This is applicable to any type of input, be it an image, a sound
-clip or an unordered collection of features: their representation can always be
-flattened into a vector before the transformation.
+The bread and butter of neural networks is \emph{affine transformations}: a 
+vector is received as input and is multiplied with a matrix to produce an 
+output (to which a bias vector is usually added before passing the result 
+through a nonlinearity). This is applicable to any type of input, be it an 
+image, a sound clip or an unordered collection of features: whatever their
+dimensionality, their representation can always be flattened into a vector 
+before the transformation.
 
-In the case of images and sound clips, there is an ordering (spatial or
-temporal) being thrown away when they are flattened. This information may prove
-very handy in solving some tasks, like computer vision and speech recognition.
-
-These sorts of inputs share important properties:
+Images, sound clips and many other similar kinds of data have an intrinsic
+structure. More formally, we can note they share these important properties:
 
 \begin{itemize}
     \item They are stored as multi-dimensional arrays.
@@ -117,6 +117,12 @@ These sorts of inputs share important properties:
         of the data (e.g. the red, green and blue channels of a color image, or
         the left and right channels of a stereo audio track).
 \end{itemize}
+
+This gets thrown away when an affine transformation is applied, due to the
+flattening step that has to precede the transformation itself. Still, the
+topological information may prove very handy in solving some tasks, like
+computer vision and speech recognition, and we would rather not lose it. Here
+is where discrete convolutions come into play.
 
 A discrete convolution is a linear transformation that is sparse (only a few
 input units contribute to a given output unit) and reuses parameters (the same
@@ -143,7 +149,7 @@ value\footnote{
     While there is a distinction between convolution and cross-correlation from
     a signal processing perspective, the two become interchangeable when the
     kernel is learned. For the sake of simplicity and to stay consistent with
-    most of the machine learning litterature, the term {\em convolution}
+    most of the machine learning literature, the term {\em convolution}
     will be used in this guide.}.
 
 If there are multiple input feature maps, each input feature map is convolved
