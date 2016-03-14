@@ -134,13 +134,22 @@ convolution. The blue grid is called the input {\em feature map}\footnote{
     feature maps} of input data.}.
 A {\em kernel} (dark blue) of value
 
-\begin{equation*}
-\begin{pmatrix}
-    0 & 1 & 2 \\
-    2 & 2 & 0 \\
-    0 & 1 & 2
-\end{pmatrix}
-\end{equation*}
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}[scale=.5,every node/.style={minimum size=1cm}, on grid]
+            \draw[fill=base02,opacity=0.4] (0,0) rectangle (3,3);
+            \draw[draw=base03,thick] (0,0) grid (3,3);
+            \node (00) at (0.5,0.5) {\tiny 0};
+            \node (01) at (0.5,1.5) {\tiny 1};
+            \node (02) at (0.5,2.5) {\tiny 2};
+            \node (10) at (1.5,0.5) {\tiny 2};
+            \node (11) at (1.5,1.5) {\tiny 2};
+            \node (12) at (1.5,2.5) {\tiny 0};
+            \node (20) at (2.5,0.5) {\tiny 0};
+            \node (21) at (2.5,1.5) {\tiny 1};
+            \node (22) at (2.5,2.5) {\tiny 2};
+    \end{tikzpicture}
+\end{figure}
 
 slides across the input feature map. At each location, the product between the
 kernel elements and the overlapped input elements is computed and the results
