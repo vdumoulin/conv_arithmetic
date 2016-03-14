@@ -60,7 +60,7 @@ def make_header():
 
 def make_report_section():
 
-    return ('conv_arithmetic.pdf : export BSTINPUTS=:./natbib\n'
+    return ('conv_arithmetic.pdf : export BSTINPUTS=$BSTINPUTS:./natbib\n'
 			'conv_arithmetic.pdf : conv_arithmetic.tex\n'
             '\tpdflatex conv_arithmetic\n'
             '\tpdflatex conv_arithmetic\n'
