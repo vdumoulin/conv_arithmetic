@@ -301,30 +301,46 @@ retaining only odd output elements (\autoref{fig:strides_subsampling}).
 \begin{figure}[p]
     \centering
     \begin{tikzpicture}[scale=.35,every node/.style={minimum size=1cm}, on grid]
-        \begin{scope}[xshift=0cm,yshift=0cm]
-            \draw[draw=base03,fill=blue,thick] (0,0) grid (5,5) rectangle (0,0);
-            \draw[fill=base02, opacity=0.4] (0,2) rectangle (3,5);
-        \end{scope}
-        \begin{scope}[xshift=7cm,yshift=1cm]
-            \draw[draw=base03,fill=cyan,thick] (0,0) grid (3,3) rectangle (0,0);
-            \draw[draw=base03] (1,0) -- (2,1) -- (2,0) -- (1,1);
-            \draw[draw=base03] (0,1) -- (1,2) -- (1,1) -- (0,2);
-            \draw[draw=base03] (1,1) -- (2,2) -- (2,1) -- (1,2);
-            \draw[draw=base03] (2,1) -- (3,2) -- (3,1) -- (2,2);
-            \draw[draw=base03] (1,2) -- (2,3) -- (2,2) -- (1,3);
-        \end{scope}
-        \begin{scope}[xshift=12cm,yshift=1.5cm]
-            \draw[draw=base03,fill=cyan,thick] (0,0) grid (2,2) rectangle (0,0);
+        \begin{scope}[xshift=0,yshift=0cm]
+            \begin{scope}[xshift=0cm,yshift=0cm]
+                \draw[draw=base03,fill=blue,thick] (0,0) grid (5,5) rectangle (0,0);
+                \draw[fill=base02, opacity=0.4] (0,2) rectangle (3,5);
+            \end{scope}
+            \begin{scope}[xshift=7cm,yshift=1.5cm]
+                \draw[draw=base03,fill=cyan,thick] (0,0) grid (2,2) rectangle (0,0);
+            \end{scope}
         \end{scope}
         \draw[draw=base03, ->, thick] (2.6,3.5) to  (4.5,3.5);
         \draw[draw=base03, ->, thick] (1.5,2.4) to (1.5,0.5);
         \draw[draw=base03, ->, thick] (5.25, 2.5) to (6.75, 2.5);
-        \draw[draw=base03, ->, thick] (10.25, 2.5) to (11.75, 2.5);
+        \begin{scope}[xshift=12cm,yshift=0cm]
+            \begin{scope}[xshift=0cm,yshift=0cm]
+                \draw[draw=base03,fill=blue,thick] (0,0) grid (5,5) rectangle (0,0);
+                \draw[fill=base02, opacity=0.4] (0,2) rectangle (3,5);
+            \end{scope}
+            \begin{scope}[xshift=7cm,yshift=1cm]
+                \draw[draw=base03,fill=cyan,thick] (0,0) grid (3,3) rectangle (0,0);
+                \draw[draw=base03] (1,0) -- (2,1) -- (2,0) -- (1,1);
+                \draw[draw=base03] (0,1) -- (1,2) -- (1,1) -- (0,2);
+                \draw[draw=base03] (1,1) -- (2,2) -- (2,1) -- (1,2);
+                \draw[draw=base03] (2,1) -- (3,2) -- (3,1) -- (2,2);
+                \draw[draw=base03] (1,2) -- (2,3) -- (2,2) -- (1,3);
+            \end{scope}
+            \begin{scope}[xshift=12cm,yshift=1.5cm]
+                \draw[draw=base03,fill=cyan,thick] (0,0) grid (2,2) rectangle (0,0);
+            \end{scope}
+        \end{scope}
+        \draw[draw=base03, ->, thick] (14.6,3.5) to  (15.5,3.5);
+        \draw[draw=base03, ->, thick] (15.6,3.5) to  (16.5,3.5);
+        \draw[draw=base03, ->, thick] (13.5,2.4) to (13.5,1.5);
+        \draw[draw=base03, ->, thick] (13.5,1.4) to (13.5,0.5);
+        \draw[draw=base03, ->, thick] (17.25, 2.5) to (18.75, 2.5);
+        \draw[draw=base03, ->, thick] (22.25, 2.5) to (23.75, 2.5);
     \end{tikzpicture}
     \caption{\label{fig:strides_subsampling} An alternative way of viewing
         strides. Instead of translating the $3 \times 3$ kernel by increments of
-        $s = 2$, the kernel is translated by increments of $1$ and only one in
-        $s = 2$ output elements is retained.}
+        $s = 2$ (left), the kernel is translated by increments of $1$ and only
+        one in $s = 2$ output elements is retained (right).}
 \end{figure}
 
 \section{Pooling}
