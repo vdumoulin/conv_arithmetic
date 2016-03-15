@@ -280,9 +280,15 @@ retaining only odd output elements (\autoref{fig:strides_subsampling}).
         \draw[->, thick] (-0.5,2.5) to (-8.5,9.5);
         \draw[->, thick] (3,6) to (3,9.5);
         \draw[->, thick] (6,3.5) to (12.5,9.5);
-        \draw[->, thick]  (-8,14.5) to (-8,19.5);
-        \draw[->, thick]  (3,14.5) to (3,19.5);
-        \draw[->, thick]  (13,14.5) to (13,19.5);
+        \draw[thick]  (-8,14.5) to (-8,16);
+        \draw[->, thick]  (-8,18) to (-8,19.5);
+        \node[thick] (p1) at (-8,17) {$+$};
+        \draw[thick]  (3,14.5) to (3,16);
+        \draw[->, thick]  (3,18) to (3,19.5);
+        \node[thick] (p2) at (3,17) {$+$};
+        \draw[thick]  (13,14.5) to (13,16);
+        \draw[->, thick]  (13,18) to (13,19.5);
+        \node[thick] (p3) at (13,17) {$+$};
         \draw[->, thick]  (-8,23.5) to (2,29.5);
         \draw[->, thick]  (3,23.5) to (2.5,29.5);
         \draw[->, thick]  (13,23.5) to (3,29.5);
