@@ -1,5 +1,5 @@
 \documentclass{report}
-\usepackage{amsmath,amsfonts,amsthm}
+\usepackage{amsmath,amsfonts,amsthm,amssymb}
 \usepackage{authblk}
 \usepackage[T1]{fontenc}
 \usepackage{graphicx}
@@ -42,9 +42,9 @@
 \setcounter{MaxMatrixCols}{16}
 
 \title{A guide to convolution arithmetic for deep learning}
-\author[*]{Vincent Dumoulin\thanks{dumouliv@iro.umontreal.ca}}
-\author[*$\dagger$]{Francesco Visin\thanks{francesco.visin@polimi.it}}
-\affil[*]{MILA, Universit\'{e} de Montr\'{e}al}
+\author[$\bigstar$]{Vincent Dumoulin\thanks{dumouliv@iro.umontreal.ca}}
+\author[$\bigstar\dagger$]{Francesco Visin\thanks{francesco.visin@polimi.it}}
+\affil[$\bigstar$]{MILA, Universit\'{e} de Montr\'{e}al}
 \affil[$\dagger$]{AIRLab, Politecnico di Milano}
 \date{\today}
 
@@ -129,10 +129,12 @@ input units contribute to a given output unit) and reuses parameters (the same
 transformation is applied to multiple locations in the input).
 
 \autoref{fig:numerical_no_padding_no_strides} provides an example of a discrete
-convolution. The blue grid is called the input {\em feature map}\footnote{
-    What was referred to earlier as {\em channels} is a name for the {\em
-    feature maps} of input data.}.
-A {\em kernel} (dark blue) of value
+convolution. The light blue grid is called the {\em input feature map}. To keep
+the drawing simple we representrd a single input feature map, but it is not
+uncommon to have multiple feature maps stacked one over the other.\footnote{
+    An example of this is what was referred to earlier as {\em channels} for 
+    images and sound clips.}. 
+A {\em kernel} (shaded area, resulting in dark blue) of value
 
 \begin{figure}[h]
     \centering
@@ -151,26 +153,29 @@ A {\em kernel} (dark blue) of value
     \end{tikzpicture}
 \end{figure}
 
-slides across the input feature map. At each location, the product between the
-kernel elements and the overlapped input elements is computed and the results
-are summed up to obtain the corresponding output {\em feature map}
-value\footnote{
+\noindent is being slided across the input feature map. At each location, the
+product between each element of the kernel and the corresponding elements of
+the overlapped input is computed and the results are summed up to obtain the
+output in the current location. The procedure can be repeated using different
+kernels to form as many output feature maps as desired 
+(\autoref{fig:full_picture}).  The final output of these procedure is called 
+{\em output feature map}\footnote{
     While there is a distinction between convolution and cross-correlation from
     a signal processing perspective, the two become interchangeable when the
     kernel is learned. For the sake of simplicity and to stay consistent with
     most of the machine learning literature, the term {\em convolution}
-    will be used in this guide.}.
+    will be used in this guide.}.  
 
-If there are multiple input feature maps, each input feature map is convolved
-with a distinct kernel, and the resulting feature maps are summed up elementwise
-to produce the output feature map. The procedure can be repeated using different
-kernels to form as many output feature maps as desired
-(\autoref{fig:full_picture}).
+If there are multiple input feature maps, the kernel will have to be
+\mbox{3-dimensional -- or,} equivalently each one of the feature maps will be
+convolved with a distinct \mbox{kernel -- and} the resulting feature maps will
+be summed up elementwise to produce the output feature map. 
 
-The convolution presented in \autoref{fig:numerical_no_padding_no_strides} is an
-instance of a 2-D convolution, but it can be generalized to N-D convolutions.
-For instance, in a 3-D convolution, the kernel would be a {\em cuboid} and would
-slide across the height, width and depth of the input feature map.
+The convolution presented so far and depicted in 
+\autoref{fig:numerical_no_padding_no_strides} is an instance of a 2-D
+convolution, but it can be generalized to N-D convolutions.  For instance, in a
+3-D convolution, the kernel would be a {\em cuboid} and would slide across the
+height, width and depth of the input feature map.
 
 The collection of kernels defining a discrete convolution has a shape
 corresponding to some permutation of $(n, m, k_1, \ldots, k_N)$, where
@@ -199,11 +204,11 @@ For instance, \autoref{fig:numerical_padding_strides} shows a $3 \times 3$
 kernel applied to a $5 \times 5$ input padded with a $1 \times 1$ border of
 zeros using $2 \times 2$ strides.
 
-Note that strides constitute a form of subsampling. In addition to being a
-measure of how the kernel is translated, strides can be viewed as how much of
-the output is retained. For instance, moving the kernel by hops of two is
-equivalent to moving the kernel by hops of one but retaining only even output
-elements (\autoref{fig:strides_subsampling}).
+Note that strides constitute a form of \emph{subsampling}. As an alternative to
+being interpreted as a measure of how much the kernel is translated, strides
+can be also viewed as how much of the output is retained. For instance, moving
+the kernel by hops of two is equivalent to moving the kernel by hops of one but
+retaining only odd output elements (\autoref{fig:strides_subsampling}).
 
 \section{Pooling}
 
@@ -336,10 +341,8 @@ along axis $j$:
         \begin{scope}[xshift=12cm,yshift=1.5cm]
             \draw[draw=base03,fill=cyan,thick] (0,0) grid (2,2) rectangle (0,0);
         \end{scope}
-        \draw[draw=base03, ->, thick] (2.6,3.5) to  (3.5,3.5);
-        \draw[draw=base03, ->, thick] (3.6,3.5) to  (4.5,3.5);
-        \draw[draw=base03, ->, thick] (1.5,2.4) to  (1.5,1.5);
-        \draw[draw=base03, ->, thick] (1.5,1.4) to  (1.5,0.5);
+        \draw[draw=base03, ->, thick] (2.6,3.5) to  (4.5,3.5);
+        \draw[draw=base03, ->, thick] (1.5,2.4) to (1.5,0.5);
         \draw[draw=base03, ->, thick] (5.25, 2.5) to (6.75, 2.5);
         \draw[draw=base03, ->, thick] (10.25, 2.5) to (11.75, 2.5);
     \end{tikzpicture}
@@ -384,11 +387,12 @@ along axis $j$:
 \chapter{Convolution arithmetic}
 
 The analysis of the relationship between convolutional layer properties is
-simplified by the fact that they don't interact across axes, i.e. the choice of
-kernel size, stride and zero padding along axis $j$ only affects the output size
-of axis $j$.
+easied by the fact that they don't interact across axes, i.e. the choice of
+kernel size, stride and zero padding along axis $j$ only affects the output
+size of axis $j$.
 
-Because of this, the chapter will focus on the following setting:
+Because of this, in this chapter we will focus on the following simplified 
+setting:
 
 \begin{itemize}
     \item 2-D discrete convolutions ($N = 2$),
@@ -398,24 +402,27 @@ Because of this, the chapter will focus on the following setting:
     \item same zero-padding along both axes ($p_1 = p_2 = p$).
 \end{itemize}
 
-This simplifies the analysis and the visualization, but keep in mind that the
-results outlined also generalize to the N-D and non-square cases.
+This facilitates the analysis and the visualization, but keep in mind that the
+results outlined here also generalize to the N-D and non-square cases.
 
 \section{No zero-padding, unit strides}
 
-The simplest case to analyze is when a kernel just slides across the input (i.e.
-$s = 1$ and $p = 0$). \autoref{fig:no_padding_no_strides} provides an example
-for $i = 4$ and $k = 3$.
+The simplest case to analyze is when the kernel just slides across every
+position of the input (i.e.  $s = 1$ and $p = 0$).
+\autoref{fig:no_padding_no_strides} provides an example for $i = 4$ and $k =
+3$.
 
-One way of defining the output size is by the number of possible placements of
-the kernel on the input. Consider the width axis: the left side of the kernel
-starts at the left side of the input, and the kernel slides by steps of one
-until its right side touches the right side of the input. The size of the output
-is equal to the number of steps made, plus one, accounting for the initial
-position of the kernel (\autoref{fig:no_padding_no_strides_explained}). The same
-logic applies for the height axis.
+One way of defining the output size in this case is by the number of possible
+placements of the kernel on the input. Let's consider the width axis. Imagine
+to superimpose the kernel on the upper left part of the input feature map and
+then move it towards the right. The size of the output will be equal to the
+number of steps we need to make the right side of the kernel touch the right
+side of the image, plus one, which corresponds to the initial superimposition
+of the kernel on the upper-left side
+(\autoref{fig:no_padding_no_strides_explained}).  The same logic applies for
+the height axis.
 
-From this, the following relationship is inferred:
+More formally, the following relashionship can be inferred:
 
 \begin{relationship}\label{rel:no_padding_no_strides}
 For $i$, $k$, $s = 1$ and $p = 0$,
