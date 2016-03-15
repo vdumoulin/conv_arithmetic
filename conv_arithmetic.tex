@@ -196,10 +196,9 @@ kernels to form as many output feature maps as desired
     kernel is learned. For the sake of simplicity and to stay consistent with
     most of the machine learning literature, the term {\em convolution}
     will be used in this guide.}.  
-
 If there are multiple input feature maps, the kernel will have to be
-\mbox{3-dimensional -- or,} equivalently each one of the feature maps will be
-convolved with a distinct \mbox{kernel -- and} the resulting feature maps will
+3-dimensional -- or, equivalently each one of the feature maps will be
+convolved with a distinct kernel -- and the resulting feature maps will
 be summed up elementwise to produce the output feature map. 
 
 The convolution presented so far and depicted in 
@@ -231,9 +230,9 @@ along axis $j$:
         at the end of an axis) along axis $j$.
 \end{itemize}
 
-For instance, \autoref{fig:numerical_padding_strides} shows a $3 \times 3$
-kernel applied to a $5 \times 5$ input padded with a $1 \times 1$ border of
-zeros using $2 \times 2$ strides.
+\noindent For instance, \autoref{fig:numerical_padding_strides} shows a $3
+\times 3$ kernel applied to a $5 \times 5$ input padded with a $1 \times 1$
+border of zeros using $2 \times 2$ strides.
 
 Note that strides constitute a form of \emph{subsampling}. As an alternative to
 being interpreted as a measure of how much the kernel is translated, strides
