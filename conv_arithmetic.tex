@@ -153,6 +153,37 @@ A {\em kernel} (shaded area, resulting in dark blue) of value
     \end{tikzpicture}
 \end{figure}
 
+\begin{figure}[p]
+    \centering
+    \includegraphics[width=0.32\textwidth]{pdf/numerical_no_padding_no_strides_00.pdf}
+    \includegraphics[width=0.32\textwidth]{pdf/numerical_no_padding_no_strides_01.pdf}
+    \includegraphics[width=0.32\textwidth]{pdf/numerical_no_padding_no_strides_02.pdf}
+    \includegraphics[width=0.32\textwidth]{pdf/numerical_no_padding_no_strides_03.pdf}
+    \includegraphics[width=0.32\textwidth]{pdf/numerical_no_padding_no_strides_04.pdf}
+    \includegraphics[width=0.32\textwidth]{pdf/numerical_no_padding_no_strides_05.pdf}
+    \includegraphics[width=0.32\textwidth]{pdf/numerical_no_padding_no_strides_06.pdf}
+    \includegraphics[width=0.32\textwidth]{pdf/numerical_no_padding_no_strides_07.pdf}
+    \includegraphics[width=0.32\textwidth]{pdf/numerical_no_padding_no_strides_08.pdf}
+    \caption{\label{fig:numerical_no_padding_no_strides} Computing the output
+        values of a discrete convolution.}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[width=0.32\textwidth]{pdf/numerical_padding_strides_00.pdf}
+    \includegraphics[width=0.32\textwidth]{pdf/numerical_padding_strides_01.pdf}
+    \includegraphics[width=0.32\textwidth]{pdf/numerical_padding_strides_02.pdf}
+    \includegraphics[width=0.32\textwidth]{pdf/numerical_padding_strides_03.pdf}
+    \includegraphics[width=0.32\textwidth]{pdf/numerical_padding_strides_04.pdf}
+    \includegraphics[width=0.32\textwidth]{pdf/numerical_padding_strides_05.pdf}
+    \includegraphics[width=0.32\textwidth]{pdf/numerical_padding_strides_06.pdf}
+    \includegraphics[width=0.32\textwidth]{pdf/numerical_padding_strides_07.pdf}
+    \includegraphics[width=0.32\textwidth]{pdf/numerical_padding_strides_08.pdf}
+    \caption{\label{fig:numerical_padding_strides} Computing the output values
+        of a discrete convolution for $N = 2$, $i_1 = i_2 = 5$, $k_1 = k_2 = 3$,
+        $s_1 = s_2 = 2$, and $p_1 = p_2 = 1$.}
+\end{figure}
+
 \noindent is being slided across the input feature map. At each location, the
 product between each element of the kernel and the corresponding elements of
 the overlapped input is computed and the results are summed up to obtain the
@@ -209,61 +240,6 @@ being interpreted as a measure of how much the kernel is translated, strides
 can be also viewed as how much of the output is retained. For instance, moving
 the kernel by hops of two is equivalent to moving the kernel by hops of one but
 retaining only odd output elements (\autoref{fig:strides_subsampling}).
-
-\section{Pooling}
-
-In addition to discrete convolutions themselves, {\em pooling} operations
-make up another important building block in CNNs. Pooling operations reduce
-the size of feature maps by using some function to summarize subregions, such
-as taking the average or the maximum value.
-
-Pooling works by sliding a window across the input and feeding the content of
-the window to a {\em pooling function}. In some sense, pooling works very much
-like a discrete convolution, but replaces the linear combination described by
-the kernel with some other function. \autoref{fig:numerical_average_pooling}
-provides an example for average pooling, and \autoref{fig:numerical_max_pooling}
-does the same for max pooling.
-
-The following properties affect the output size $o_j$ of a pooling layer
-along axis $j$:
-
-\begin{itemize}
-    \item $i_j$: input size along axis $j$,
-    \item $k_j$: pooling window size along axis $j$,
-    \item $s_j$: stride (distance between two consecutive positions of the
-        pooling window) along axis $j$.
-\end{itemize}
-
-\begin{figure}[p]
-    \centering
-    \includegraphics[width=0.32\textwidth]{pdf/numerical_no_padding_no_strides_00.pdf}
-    \includegraphics[width=0.32\textwidth]{pdf/numerical_no_padding_no_strides_01.pdf}
-    \includegraphics[width=0.32\textwidth]{pdf/numerical_no_padding_no_strides_02.pdf}
-    \includegraphics[width=0.32\textwidth]{pdf/numerical_no_padding_no_strides_03.pdf}
-    \includegraphics[width=0.32\textwidth]{pdf/numerical_no_padding_no_strides_04.pdf}
-    \includegraphics[width=0.32\textwidth]{pdf/numerical_no_padding_no_strides_05.pdf}
-    \includegraphics[width=0.32\textwidth]{pdf/numerical_no_padding_no_strides_06.pdf}
-    \includegraphics[width=0.32\textwidth]{pdf/numerical_no_padding_no_strides_07.pdf}
-    \includegraphics[width=0.32\textwidth]{pdf/numerical_no_padding_no_strides_08.pdf}
-    \caption{\label{fig:numerical_no_padding_no_strides} Computing the output
-        values of a discrete convolution.}
-\end{figure}
-
-\begin{figure}[p]
-    \centering
-    \includegraphics[width=0.32\textwidth]{pdf/numerical_padding_strides_00.pdf}
-    \includegraphics[width=0.32\textwidth]{pdf/numerical_padding_strides_01.pdf}
-    \includegraphics[width=0.32\textwidth]{pdf/numerical_padding_strides_02.pdf}
-    \includegraphics[width=0.32\textwidth]{pdf/numerical_padding_strides_03.pdf}
-    \includegraphics[width=0.32\textwidth]{pdf/numerical_padding_strides_04.pdf}
-    \includegraphics[width=0.32\textwidth]{pdf/numerical_padding_strides_05.pdf}
-    \includegraphics[width=0.32\textwidth]{pdf/numerical_padding_strides_06.pdf}
-    \includegraphics[width=0.32\textwidth]{pdf/numerical_padding_strides_07.pdf}
-    \includegraphics[width=0.32\textwidth]{pdf/numerical_padding_strides_08.pdf}
-    \caption{\label{fig:numerical_padding_strides} Computing the output values
-        of a discrete convolution for $N = 2$, $i_1 = i_2 = 5$, $k_1 = k_2 = 3$,
-        $s_1 = s_2 = 2$, and $p_1 = p_2 = 1$.}
-\end{figure}
 
 \begin{figure}[p]
     \centering
@@ -352,6 +328,30 @@ along axis $j$:
         $s = 2$ output elements is retained.}
 \end{figure}
 
+\section{Pooling}
+
+In addition to discrete convolutions themselves, {\em pooling} operations
+make up another important building block in CNNs. Pooling operations reduce
+the size of feature maps by using some function to summarize subregions, such
+as taking the average or the maximum value.
+
+Pooling works by sliding a window across the input and feeding the content of
+the window to a {\em pooling function}. In some sense, pooling works very much
+like a discrete convolution, but replaces the linear combination described by
+the kernel with some other function. \autoref{fig:numerical_average_pooling}
+provides an example for average pooling, and \autoref{fig:numerical_max_pooling}
+does the same for max pooling.
+
+The following properties affect the output size $o_j$ of a pooling layer
+along axis $j$:
+
+\begin{itemize}
+    \item $i_j$: input size along axis $j$,
+    \item $k_j$: pooling window size along axis $j$,
+    \item $s_j$: stride (distance between two consecutive positions of the
+        pooling window) along axis $j$.
+\end{itemize}
+
 \begin{figure}[p]
     \centering
     \includegraphics[width=0.32\textwidth]{pdf/numerical_average_pooling_00.pdf}
@@ -430,6 +430,50 @@ For $i$, $k$, $s = 1$ and $p = 0$,
     o = (i - k) + 1.
 \end{equation*}
 \end{relationship}
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[width=0.24\textwidth]{pdf/no_padding_no_strides_00.pdf}
+    \includegraphics[width=0.24\textwidth]{pdf/no_padding_no_strides_01.pdf}
+    \includegraphics[width=0.24\textwidth]{pdf/no_padding_no_strides_02.pdf}
+    \includegraphics[width=0.24\textwidth]{pdf/no_padding_no_strides_03.pdf}
+    \caption{\label{fig:no_padding_no_strides} Convolving a $3 \times 3$ kernel
+        over a $4 \times 4$ input using unit strides (i.e. $i = 4$, $k = 3$,
+        $s = 1$ and $p = 0$).}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[width=0.24\textwidth]{pdf/arbitrary_padding_no_strides_00.pdf}
+    \includegraphics[width=0.24\textwidth]{pdf/arbitrary_padding_no_strides_01.pdf}
+    \includegraphics[width=0.24\textwidth]{pdf/arbitrary_padding_no_strides_02.pdf}
+    \includegraphics[width=0.24\textwidth]{pdf/arbitrary_padding_no_strides_03.pdf}
+    \caption{\label{fig:arbitrary_padding_no_strides} Convolving a $4 \times 4$
+        kernel over a $5 \times 5$ input padded with a $2 \times 2$ border of
+        zeros using unit strides (i.e. $i = 5$, $k = 4$, $s = 1$ and $p = 2$).}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[width=0.24\textwidth]{pdf/same_padding_no_strides_00.pdf}
+    \includegraphics[width=0.24\textwidth]{pdf/same_padding_no_strides_01.pdf}
+    \includegraphics[width=0.24\textwidth]{pdf/same_padding_no_strides_02.pdf}
+    \includegraphics[width=0.24\textwidth]{pdf/same_padding_no_strides_03.pdf}
+    \caption{\label{fig:same_padding_no_strides} Convolving a $3 \times 3$
+        kernel over a $5 \times 5$ input using half padding and unit strides
+        (i.e. $i = 5$, $k = 3$, $s = 1$ and $p = 1$).}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[width=0.24\textwidth]{pdf/full_padding_no_strides_00.pdf}
+    \includegraphics[width=0.24\textwidth]{pdf/full_padding_no_strides_01.pdf}
+    \includegraphics[width=0.24\textwidth]{pdf/full_padding_no_strides_02.pdf}
+    \includegraphics[width=0.24\textwidth]{pdf/full_padding_no_strides_03.pdf}
+    \caption{\label{fig:full_padding_no_strides} Convolving a $3 \times 3$
+        kernel over a $5 \times 5$ input using full padding and unit strides
+        (i.e. $i = 5$, $k = 3$, $s = 1$ and $p = 2$).}
+\end{figure}
 
 \section{Zero-padding, unit strides}
 
@@ -555,50 +599,6 @@ same output size.
 
 While this doesn't affect the analysis for {\em convolutions}, this will
 complicate the analysis in the case of {\em transposed convolutions}.
-
-\begin{figure}[p]
-    \centering
-    \includegraphics[width=0.24\textwidth]{pdf/no_padding_no_strides_00.pdf}
-    \includegraphics[width=0.24\textwidth]{pdf/no_padding_no_strides_01.pdf}
-    \includegraphics[width=0.24\textwidth]{pdf/no_padding_no_strides_02.pdf}
-    \includegraphics[width=0.24\textwidth]{pdf/no_padding_no_strides_03.pdf}
-    \caption{\label{fig:no_padding_no_strides} Convolving a $3 \times 3$ kernel
-        over a $4 \times 4$ input using unit strides (i.e. $i = 4$, $k = 3$,
-        $s = 1$ and $p = 0$).}
-\end{figure}
-
-\begin{figure}[p]
-    \centering
-    \includegraphics[width=0.24\textwidth]{pdf/arbitrary_padding_no_strides_00.pdf}
-    \includegraphics[width=0.24\textwidth]{pdf/arbitrary_padding_no_strides_01.pdf}
-    \includegraphics[width=0.24\textwidth]{pdf/arbitrary_padding_no_strides_02.pdf}
-    \includegraphics[width=0.24\textwidth]{pdf/arbitrary_padding_no_strides_03.pdf}
-    \caption{\label{fig:arbitrary_padding_no_strides} Convolving a $4 \times 4$
-        kernel over a $5 \times 5$ input padded with a $2 \times 2$ border of
-        zeros using unit strides (i.e. $i = 5$, $k = 4$, $s = 1$ and $p = 2$).}
-\end{figure}
-
-\begin{figure}[p]
-    \centering
-    \includegraphics[width=0.24\textwidth]{pdf/same_padding_no_strides_00.pdf}
-    \includegraphics[width=0.24\textwidth]{pdf/same_padding_no_strides_01.pdf}
-    \includegraphics[width=0.24\textwidth]{pdf/same_padding_no_strides_02.pdf}
-    \includegraphics[width=0.24\textwidth]{pdf/same_padding_no_strides_03.pdf}
-    \caption{\label{fig:same_padding_no_strides} Convolving a $3 \times 3$
-        kernel over a $5 \times 5$ input using half padding and unit strides
-        (i.e. $i = 5$, $k = 3$, $s = 1$ and $p = 1$).}
-\end{figure}
-
-\begin{figure}[p]
-    \centering
-    \includegraphics[width=0.24\textwidth]{pdf/full_padding_no_strides_00.pdf}
-    \includegraphics[width=0.24\textwidth]{pdf/full_padding_no_strides_01.pdf}
-    \includegraphics[width=0.24\textwidth]{pdf/full_padding_no_strides_02.pdf}
-    \includegraphics[width=0.24\textwidth]{pdf/full_padding_no_strides_03.pdf}
-    \caption{\label{fig:full_padding_no_strides} Convolving a $3 \times 3$
-        kernel over a $5 \times 5$ input using full padding and unit strides
-        (i.e. $i = 5$, $k = 3$, $s = 1$ and $p = 2$).}
-\end{figure}
 
 \begin{figure}[p]
     \centering
@@ -839,6 +839,49 @@ size is
 The transposes of convolutions with half and full padding have elegant
 properties.
 
+\begin{figure}[p]
+    \centering
+    \includegraphics[width=0.24\textwidth]{pdf/no_padding_no_strides_transposed_00.pdf}
+    \includegraphics[width=0.24\textwidth]{pdf/no_padding_no_strides_transposed_01.pdf}
+    \includegraphics[width=0.24\textwidth]{pdf/no_padding_no_strides_transposed_02.pdf}
+    \includegraphics[width=0.24\textwidth]{pdf/no_padding_no_strides_transposed_03.pdf}
+    \caption{\label{fig:no_padding_no_strides_transposed} The transpose of
+        convolving a $3 \times 3$ kernel over a $4 \times 4$ input using unit
+        strides (i.e. $i = 4$, $k = 3$, $s = 1$ and $p = 0$). It is equivalent
+        to convolving a $3 \times 3$ kernel over a $2 \times 2$ input padded
+        with a $2 \times 2$ border of zeros using unit strides (i.e. $i' = 2$,
+        $k' = k$, $s' = 1$ and $p' = 2$).}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[width=0.24\textwidth]{pdf/arbitrary_padding_no_strides_transposed_00.pdf}
+    \includegraphics[width=0.24\textwidth]{pdf/arbitrary_padding_no_strides_transposed_01.pdf}
+    \includegraphics[width=0.24\textwidth]{pdf/arbitrary_padding_no_strides_transposed_02.pdf}
+    \includegraphics[width=0.24\textwidth]{pdf/arbitrary_padding_no_strides_transposed_03.pdf}
+    \caption{\label{fig:arbitrary_padding_no_strides_transposed} The transpose
+        of convolving a $4 \times 4$ kernel over a $5 \times 5$ input padded
+        with a $2 \times 2$ border of zeros using unit strides (i.e. $i = 5$,
+        $k = 4$, $s = 1$ and $p = 2$). It is equivalent to convolving a $4
+        \times 4$ kernel over a $6 \times 6$ input padded with a $1 \times 1$
+        border of zeros using unit strides (i.e. $i' = 6$, $k' = k$, $s' = 1$
+        and $p' = 1$).}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[width=0.24\textwidth]{pdf/same_padding_no_strides_transposed_00.pdf}
+    \includegraphics[width=0.24\textwidth]{pdf/same_padding_no_strides_transposed_01.pdf}
+    \includegraphics[width=0.24\textwidth]{pdf/same_padding_no_strides_transposed_02.pdf}
+    \includegraphics[width=0.24\textwidth]{pdf/same_padding_no_strides_transposed_03.pdf}
+    \caption{\label{fig:same_padding_no_strides_transposed} The transpose of
+        convolving a $3 \times 3$ kernel over a $5 \times 5$ input using half
+        padding and unit strides (i.e. $i = 5$, $k = 3$, $s = 1$ and $p = 1$).
+        It is equivalent to convolving a $3 \times 3$ kernel over a $5 \times 5$
+        input using half padding and unit strides (i.e. $i' = 5$, $k' = k$, $s'
+        = 1$ and $p' = 1$).}
+\end{figure}
+
 \subsection{Half padding, transposed}
 
 Knowing that a half padded convolution produces an output with the same size as
@@ -916,93 +959,6 @@ between each input unit, and its output size is
 \end{equation*}
 \end{relationship}
 
-\section{Zero-padding, non-unit strides, transposed}
-
-Still assuming that the convolution's input size $i$ is such that $i - k$ is a
-multiple of $s$, the analysis is extended to the zero-padded case by combining
-\autoref{rel:arbitrary_padding_no_strides_transposed} and
-\autoref{rel:no_padding_strides_transposed}:
-
-\begin{relationship}\label{rel:padding_strides_transposed}
-A convolution described by $k$, $s$ and $p$ and whose input size is such
-that $i - k$ is a multiple of $s$ has an associated transposed convolution
-described by $\tilde{i}'$, $k' = k$, $s' = 1$ and $p' = k - p - 1$, where
-$\tilde{i}'$ is the size of the stretched input obtained by adding $s - 1$ zeros
-between each input unit, and its output size is
-\begin{equation*}
-\begin{split}
-    o' = s (i' - 1) + k - 2p.
-\end{split}
-\end{equation*}
-\end{relationship}
-
-\autoref{fig:padding_strides_transposed} provides an example for $i = 5$, $k =
-3$, $s = 2$ and $p = 1$.
-
-The assumption that $i$ is such that $i - k$ is a multiple of $s$ is relaxed by
-introducing another parameter $a \in \{0, \ldots, s - 1\}$ that allows to
-distinguish between the $s$ different cases leading to $i'$:
-
-\begin{relationship}\label{rel:padding_strides_transposed_odd}
-A convolution described by $k$, $s$ and $p$ has an associated transposed
-convolution described by $a$, $\tilde{i}'$, $k' = k$, $s' = 1$ and $p' = k - p -
-1$, where $\tilde{i}'$ is the size of the stretched input obtained by adding $s
-- 1$ zeros between each input unit, and $a = (i + 2p - k) \mod s$ represents the
-number of zeros added to the top and right edges of the input, and its output
-size is
-\begin{equation*}
-\begin{split}
-    o' = s (i' - 1) + a + k - 2p.
-\end{split}
-\end{equation*}
-\end{relationship}
-
-\autoref{fig:padding_strides_odd_transposed} provides an example for $i = 6$, $k
-= 3$, $s = 2$ and $p = 1$.
-
-\begin{figure}[p]
-    \centering
-    \includegraphics[width=0.24\textwidth]{pdf/no_padding_no_strides_transposed_00.pdf}
-    \includegraphics[width=0.24\textwidth]{pdf/no_padding_no_strides_transposed_01.pdf}
-    \includegraphics[width=0.24\textwidth]{pdf/no_padding_no_strides_transposed_02.pdf}
-    \includegraphics[width=0.24\textwidth]{pdf/no_padding_no_strides_transposed_03.pdf}
-    \caption{\label{fig:no_padding_no_strides_transposed} The transpose of
-        convolving a $3 \times 3$ kernel over a $4 \times 4$ input using unit
-        strides (i.e. $i = 4$, $k = 3$, $s = 1$ and $p = 0$). It is equivalent
-        to convolving a $3 \times 3$ kernel over a $2 \times 2$ input padded
-        with a $2 \times 2$ border of zeros using unit strides (i.e. $i' = 2$,
-        $k' = k$, $s' = 1$ and $p' = 2$).}
-\end{figure}
-
-\begin{figure}[p]
-    \centering
-    \includegraphics[width=0.24\textwidth]{pdf/arbitrary_padding_no_strides_transposed_00.pdf}
-    \includegraphics[width=0.24\textwidth]{pdf/arbitrary_padding_no_strides_transposed_01.pdf}
-    \includegraphics[width=0.24\textwidth]{pdf/arbitrary_padding_no_strides_transposed_02.pdf}
-    \includegraphics[width=0.24\textwidth]{pdf/arbitrary_padding_no_strides_transposed_03.pdf}
-    \caption{\label{fig:arbitrary_padding_no_strides_transposed} The transpose
-        of convolving a $4 \times 4$ kernel over a $5 \times 5$ input padded
-        with a $2 \times 2$ border of zeros using unit strides (i.e. $i = 5$,
-        $k = 4$, $s = 1$ and $p = 2$). It is equivalent to convolving a $4
-        \times 4$ kernel over a $6 \times 6$ input padded with a $1 \times 1$
-        border of zeros using unit strides (i.e. $i' = 6$, $k' = k$, $s' = 1$
-        and $p' = 1$).}
-\end{figure}
-
-\begin{figure}[p]
-    \centering
-    \includegraphics[width=0.24\textwidth]{pdf/same_padding_no_strides_transposed_00.pdf}
-    \includegraphics[width=0.24\textwidth]{pdf/same_padding_no_strides_transposed_01.pdf}
-    \includegraphics[width=0.24\textwidth]{pdf/same_padding_no_strides_transposed_02.pdf}
-    \includegraphics[width=0.24\textwidth]{pdf/same_padding_no_strides_transposed_03.pdf}
-    \caption{\label{fig:same_padding_no_strides_transposed} The transpose of
-        convolving a $3 \times 3$ kernel over a $5 \times 5$ input using half
-        padding and unit strides (i.e. $i = 5$, $k = 3$, $s = 1$ and $p = 1$).
-        It is equivalent to convolving a $3 \times 3$ kernel over a $5 \times 5$
-        input using half padding and unit strides (i.e. $i' = 5$, $k' = k$, $s'
-        = 1$ and $p' = 1$).}
-\end{figure}
-
 \begin{figure}[p]
     \centering
     \includegraphics[width=0.24\textwidth]{pdf/full_padding_no_strides_transposed_00.pdf}
@@ -1046,6 +1002,50 @@ size is
         with a $1 \times 1$ border of zeros using unit strides (i.e. $i' = 3$,
         $\tilde{i}' = 5$, $k' = k$, $s' = 1$ and $p' = 1$).}
 \end{figure}
+
+\section{Zero-padding, non-unit strides, transposed}
+
+Still assuming that the convolution's input size $i$ is such that $i - k$ is a
+multiple of $s$, the analysis is extended to the zero-padded case by combining
+\autoref{rel:arbitrary_padding_no_strides_transposed} and
+\autoref{rel:no_padding_strides_transposed}:
+
+\begin{relationship}\label{rel:padding_strides_transposed}
+A convolution described by $k$, $s$ and $p$ and whose input size is such
+that $i - k$ is a multiple of $s$ has an associated transposed convolution
+described by $\tilde{i}'$, $k' = k$, $s' = 1$ and $p' = k - p - 1$, where
+$\tilde{i}'$ is the size of the stretched input obtained by adding $s - 1$ zeros
+between each input unit, and its output size is
+\begin{equation*}
+\begin{split}
+    o' = s (i' - 1) + k - 2p.
+\end{split}
+\end{equation*}
+\end{relationship}
+
+\autoref{fig:padding_strides_transposed} provides an example for $i = 5$, $k =
+3$, $s = 2$ and $p = 1$.
+
+The assumption that $i$ is such that $i - k$ is a multiple of $s$ is relaxed by
+introducing another parameter $a \in \{0, \ldots, s - 1\}$ that allows to
+distinguish between the $s$ different cases leading to $i'$:
+
+\begin{relationship}\label{rel:padding_strides_transposed_odd}
+A convolution described by $k$, $s$ and $p$ has an associated transposed
+convolution described by $a$, $\tilde{i}'$, $k' = k$, $s' = 1$ and $p' = k - p -
+1$, where $\tilde{i}'$ is the size of the stretched input obtained by adding $s
+- 1$ zeros between each input unit, and $a = (i + 2p - k) \mod s$ represents the
+number of zeros added to the top and right edges of the input, and its output
+size is
+\begin{equation*}
+\begin{split}
+    o' = s (i' - 1) + a + k - 2p.
+\end{split}
+\end{equation*}
+\end{relationship}
+
+\autoref{fig:padding_strides_odd_transposed} provides an example for $i = 6$, $k
+= 3$, $s = 2$ and $p = 1$.
 
 \begin{figure}[p]
     \centering
