@@ -130,7 +130,7 @@ transformation is applied to multiple locations in the input).
 
 \autoref{fig:numerical_no_padding_no_strides} provides an example of a discrete
 convolution. The light blue grid is called the {\em input feature map}. To keep
-the drawing simple we representrd a single input feature map, but it is not
+the drawing simple we represented a single input feature map, but it is not
 uncommon to have multiple feature maps stacked one over the other.\footnote{
     An example of this is what was referred to earlier as {\em channels} for 
     images and sound clips.}. 
@@ -412,16 +412,15 @@ position of the input (i.e.  $s = 1$ and $p = 0$).
 3$.
 
 One way of defining the output size in this case is by the number of possible
-placements of the kernel on the input. Let's consider the width axis. Imagine
-to superimpose the kernel on the upper left part of the input feature map and
-then move it towards the right. The size of the output will be equal to the
-number of steps we need to make the right side of the kernel touch the right
-side of the image, plus one, which corresponds to the initial superimposition
-of the kernel on the upper-left side
-(\autoref{fig:no_padding_no_strides_explained}).  The same logic applies for
-the height axis.
+placements of the kernel on the input. Let's consider the width axis: the
+kernel starts on the leftmost part of the input feature map and slides by steps
+of one until its right side touches the right side of the input. The size of
+the output will be equal to the number of steps we made, plus one, accounting
+for the initial position of the kernel
+(\autoref{fig:no_padding_no_strides_explained}). The same logic applies for the
+height axis.
 
-More formally, the following relashionship can be inferred:
+More formally, the following relationship can be inferred:
 
 \begin{relationship}\label{rel:no_padding_no_strides}
 For $i$, $k$, $s = 1$ and $p = 0$,
@@ -496,7 +495,7 @@ because of their respective properties.
 
 \subsection{Half padding}
 
-Having the output size be the same as the input size can be a desireable
+Having the output size be the same as the input size can be a desirable
 property:
 
 \begin{relationship}\label{rel:same_padding_no_strides}
