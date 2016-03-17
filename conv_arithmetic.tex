@@ -121,10 +121,10 @@ structure. More formally, they share these important properties:
 
 \begin{itemize}
     \item They are stored as multi-dimensional arrays.
-    \item They feature one or more axes for which ordering matters (e.g. width
+    \item They feature one or more axes for which ordering matters (e.g., width
         and height axes for an image, time axis for a sound clip).
     \item One axis, called the channel axis, is used to access different views
-        of the data (e.g. the red, green and blue channels of a color image, or
+        of the data (e.g., the red, green and blue channels of a color image, or
         the left and right channels of a stereo audio track).
 \end{itemize}
 
@@ -141,7 +141,7 @@ transformation is applied to multiple locations in the input).
 \autoref{fig:numerical_no_padding_no_strides} provides an example of a discrete
 convolution. The light blue grid is called the {\em input feature map}. To keep
 the drawing simple a single input feature map is represented, but it is not
-uncommon to have multiple feature maps stacked one over another.\footnote{
+uncommon to have multiple feature maps stacked one over another.\footnote{%
     An example of this is what was referred to earlier as {\em channels} for 
     images and sound clips.}
 A {\em kernel} (shaded area) of value
@@ -200,7 +200,7 @@ overlapped input is computed and the results are summed up to obtain the output
 in the current location. The procedure can be repeated using different kernels
 to form as many output feature maps as desired (\autoref{fig:full_picture}). The
 final output of this procedure is called
-{\em output feature map}.\footnote{
+{\em output feature map}.\footnote{%
     While there is a distinction between convolution and cross-correlation from
     a signal processing perspective, the two become interchangeable when the
     kernel is learned. For the sake of simplicity and to stay consistent with
@@ -262,7 +262,7 @@ retaining only odd output elements (\autoref{fig:strides_subsampling}).
                     (0,0) grid (5,5) rectangle (0,0);
             \end{scope}
         \end{scope}
-        \foreach \x in {-10,1,11} {
+        \foreach \x in {-10,1,11} {%
             \begin{scope}[xshift=\x cm,yshift=10cm]
                 \begin{scope}[xshift=0cm,yshift=0cm]
                     \draw[draw=base03,fill=violet,thick]
@@ -279,7 +279,7 @@ retaining only odd output elements (\autoref{fig:strides_subsampling}).
             \end{scope}\end{scope}
         }
         \begin{scope}[xshift=1cm,yshift=30cm]
-            \foreach \s in {0,0.5,1.0} {
+            \foreach \s in {1,0.5,1.0} {%
                 \begin{scope}[xshift=\s cm,yshift=\s cm]
                     \draw[draw=base03,fill=cyan,thick]
                         (0,0) grid (3,3) rectangle (0,0);
@@ -417,7 +417,7 @@ along axis $j$:
 \chapter{Convolution arithmetic}
 
 The analysis of the relationship between convolutional layer properties is eased
-by the fact that they don't interact across axes, i.e. the choice of kernel
+by the fact that they don't interact across axes, i.e., the choice of kernel
 size, stride and zero padding along axis $j$ only affects the output size of
 axis $j$. Because of that, this chapter will focus on the following simplified
 setting:
@@ -436,7 +436,7 @@ results outlined here also generalize to the N-D and non-square cases.
 \section{No zero padding, unit strides}
 
 The simplest case to analyze is when the kernel just slides across every
-position of the input (i.e.  $s = 1$ and $p = 0$).
+position of the input (i.e., $s = 1$ and $p = 0$).
 \autoref{fig:no_padding_no_strides} provides an example for $i = 4$ and $k =
 3$.
 
@@ -800,7 +800,7 @@ transpose of convolutions can be expressed in terms of convolutions.
 \section{No zero padding, unit strides, transposed}
 
 \autoref{fig:no_padding_no_strides_transposed} shows the effect of applying the
-transpose of the matrix above on a $4 \times 4$ input (i.e. $i = 4$, $k = 3$, $s
+transpose of the matrix above on a $4 \times 4$ input (i.e., $i = 4$, $k = 3$, $s
 = 1$ and $p = 0$).
 
 Note that although equivalent to the transposed matrix, this visualization adds
@@ -810,7 +810,7 @@ normally not perform the useless zero multiplications.
 
 The transposed convolution is equivalent to convolving a $3 \times 3$ kernel
 over a $2 \times 2$ input padded with a $2 \times 2$ border of zeros using unit
-strides (i.e. $i' = 2$, $k' = k$, $s' = 1$ and $p' = 2$). The kernel size and
+strides (i.e., $i' = 2$, $k' = k$, $s' = 1$ and $p' = 2$). The kernel size and
 stride remain the same, but the input to the transposed convolution is now
 zero padded.
 
@@ -867,9 +867,9 @@ size is
     \includegraphics[width=0.24\textwidth]{pdf/no_padding_no_strides_transposed_03.pdf}
     \caption{\label{fig:no_padding_no_strides_transposed} The transpose of
         convolving a $3 \times 3$ kernel over a $4 \times 4$ input using unit
-        strides (i.e. $i = 4$, $k = 3$, $s = 1$ and $p = 0$). It is equivalent
+        strides (i.e., $i = 4$, $k = 3$, $s = 1$ and $p = 0$). It is equivalent
         to convolving a $3 \times 3$ kernel over a $2 \times 2$ input padded
-        with a $2 \times 2$ border of zeros using unit strides (i.e. $i' = 2$,
+        with a $2 \times 2$ border of zeros using unit strides (i.e., $i' = 2$,
         $k' = k$, $s' = 1$ and $p' = 2$).}
 \end{figure}
 
@@ -881,10 +881,10 @@ size is
     \includegraphics[width=0.24\textwidth]{pdf/arbitrary_padding_no_strides_transposed_03.pdf}
     \caption{\label{fig:arbitrary_padding_no_strides_transposed} The transpose
         of convolving a $4 \times 4$ kernel over a $5 \times 5$ input padded
-        with a $2 \times 2$ border of zeros using unit strides (i.e. $i = 5$,
+        with a $2 \times 2$ border of zeros using unit strides (i.e., $i = 5$,
         $k = 4$, $s = 1$ and $p = 2$). It is equivalent to convolving a $4
         \times 4$ kernel over a $6 \times 6$ input padded with a $1 \times 1$
-        border of zeros using unit strides (i.e. $i' = 6$, $k' = k$, $s' = 1$
+        border of zeros using unit strides (i.e., $i' = 6$, $k' = k$, $s' = 1$
         and $p' = 1$).}
 \end{figure}
 
@@ -896,9 +896,9 @@ size is
     \includegraphics[width=0.24\textwidth]{pdf/same_padding_no_strides_transposed_03.pdf}
     \caption{\label{fig:same_padding_no_strides_transposed} The transpose of
         convolving a $3 \times 3$ kernel over a $5 \times 5$ input using half
-        padding and unit strides (i.e. $i = 5$, $k = 3$, $s = 1$ and $p = 1$).
+        padding and unit strides (i.e., $i = 5$, $k = 3$, $s = 1$ and $p = 1$).
         It is equivalent to convolving a $3 \times 3$ kernel over a $5 \times 5$
-        input using half padding and unit strides (i.e. $i' = 5$, $k' = k$, $s'
+        input using half padding and unit strides (i.e., $i' = 5$, $k' = k$, $s'
         = 1$ and $p' = 1$).}
 \end{figure}
 
@@ -987,9 +987,9 @@ between each input unit, and its output size is
     \includegraphics[width=0.24\textwidth]{pdf/full_padding_no_strides_transposed_03.pdf}
     \caption{\label{fig:full_padding_no_strides_transposed} The transpose of
         convolving a $3 \times 3$ kernel over a $5 \times 5$ input using full
-        padding and unit strides (i.e. $i = 5$, $k = 3$, $s = 1$ and $p = 2$).
+        padding and unit strides (i.e., $i = 5$, $k = 3$, $s = 1$ and $p = 2$).
         It is equivalent to convolving a $3 \times 3$ kernel over a $7 \times 7$
-        input using unit strides (i.e. $i' = 7$, $k' = k$, $s' = 1$ and $p' =
+        input using unit strides (i.e., $i' = 7$, $k' = k$, $s' = 1$ and $p' =
         0$).}
 \end{figure}
 
@@ -1001,10 +1001,10 @@ between each input unit, and its output size is
     \includegraphics[width=0.24\textwidth]{pdf/no_padding_strides_transposed_03.pdf}
     \caption{\label{fig:no_padding_strides_transposed} The transpose of
         convolving a $3 \times 3$ kernel over a $5 \times 5$ input using $2
-        \times 2$ strides (i.e. $i = 5$, $k = 3$, $s = 2$ and $p = 0$). It is
+        \times 2$ strides (i.e., $i = 5$, $k = 3$, $s = 2$ and $p = 0$). It is
         equivalent to convolving a $3 \times 3$ kernel over a $2 \times 2$ input
         (with $1$ zero inserted between inputs) padded with a $2 \times 2$
-        border of zeros using unit strides (i.e. $i' = 2$, $\tilde{i}' = 3$, $k'
+        border of zeros using unit strides (i.e., $i' = 2$, $\tilde{i}' = 3$, $k'
         = k$, $s' = 1$ and $p' = 2$).}
 \end{figure}
 
@@ -1016,10 +1016,10 @@ between each input unit, and its output size is
     \includegraphics[width=0.24\textwidth]{pdf/padding_strides_transposed_03.pdf}
     \caption{\label{fig:padding_strides_transposed} The transpose of convolving
         a $3 \times 3$ kernel over a $5 \times 5$ input padded with a $1 \times
-        1$ border of zeros using $2 \times 2$ strides (i.e. $i = 5$, $k = 3$, $s
+        1$ border of zeros using $2 \times 2$ strides (i.e., $i = 5$, $k = 3$, $s
         = 2$ and $p = 1$). It is equivalent to convolving a $3 \times 3$ kernel
         over a $2 \times 2$ input (with $1$ zero inserted between inputs) padded
-        with a $1 \times 1$ border of zeros using unit strides (i.e. $i' = 3$,
+        with a $1 \times 1$ border of zeros using unit strides (i.e., $i' = 3$,
         $\tilde{i}' = 5$, $k' = k$, $s' = 1$ and $p' = 1$).}
 \end{figure}
 
@@ -1075,12 +1075,12 @@ size is
     \includegraphics[width=0.24\textwidth]{pdf/padding_strides_odd_transposed_03.pdf}
     \caption{\label{fig:padding_strides_odd_transposed} The transpose of
         convolving a $3 \times 3$ kernel over a $6 \times 6$ input padded with a
-        $1 \times 1$ border of zeros using $2 \times 2$ strides (i.e. $i = 6$,
+        $1 \times 1$ border of zeros using $2 \times 2$ strides (i.e., $i = 6$,
         $k = 3$, $s = 2$ and $p = 1$). It is equivalent to convolving a $3
         \times 3$ kernel over a $2 \times 2$ input (with $1$ zero inserted
         between inputs) padded with a $1 \times 1$ border of zeros (with an
         additional border of size $1$ added to the top and right edges) using
-        unit strides (i.e. $i' = 3$, $\tilde{i}' = 5$, $a = 1$, $k' = k$, $s' =
+        unit strides (i.e., $i' = 3$, $\tilde{i}' = 5$, $a = 1$, $k' = k$, $s' =
         1$ and $p' = 1$).}
 \end{figure}
 
