@@ -1,4 +1,4 @@
-\documentclass{report}
+\documentclass[notitlepage]{report}
 \usepackage{amsmath,amsfonts,amsthm,amssymb}
 \usepackage{authblk}
 \usepackage[T1]{fontenc}
@@ -55,9 +55,11 @@
 \begin{document}
 
 \maketitle
+\clearpage
 
 \setlength{\epigraphwidth}{0.4\textwidth}
 \epigraph{All models are wrong, but some are useful.}{George E. P. Box}
+\clearpage
 
 \renewcommand{\abstractname}{Acknowledgements}
 \begin{abstract}
@@ -67,6 +69,17 @@
     Special thanks to Ethan Schoonover, creator of the Solarized color
     scheme,\footnote{\url{http://ethanschoonover.com/solarized}} whose colors
     were used for the figures.
+\end{abstract}
+
+\renewcommand{\abstractname}{Feedbacks}
+\begin{abstract}
+    Your feedback is welcome!  We did our best to be as precise, informative
+    and up to the point as possible, but should there be anything you feel
+    might be an error or could be rephrased to be more precise or
+    comprehensible, please don't refrain from contacting us. Likewise, drop us
+    a line if you think there is something that might fit this technical report
+    and you would like us to discuss -- we will make our best effort to update
+    this document.
 \end{abstract}
 
 \chapter{Introduction}
