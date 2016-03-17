@@ -463,9 +463,9 @@ For $i$, $k$, $s = 1$ and $p = 0$,
     \includegraphics[width=0.24\textwidth]{pdf/no_padding_no_strides_01.pdf}
     \includegraphics[width=0.24\textwidth]{pdf/no_padding_no_strides_02.pdf}
     \includegraphics[width=0.24\textwidth]{pdf/no_padding_no_strides_03.pdf}
-    \caption{\label{fig:no_padding_no_strides} Convolving a $3 \times 3$ kernel
-        over a $4 \times 4$ input using unit strides (i.e. $i = 4$, $k = 3$,
-        $s = 1$ and $p = 0$).}
+    \caption{\label{fig:no_padding_no_strides} (No padding, no strides)
+        Convolving a $3 \times 3$ kernel over a $4 \times 4$ input using unit
+        strides (i.e., $i = 4$, $k = 3$, $s = 1$ and $p = 0$).}
 \end{figure}
 
 \begin{figure}[p]
@@ -474,9 +474,10 @@ For $i$, $k$, $s = 1$ and $p = 0$,
     \includegraphics[width=0.24\textwidth]{pdf/arbitrary_padding_no_strides_01.pdf}
     \includegraphics[width=0.24\textwidth]{pdf/arbitrary_padding_no_strides_02.pdf}
     \includegraphics[width=0.24\textwidth]{pdf/arbitrary_padding_no_strides_03.pdf}
-    \caption{\label{fig:arbitrary_padding_no_strides} Convolving a $4 \times 4$
-        kernel over a $5 \times 5$ input padded with a $2 \times 2$ border of
-        zeros using unit strides (i.e. $i = 5$, $k = 4$, $s = 1$ and $p = 2$).}
+    \caption{\label{fig:arbitrary_padding_no_strides} (Arbitrary padding, no
+        strides) Convolving a $4 \times 4$ kernel over a $5 \times 5$ input 
+        padded with a $2 \times 2$ border of zeros using unit strides (i.e.,
+        $i = 5$, $k = 4$, $s = 1$ and $p = 2$).}
 \end{figure}
 
 \begin{figure}[p]
@@ -485,9 +486,9 @@ For $i$, $k$, $s = 1$ and $p = 0$,
     \includegraphics[width=0.24\textwidth]{pdf/same_padding_no_strides_01.pdf}
     \includegraphics[width=0.24\textwidth]{pdf/same_padding_no_strides_02.pdf}
     \includegraphics[width=0.24\textwidth]{pdf/same_padding_no_strides_03.pdf}
-    \caption{\label{fig:same_padding_no_strides} Convolving a $3 \times 3$
-        kernel over a $5 \times 5$ input using half padding and unit strides
-        (i.e. $i = 5$, $k = 3$, $s = 1$ and $p = 1$).}
+    \caption{\label{fig:same_padding_no_strides} (Same padding, no strides) 
+        Convolving a $3 \times 3$ kernel over a $5 \times 5$ input using half 
+        padding and unit strides (i.e., $i = 5$, $k = 3$, $s = 1$ and $p = 1$).}
 \end{figure}
 
 \begin{figure}[p]
@@ -496,17 +497,17 @@ For $i$, $k$, $s = 1$ and $p = 0$,
     \includegraphics[width=0.24\textwidth]{pdf/full_padding_no_strides_01.pdf}
     \includegraphics[width=0.24\textwidth]{pdf/full_padding_no_strides_02.pdf}
     \includegraphics[width=0.24\textwidth]{pdf/full_padding_no_strides_03.pdf}
-    \caption{\label{fig:full_padding_no_strides} Convolving a $3 \times 3$
-        kernel over a $5 \times 5$ input using full padding and unit strides
-        (i.e. $i = 5$, $k = 3$, $s = 1$ and $p = 2$).}
+    \caption{\label{fig:full_padding_no_strides} (Full padding, no strides) 
+        Convolving a $3 \times 3$ kernel over a $5 \times 5$ input using full 
+        padding and unit strides (i.e., $i = 5$, $k = 3$, $s = 1$ and $p = 2$).}
 \end{figure}
 
 \section{Zero padding, unit strides}
 
-To factor in zero padding (i.e. only restricting that $s = 0$), consider its
-effect on the effective input size: padding with $p$ zeros changes the effective
-input size from $i$ to $i + 2p$. \autoref{rel:no_padding_no_strides} is used
-to infer the following relationship:
+To factor in zero padding (i.e., only restricting to $s = 0$), let's consider
+its effect on the effective input size: padding with $p$ zeros changes the
+effective input size from $i$ to $i + 2p$. In the general case, we can then use
+\autoref{rel:no_padding_no_strides} to infer the following relationship:
 
 \begin{relationship}\label{rel:arbitrary_padding_no_strides}
 For $i$, $k$, $s = 1$ and $p$,
@@ -518,16 +519,16 @@ For $i$, $k$, $s = 1$ and $p$,
 \noindent \autoref{fig:arbitrary_padding_no_strides} provides an example for $i
 = 5$, $k = 4$ and $p = 2$.
 
-Two specific instances of zero padding are used quite extensively in practice
-because of their respective properties.
+In practice, two specific instances of zero padding are used quite extensively
+because of their respective properties. Let's discuss them in more detail.
 
-\subsection{Half padding}
+\subsection{Half (same) padding}
 
-Having the output size be the same as the input size can be a desirable
-property:
+Having the output size be the same as the input size (i.e., $i = o$) can be a
+desirable property:
 
 \begin{relationship}\label{rel:same_padding_no_strides}
-If $k$ is odd ($k = 2n + 1, \quad n \in \mathbb{N}$), and for $i$, $s = 1$ and
+For $k$ odd ($k = 2n + 1, \quad n \in \mathbb{N}$), $\forall i$, $s = 1$ and
 $p = \lfloor k / 2 \rfloor = n$,
 \begin{equation*}
 \begin{split}
@@ -538,17 +539,18 @@ $p = \lfloor k / 2 \rfloor = n$,
 \end{equation*}
 \end{relationship}
 
-This is sometimes referred to as {\em half} (or {\em same}) padding.
+\noindent This is sometimes referred to as {\em half} (or {\em same}) padding.
 \autoref{fig:same_padding_no_strides} provides an example for $i = 5$, $k = 3$
 and (therefore) $p = 1$.
 
 \subsection{Full padding}
 
 While convolving a kernel generally {\em decreases} the output size with respect
-to the input size, sometimes the opposite is required:
+to the input size, sometimes the opposite is required. This can be achieved
+with a proper zero padding:
 
 \begin{relationship}\label{rel:full_padding_no_strides}
-If $p = k - 1$, and for $i$, $k$ and $s = 1$,
+For $p = k - 1$, $\forall i$, $k$ and $s = 1$,
 \begin{equation*}
 \begin{split}
     o &= i + 2(k - 1) - (k - 1) \\
@@ -557,28 +559,29 @@ If $p = k - 1$, and for $i$, $k$ and $s = 1$,
 \end{equation*}
 \end{relationship}
 
-This is sometimes referred to as {\em full} padding, because in this setting
-every element of the kernel is superimposed on every element of the input
-feature map. \autoref{fig:full_padding_no_strides} provides an example for $i =
-5$, $k = 3$ and (therefore) $p = 2$.
+\noindent This is sometimes referred to as {\em full} padding, because in this
+setting every element of the kernel is superimposed to every element of the
+input feature map. \autoref{fig:full_padding_no_strides} provides an example
+for $i = 5$, $k = 3$ and (therefore) $p = 2$.
 
 \section{No zero padding, non-unit strides}
 
-So far, all relationships derived only apply for unit-strided convolutions.
-Incorporating non-unit strides requires another inference leap. To facilitate
-the analysis, let's momentarily ignore zero padding (i.e.  $s > 1$ and $p = 0$).
-\autoref{fig:no_padding_strides} provides an example for $i = 5$, $k = 3$ and $s
-= 2$.
+All relationships derived so far only apply for unit-strided convolutions.
+Incorporating non unitary strides requires another inference leap. To
+facilitate the analysis, let's momentarily ignore zero padding (i.e., $s > 1$
+and $p = 0$). \autoref{fig:no_padding_strides} provides an example for $i =
+5$, $k = 3$ and $s = 2$.
 
-Once again, the output size is defined in terms of the number of possible
-placements of the kernel on the input. Consider the width axis: the kernel
-starts at the left side of the input, but this time it slides by steps of $s$
-until it touches the right side of the input. The size of the output is equal to
-the number of steps made, plus one, accounting for the initial position of the
-kernel (\autoref{fig:no_padding_strides_explained}). The same logic applies for
-the height axis.
+Once again, the output size can be defined in terms of the number of possible
+placements of the kernel on the input. Let's consider the width axis: the
+kernel starts as usual on the leftmost part of the input, but this time it
+slides by steps of size $s$ until it touches the right side of the input. The
+size of the output is again equal to the number of steps made, plus one,
+accounting for the initial position of the kernel
+(\autoref{fig:no_padding_strides_explained}). The same logic applies for the
+height axis.
 
-From this, the following relationship is inferred:
+From this, the following relationship can be inferred:
 
 \begin{relationship}\label{rel:no_padding_strides}
 For $i$, $k$, $p = 0$ and $s$,
@@ -587,16 +590,16 @@ For $i$, $k$, $p = 0$ and $s$,
 \end{equation*}
 \end{relationship}
 
-The floor function accounts for the fact that sometimes the last possible step
-does {\em not} coincide with the kernel reaching the end of the input, i.e.
-some input units are left out (see \autoref{fig:padding_strides_odd} for an
-example of such a case).
+\noindent The floor function accounts for the fact that sometimes the last
+possible step does {\em not} coincide with the kernel reaching the end of the
+input, i.e., some input units are left out (see
+\autoref{fig:padding_strides_odd} for an example of such a case).
 
 \section{Zero padding, non-unit strides}
 
 The most general case (convolving over a zero padded input using non-unit
-strides) is analyzed by applying \autoref{rel:no_padding_strides} on an
-effective input of size $i + 2p$, just as was done for
+strides) can be derived by applying \autoref{rel:no_padding_strides} on an
+effective input of size $i + 2p$, analogously to what was done for
 \autoref{rel:arbitrary_padding_no_strides}:
 
 \begin{relationship}\label{rel:padding_strides}
@@ -606,22 +609,18 @@ For $i$, $k$, $p$ and $s$,
 \end{equation*}
 \end{relationship}
 
-\autoref{fig:padding_strides} provides an example for $i = 5$, $k = 3$, $s = 2$
-and $p = 1$.
+\noindent As before, the floor function means that in some cases a convolution
+will produce the same output size for multiple input sizes. More specifically,
+if $i + 2p - k$ is a multiple of $s$, then any input size $j = i + a, \quad a
+\in \{0,\ldots,s - 1\}$ will produce the same output size. Note that this
+ambiguity applies only for $s > 1$. 
 
-As was noted when describing \autoref{rel:no_padding_strides}, the floor
-function means that in some cases a convolution will produce the same output
-size for multiple input sizes. More specifically, if $i + 2p - k$ is a multiple
-of $s$, then any input size $j = i + a, \quad a \in \{0,\ldots,s - 1\}$ will
-produce the same output size. Note that this ambiguity applies only for $s > 1$.
-
-\autoref{fig:padding_strides_odd} provides an example for $i = 6$, $k = 3$, $s =
-2$ and $p = 1$. Despite having different input sizes, the convolutions presented
-in \autoref{fig:padding_strides} and \autoref{fig:padding_strides_odd} share the
-same output size.
-
-While this doesn't affect the analysis for {\em convolutions}, this will
-complicate the analysis in the case of {\em transposed convolutions}.
+\autoref{fig:padding_strides} shows an example with $i = 5$, $k = 3$, $s = 2$ 
+and $p = 1$, while \autoref{fig:padding_strides_odd} provides an example for 
+$i = 6$, $k = 3$, $s = 2$ and $p = 1$. Interestingly, despite having different
+input sizes these convolution share the same output size. While this doesn't
+affect the analysis for {\em convolutions}, this will complicate the analysis
+in the case of {\em transposed convolutions}.
 
 \begin{figure}[p]
     \centering
@@ -629,9 +628,10 @@ complicate the analysis in the case of {\em transposed convolutions}.
     \includegraphics[width=0.24\textwidth]{pdf/no_padding_strides_01.pdf}
     \includegraphics[width=0.24\textwidth]{pdf/no_padding_strides_02.pdf}
     \includegraphics[width=0.24\textwidth]{pdf/no_padding_strides_03.pdf}
-    \caption{\label{fig:no_padding_strides} Convolving a $3 \times 3$
-        kernel over a $5 \times 5$ input using $2 \times 2$ strides (i.e.
-        $i = 5$, $k = 3$, $s = 2$ and $p = 0$).}
+    \caption{\label{fig:no_padding_strides} (No zero-padding, arbitrary 
+        stripes) Convolving a $3 \times 3$ kernel over a $5 \times 5$ input 
+        using $2 \times 2$ strides (i.e., $i = 5$, $k = 3$, $s = 2$ and 
+        $p = 0$).}
 \end{figure}
 
 \begin{figure}[p]
@@ -640,9 +640,10 @@ complicate the analysis in the case of {\em transposed convolutions}.
     \includegraphics[width=0.24\textwidth]{pdf/padding_strides_01.pdf}
     \includegraphics[width=0.24\textwidth]{pdf/padding_strides_02.pdf}
     \includegraphics[width=0.24\textwidth]{pdf/padding_strides_03.pdf}
-    \caption{\label{fig:padding_strides} Convolving a $3 \times 3$ kernel over a
-        $5 \times 5$ input padded with a $1 \times 1$ border of zeros using $2
-        \times 2$ strides (i.e.  $i = 5$, $k = 3$, $s = 2$ and $p = 1$).}
+    \caption{\label{fig:padding_strides} (Arbitrary padding and strides) 
+        Convolving a $3 \times 3$ kernel over a $5 \times 5$ input padded with 
+        a $1 \times 1$ border of zeros using $2 \times 2$ strides (i.e., 
+        $i = 5$, $k = 3$, $s = 2$ and $p = 1$).}
 \end{figure}
 
 \begin{figure}[p]
@@ -651,11 +652,12 @@ complicate the analysis in the case of {\em transposed convolutions}.
     \includegraphics[width=0.24\textwidth]{pdf/padding_strides_odd_01.pdf}
     \includegraphics[width=0.24\textwidth]{pdf/padding_strides_odd_02.pdf}
     \includegraphics[width=0.24\textwidth]{pdf/padding_strides_odd_03.pdf}
-    \caption{\label{fig:padding_strides_odd} Convolving a $3 \times 3$ kernel
-        over a $6 \times 6$ input padded with a $1 \times 1$ border of zeros
-        using $2 \times 2$ strides (i.e.  $i = 6$, $k = 3$, $s = 2$ and
-        $p = 1$). In this case, the bottom row and right column of the
-        zero padded input are not covered by the kernel.}
+    \caption{\label{fig:padding_strides_odd} (Arbitrary padding and strides) 
+        Convolving a $3 \times 3$ kernel over a $6 \times 6$ input padded with 
+        a $1 \times 1$ border of zeros using $2 \times 2$ strides (i.e., 
+        $i = 6$, $k = 3$, $s = 2$ and $p = 1$). In this case, the bottom row 
+        and right column of the zero padded input are not covered by the 
+        kernel.}
 \end{figure}
 
 \begin{figure}[p]
@@ -675,9 +677,8 @@ complicate the analysis in the case of {\em transposed convolutions}.
         \end{tikzpicture}
         \caption{\label{fig:no_padding_no_strides_explained} The kernel has to
             slide two steps to the right to touch the right side of the input
-            and two steps downwards to touch the bottom side of the input.
-            Adding one to account for the initial kernel position, the output
-            size is $3 \times 3$.}
+            (and equivalently downwards).  Adding one to account for the 
+            initial kernel position, the output size is $3 \times 3$.}
     \end{subfigure}
     ~
     \begin{subfigure}[t]{0.48\textwidth}
@@ -693,9 +694,8 @@ complicate the analysis in the case of {\em transposed convolutions}.
         \end{tikzpicture}
         \caption{\label{fig:no_padding_strides_explained} The kernel has to
             slide one step of size two to the right to touch the right side of
-            the input and one step of size two downwards to touch the bottom
-            side of the input. Adding one to account for the initial kernel
-            position, the output size is $2 \times 2$.}
+            the input (and equivalently downwards).  Adding one to account for 
+            the initial kernel position, the output size is $2 \times 2$.}
     \end{subfigure}
     \caption{Counting kernel positions.}
 \end{figure}
