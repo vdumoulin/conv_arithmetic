@@ -66,10 +66,10 @@
 
 Deep convolutional neural networks (CNNs) have been at the heart of spectacular
 advances in deep learning. Although CNNs have been used as early as the late
-eighties \citep{lecun1989generalization} to solve character recognition
-tasks, their current widespread application is due to much more recent work,
-when a deep CNN was used to beat state-of-the-art in the ImageNet image
-classification challenge \citep{krizhevsky2012imagenet}.
+eighties to solve character recognition tasks \citep{lecun1989generalization},
+their current widespread application is due to much more recent work, when a
+deep CNN was used to beat state-of-the-art in the ImageNet image classification
+challenge \citep{krizhevsky2012imagenet}.
 
 Convolutional neural networks therefore constitute a very useful tool for
 machine learning practitioners. However, learning to use CNNs for the first time
@@ -77,7 +77,7 @@ is generally an intimidating experience. A convolutional layer's output shape is
 affected by the shape of its input as well as the choice of kernel shape, zero
 padding and strides, and the relationship between these properties is not
 trivial to infer. This contrasts with fully-connected layers, whose output size
-is independent of its input size. Additionally, CNNs also usually feature a {\em
+is independent of the input size. Additionally, CNNs also usually feature a {\em
 pooling} stage, adding yet another level of complexity with respect to
 fully-connected networks.  Finally, so-called transposed convolutional layers
 (also known as fractionally strided convolutional layers) have been employed in
@@ -117,7 +117,7 @@ dimensionality, their representation can always be flattened into a vector
 before the transformation.
 
 Images, sound clips and many other similar kinds of data have an intrinsic
-structure. More formally, we can note they share these important properties:
+structure. More formally, they share these important properties:
 
 \begin{itemize}
     \item They are stored as multi-dimensional arrays.
@@ -128,11 +128,11 @@ structure. More formally, we can note they share these important properties:
         the left and right channels of a stereo audio track).
 \end{itemize}
 
-This gets thrown away when an affine transformation is applied, due to the
-flattening step that has to precede the transformation itself. Still, the
+These properties get thrown away when an affine transformation is applied, due
+to the flattening step that has to precede the transformation itself. Still, the
 topological information may prove very handy in solving some tasks, like
-computer vision and speech recognition, and we would rather not lose it. Here
-is where discrete convolutions come into play.
+computer vision and speech recognition, and in these cases it would be best to
+preserve it. This is where discrete convolutions come into play.
 
 A discrete convolution is a linear transformation that is sparse (only a few
 input units contribute to a given output unit) and reuses parameters (the same
@@ -140,11 +140,11 @@ transformation is applied to multiple locations in the input).
 
 \autoref{fig:numerical_no_padding_no_strides} provides an example of a discrete
 convolution. The light blue grid is called the {\em input feature map}. To keep
-the drawing simple we represented a single input feature map, but it is not
-uncommon to have multiple feature maps stacked one over the other.\footnote{
+the drawing simple a single input feature map is represented, but it is not
+uncommon to have multiple feature maps stacked one over another.\footnote{
     An example of this is what was referred to earlier as {\em channels} for 
-    images and sound clips.}. 
-A {\em kernel} (shaded area, resulting in dark blue) of value
+    images and sound clips.}
+A {\em kernel} (shaded area) of value
 
 \begin{figure}[h]
     \centering
@@ -194,28 +194,27 @@ A {\em kernel} (shaded area, resulting in dark blue) of value
         $s_1 = s_2 = 2$, and $p_1 = p_2 = 1$.}
 \end{figure}
 
-\noindent is being slided across the input feature map. At each location, the
-product between each element of the kernel and the corresponding elements of
-the overlapped input is computed and the results are summed up to obtain the
-output in the current location. The procedure can be repeated using different
-kernels to form as many output feature maps as desired 
-(\autoref{fig:full_picture}).  The final output of these procedure is called 
-{\em output feature map}\footnote{
+\noindent slides across the input feature map. At each location, the product
+between each element of the kernel and the corresponding elements of the
+overlapped input is computed and the results are summed up to obtain the output
+in the current location. The procedure can be repeated using different kernels
+to form as many output feature maps as desired (\autoref{fig:full_picture}). The
+final output of this procedure is called
+{\em output feature map}.\footnote{
     While there is a distinction between convolution and cross-correlation from
     a signal processing perspective, the two become interchangeable when the
     kernel is learned. For the sake of simplicity and to stay consistent with
     most of the machine learning literature, the term {\em convolution}
-    will be used in this guide.}.  
+    will be used in this guide.}
 If there are multiple input feature maps, the kernel will have to be
 3-dimensional -- or, equivalently each one of the feature maps will be
 convolved with a distinct kernel -- and the resulting feature maps will
 be summed up elementwise to produce the output feature map. 
 
-The convolution presented so far and depicted in 
-\autoref{fig:numerical_no_padding_no_strides} is an instance of a 2-D
-convolution, but it can be generalized to N-D convolutions.  For instance, in a
-3-D convolution, the kernel would be a {\em cuboid} and would slide across the
-height, width and depth of the input feature map.
+The convolution depicted in \autoref{fig:numerical_no_padding_no_strides} is an
+instance of a 2-D convolution, but it can be generalized to N-D convolutions.
+For instance, in a 3-D convolution, the kernel would be a {\em cuboid} and would
+slide across the height, width and depth of the input feature map.
 
 The collection of kernels defining a discrete convolution has a shape
 corresponding to some permutation of $(n, m, k_1, \ldots, k_N)$, where
@@ -246,7 +245,7 @@ border of zeros using $2 \times 2$ strides.
 
 Note that strides constitute a form of \emph{subsampling}. As an alternative to
 being interpreted as a measure of how much the kernel is translated, strides
-can be also viewed as how much of the output is retained. For instance, moving
+can also be viewed as how much of the output is retained. For instance, moving
 the kernel by hops of two is equivalent to moving the kernel by hops of one but
 retaining only odd output elements (\autoref{fig:strides_subsampling}).
 
