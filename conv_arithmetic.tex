@@ -9,6 +9,7 @@
 \usepackage{subcaption}
 \usepackage{tikz}
 \usepackage{xcolor}
+\usepackage{epigraph}
 
 \usepackage{hyperref}
 
@@ -41,6 +42,9 @@
 
 \setcounter{MaxMatrixCols}{16}
 
+\let\originalepigraph\epigraph 
+\renewcommand\epigraph[2]{\originalepigraph{\textit{#1}}{\textsc{#2}}}
+
 \title{A guide to convolution arithmetic for deep learning}
 \author[$\bigstar$]{Vincent Dumoulin\thanks{dumouliv@iro.umontreal.ca}}
 \author[$\bigstar\dagger$]{Francesco Visin\thanks{francesco.visin@polimi.it}}
@@ -51,6 +55,9 @@
 \begin{document}
 
 \maketitle
+
+\setlength{\epigraphwidth}{0.4\textwidth}
+\epigraph{All models are wrong, but some are useful.}{George E. P. Box}
 
 \renewcommand{\abstractname}{Acknowledgements}
 \begin{abstract}
