@@ -787,14 +787,14 @@ Note that if $\mathbf{w}$ is {\em not} replaced with $\mathbf{u}$, the resulting
 operation is a direct transpose of the convolution defined by $\mathbf{w}$,
 which is {\em exactly} what is needed for gradient backpropagation. In other
 words, the transposed convolution operation can be thought of as the gradient of
-{\em some} convolution with respect to its input\footnote{
-    In practice, this is how transposed convolutions are implemented.}.
+{\em some} convolution with respect to its input.\footnote{
+    In practice, this is how transposed convolutions are implemented.}
 
 The fortunate thing about transposed convolutions is that they are themselves
 convolutions, albeit with some additional processing on the input.
 
-This section will proceed somewhat backwards with respect to the convolution
-arithmetic section. Case by case, the analysis will concentrate on how the
+This chapter will proceed somewhat backwards with respect to the convolution
+arithmetic chapter. Case by case, the analysis will concentrate on how the
 transpose of convolutions can be expressed in terms of convolutions.
 
 \section{No zero-padding, unit strides, transposed}
@@ -859,9 +859,6 @@ size is
 \end{equation*}
 \end{relationship}
 
-The transposes of convolutions with half and full padding have elegant
-properties.
-
 \begin{figure}[p]
     \centering
     \includegraphics[width=0.24\textwidth]{pdf/no_padding_no_strides_transposed_00.pdf}
@@ -914,7 +911,7 @@ is itself a half padded convolution:
 \begin{relationship}\label{rel:half_padding_no_strides_transposed}
 A convolution described by $k = 2n + 1, \quad n \in \mathbb{N}$, $s = 1$ and $p
 = \lfloor k / 2 \rfloor = n$ has an associated transposed convolution described
-by $k' = k$, $s' = 1$ and $p' = \lfloor k / 2 \rfloor$ and its output size is
+by $k' = k$, $s' = 1$ and $p' = p$ and its output size is
 \begin{equation*}
 \begin{split}
     o' &= i' + (k - 1) - 2p \\
@@ -1028,14 +1025,14 @@ between each input unit, and its output size is
 
 \section{Zero-padding, non-unit strides, transposed}
 
-Still assuming that the convolution's input size $i$ is such that $i - k$ is a
-multiple of $s$, the analysis is extended to the zero-padded case by combining
-\autoref{rel:arbitrary_padding_no_strides_transposed} and
+Still assuming that the convolution's input size $i$ is such that $i + 2p - k$
+is a multiple of $s$, the analysis is extended to the zero-padded case by
+combining \autoref{rel:arbitrary_padding_no_strides_transposed} and
 \autoref{rel:no_padding_strides_transposed}:
 
 \begin{relationship}\label{rel:padding_strides_transposed}
-A convolution described by $k$, $s$ and $p$ and whose input size is such
-that $i - k$ is a multiple of $s$ has an associated transposed convolution
+A convolution described by $k$, $s$ and $p$ and whose input size is such that $i
++ 2p - k$ is a multiple of $s$ has an associated transposed convolution
 described by $\tilde{i}'$, $k' = k$, $s' = 1$ and $p' = k - p - 1$, where
 $\tilde{i}'$ is the size of the stretched input obtained by adding $s - 1$ zeros
 between each input unit, and its output size is
@@ -1049,9 +1046,9 @@ between each input unit, and its output size is
 \autoref{fig:padding_strides_transposed} provides an example for $i = 5$, $k =
 3$, $s = 2$ and $p = 1$.
 
-The assumption that $i$ is such that $i - k$ is a multiple of $s$ is relaxed by
-introducing another parameter $a \in \{0, \ldots, s - 1\}$ that allows to
-distinguish between the $s$ different cases leading to $i'$:
+The assumption that $i$ is such that $i + 2p - k$ is a multiple of $s$ is
+relaxed by introducing another parameter $a \in \{0, \ldots, s - 1\}$ that
+allows to distinguish between the $s$ different cases leading to $i'$:
 
 \begin{relationship}\label{rel:padding_strides_transposed_odd}
 A convolution described by $k$, $s$ and $p$ has an associated transposed
