@@ -45,6 +45,11 @@
 \let\originalepigraph\epigraph 
 \renewcommand\epigraph[2]{\originalepigraph{\textit{#1}}{\textsc{#2}}}
 
+% Use arabic numbers for thanks
+\makeatletter
+\let\@fnsymbol\@arabic
+\makeatother
+
 \title{A guide to convolution arithmetic for deep learning}
 \author[$\bigstar$]{Vincent Dumoulin\thanks{dumouliv@iro.umontreal.ca}}
 \author[$\bigstar\dagger$]{Francesco Visin\thanks{francesco.visin@polimi.it}}
