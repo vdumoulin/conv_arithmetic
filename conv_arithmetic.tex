@@ -81,10 +81,10 @@ is independent of the input size. Additionally, CNNs also usually feature a {\em
 pooling} stage, adding yet another level of complexity with respect to
 fully-connected networks.  Finally, so-called transposed convolutional layers
 (also known as fractionally strided convolutional layers) have been employed in
-more and more work as of late
-\citep{zeiler2011adaptive,zeiler2014visualizing,long2015fully,radford2015unsupervised,im2016generating},
-and their relationship with convolutional layers has been explained with various
-degrees of clarity.
+more and more work as of late \citep{zeiler2011adaptive,zeiler2014visualizing,
+long2015fully,radford2015unsupervised,visin15,im2016generating}, and their 
+relationship with convolutional layers has been explained with various degrees 
+of clarity.
 
 This guide's objective is twofold:
 
@@ -702,13 +702,19 @@ in the case of {\em transposed convolutions}.
 
 \chapter{Pooling arithmetic}
 
+In a neural network, pooling layers provide invariance to small translation of 
+the input. The most common kind of pooling is \emph{max pooling}, which
+consists in splitting the input in (usually non-overlapping) patches and 
+outputting the maximum value of each patch. Other kinds of pooling exist, e.g.,
+mean or average pooling, which all share the same idea of aggregating the input
+locally by applying a non-linearity to the content of some patches\citep{%
+boureau-cvpr-10,boureau-icml-10,boureau-iccv-11,ICML2011Saxe_551}. 
+
 Some readers may have noticed that the treatment of convolution arithmetic only
 relies on the assumption that some function is repeatedly applied onto subsets
 of the input. This means that the relationships derived in the previous chapter
-can be reused in the case of pooling arithmetic.
-
-Since pooling does not involve zero padding, the relationship describing the
-general case is as follows:
+can be reused in the case of pooling arithmetic. Since pooling does not involve 
+zero padding, the relationship describing the general case is as follows:
 
 \begin{relationship}\label{rel:pooling}
 For $i$, $k$ and $s$,
@@ -717,7 +723,7 @@ For $i$, $k$ and $s$,
 \end{equation*}
 \end{relationship}
 
-This relationship holds for any type of pooling.
+\noindent This relationship holds for any type of pooling.
 
 \chapter{Transposed convolution arithmetic}
 
