@@ -416,12 +416,10 @@ along axis $j$:
 
 \chapter{Convolution arithmetic}
 
-The analysis of the relationship between convolutional layer properties is
-easied by the fact that they don't interact across axes, i.e. the choice of
-kernel size, stride and zero padding along axis $j$ only affects the output
-size of axis $j$.
-
-Because of this, in this chapter we will focus on the following simplified 
+The analysis of the relationship between convolutional layer properties is eased
+by the fact that they don't interact across axes, i.e. the choice of kernel
+size, stride and zero padding along axis $j$ only affects the output size of
+axis $j$. Because of that, this chapter will focus on the following simplified
 setting:
 
 \begin{itemize}
@@ -443,13 +441,12 @@ position of the input (i.e.  $s = 1$ and $p = 0$).
 3$.
 
 One way of defining the output size in this case is by the number of possible
-placements of the kernel on the input. Let's consider the width axis: the
-kernel starts on the leftmost part of the input feature map and slides by steps
-of one until its right side touches the right side of the input. The size of
-the output will be equal to the number of steps we made, plus one, accounting
-for the initial position of the kernel
-(\autoref{fig:no_padding_no_strides_explained}). The same logic applies for the
-height axis.
+placements of the kernel on the input. Let's consider the width axis: the kernel
+starts on the leftmost part of the input feature map and slides by steps of one
+until it touches the right side of the input. The size of the output will be
+equal to the number of steps made, plus one, accounting for the initial position
+of the kernel (\autoref{fig:no_padding_no_strides_explained}). The same logic
+applies for the height axis.
 
 More formally, the following relationship can be inferred:
 
@@ -507,12 +504,9 @@ For $i$, $k$, $s = 1$ and $p = 0$,
 \section{Zero-padding, unit strides}
 
 To factor in zero-padding (i.e. only restricting that $s = 0$), consider its
-effect on the effective input size. \autoref{fig:arbitrary_padding_no_strides}
-provides an example for $i = 5$, $k = 4$ and $p = 2$.
-
-Noting that padding with $p$ zeros changes the effective input size from $i$ to
-$i + 2p$, \autoref{rel:no_padding_no_strides} is used to infer the following
-relationship:
+effect on the effective input size: padding with $p$ zeros changes the effective
+input size from $i$ to $i + 2p$. \autoref{rel:no_padding_no_strides} is used
+to infer the following relationship:
 
 \begin{relationship}\label{rel:arbitrary_padding_no_strides}
 For $i$, $k$, $s = 1$ and $p$,
@@ -520,6 +514,9 @@ For $i$, $k$, $s = 1$ and $p$,
     o = (i - k) + 2p + 1.
 \end{equation*}
 \end{relationship}
+
+\noindent \autoref{fig:arbitrary_padding_no_strides} provides an example for $i
+= 5$, $k = 4$ and $p = 2$.
 
 Two specific instances of zero padding are used quite extensively in practice
 because of their respective properties.
@@ -574,13 +571,12 @@ the analysis, let's momentarily ignore zero-padding (i.e.  $s > 1$ and $p = 0$).
 = 2$.
 
 Once again, the output size is defined in terms of the number of possible
-placements of the kernel on the input. Consider the width axis: the left side of
-the kernel starts at the left side of the input, but this time the kernel slides
-by steps of $s$ until its right side touches the right side of the input. The
-size of the output is equal to the number of steps made, plus one, accounting
-for the initial position of the kernel
-(\autoref{fig:no_padding_strides_explained}). The same logic applies for the
-height axis.
+placements of the kernel on the input. Consider the width axis: the kernel
+starts at the left side of the input, but this time it slides by steps of $s$
+until it touches the right side of the input. The size of the output is equal to
+the number of steps made, plus one, accounting for the initial position of the
+kernel (\autoref{fig:no_padding_strides_explained}). The same logic applies for
+the height axis.
 
 From this, the following relationship is inferred:
 
@@ -613,13 +609,11 @@ For $i$, $k$, $p$ and $s$,
 \autoref{fig:padding_strides} provides an example for $i = 5$, $k = 3$, $s = 2$
 and $p = 1$.
 
-As was noted for \autoref{rel:no_padding_strides}, the floor function means
-that in some cases a convolution will produce the same output size for multiple
-input sizes.
-
-More specifically, if $i + 2p - k$ is a multiple of $s$, then any input size $j
-= i + a, \quad a \in \{0,\ldots,s - 1\}$ will produce the same output size. Note
-that this ambiguity applies only for $s > 1$.
+As was noted when describing \autoref{rel:no_padding_strides}, the floor
+function means that in some cases a convolution will produce the same output
+size for multiple input sizes. More specifically, if $i + 2p - k$ is a multiple
+of $s$, then any input size $j = i + a, \quad a \in \{0,\ldots,s - 1\}$ will
+produce the same output size. Note that this ambiguity applies only for $s > 1$.
 
 \autoref{fig:padding_strides_odd} provides an example for $i = 6$, $k = 3$, $s =
 2$ and $p = 1$. Despite having different input sizes, the convolutions presented
