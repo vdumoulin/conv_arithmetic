@@ -235,7 +235,7 @@ along axis $j$:
     \item $k_j$: kernel size along axis $j$,
     \item $s_j$: stride (distance between two consecutive positions of the
         kernel) along axis $j$,
-    \item $p_j$: zero-padding (number of zeros concatenated at the beginning and
+    \item $p_j$: zero padding (number of zeros concatenated at the beginning and
         at the end of an axis) along axis $j$.
 \end{itemize}
 
@@ -427,13 +427,13 @@ setting:
     \item square inputs ($i_1 = i_2 = i$),
     \item square kernel size ($k_1 = k_2 = k$),
     \item same strides along both axes ($s_1 = s_2 = s$),
-    \item same zero-padding along both axes ($p_1 = p_2 = p$).
+    \item same zero padding along both axes ($p_1 = p_2 = p$).
 \end{itemize}
 
 This facilitates the analysis and the visualization, but keep in mind that the
 results outlined here also generalize to the N-D and non-square cases.
 
-\section{No zero-padding, unit strides}
+\section{No zero padding, unit strides}
 
 The simplest case to analyze is when the kernel just slides across every
 position of the input (i.e.  $s = 1$ and $p = 0$).
@@ -501,9 +501,9 @@ For $i$, $k$, $s = 1$ and $p = 0$,
         (i.e. $i = 5$, $k = 3$, $s = 1$ and $p = 2$).}
 \end{figure}
 
-\section{Zero-padding, unit strides}
+\section{Zero padding, unit strides}
 
-To factor in zero-padding (i.e. only restricting that $s = 0$), consider its
+To factor in zero padding (i.e. only restricting that $s = 0$), consider its
 effect on the effective input size: padding with $p$ zeros changes the effective
 input size from $i$ to $i + 2p$. \autoref{rel:no_padding_no_strides} is used
 to infer the following relationship:
@@ -562,11 +562,11 @@ every element of the kernel is superimposed on every element of the input
 feature map. \autoref{fig:full_padding_no_strides} provides an example for $i =
 5$, $k = 3$ and (therefore) $p = 2$.
 
-\section{No zero-padding, non-unit strides}
+\section{No zero padding, non-unit strides}
 
 So far, all relationships derived only apply for unit-strided convolutions.
 Incorporating non-unit strides requires another inference leap. To facilitate
-the analysis, let's momentarily ignore zero-padding (i.e.  $s > 1$ and $p = 0$).
+the analysis, let's momentarily ignore zero padding (i.e.  $s > 1$ and $p = 0$).
 \autoref{fig:no_padding_strides} provides an example for $i = 5$, $k = 3$ and $s
 = 2$.
 
@@ -592,9 +592,9 @@ does {\em not} coincide with the kernel reaching the end of the input, i.e.
 some input units are left out (see \autoref{fig:padding_strides_odd} for an
 example of such a case).
 
-\section{Zero-padding, non-unit strides}
+\section{Zero padding, non-unit strides}
 
-The most general case (convolving over a zero-padded input using non-unit
+The most general case (convolving over a zero padded input using non-unit
 strides) is analyzed by applying \autoref{rel:no_padding_strides} on an
 effective input of size $i + 2p$, just as was done for
 \autoref{rel:arbitrary_padding_no_strides}:
@@ -655,7 +655,7 @@ complicate the analysis in the case of {\em transposed convolutions}.
         over a $6 \times 6$ input padded with a $1 \times 1$ border of zeros
         using $2 \times 2$ strides (i.e.  $i = 6$, $k = 3$, $s = 2$ and
         $p = 1$). In this case, the bottom row and right column of the
-        zero-padded input are not covered by the kernel.}
+        zero padded input are not covered by the kernel.}
 \end{figure}
 
 \begin{figure}[p]
@@ -707,7 +707,7 @@ relies on the assumption that some function is repeatedly applied onto subsets
 of the input. This means that the relationships derived in the previous chapter
 can be reused in the case of pooling arithmetic.
 
-Since pooling does not involve zero-padding, the relationship describing the
+Since pooling does not involve zero padding, the relationship describing the
 general case is as follows:
 
 \begin{relationship}\label{rel:pooling}
@@ -731,7 +731,7 @@ The chapter will focus on the following setting:
     \item square inputs ($i_1 = i_2 = i$),
     \item square kernel size ($k_1 = k_2 = k$),
     \item same strides along both axes ($s_1 = s_2 = s$),
-    \item same zero-padding along both axes ($p_1 = p_2 = p$).
+    \item same zero padding along both axes ($p_1 = p_2 = p$).
 \end{itemize}
 
 Once again, the results outlined generalize to the N-D and non-square cases.
@@ -797,7 +797,7 @@ This chapter will proceed somewhat backwards with respect to the convolution
 arithmetic chapter. Case by case, the analysis will concentrate on how the
 transpose of convolutions can be expressed in terms of convolutions.
 
-\section{No zero-padding, unit strides, transposed}
+\section{No zero padding, unit strides, transposed}
 
 \autoref{fig:no_padding_no_strides_transposed} shows the effect of applying the
 transpose of the matrix above on a $4 \times 4$ input (i.e. $i = 4$, $k = 3$, $s
@@ -812,7 +812,7 @@ The transposed convolution is equivalent to convolving a $3 \times 3$ kernel
 over a $2 \times 2$ input padded with a $2 \times 2$ border of zeros using unit
 strides (i.e. $i' = 2$, $k' = k$, $s' = 1$ and $p' = 2$). The kernel size and
 stride remain the same, but the input to the transposed convolution is now
-zero-padded.
+zero padded.
 
 One way to understand the logic behind zero padding is to consider what would be
 necessary to produce a transposed convolution with the same connectivity pattern
@@ -841,14 +841,14 @@ the transposed convolution's input.
 \section{Zero padding, unit strides, transposed}
 
 Knowing that the transpose of a non-padded convolution involves convolving a
-zero-padded input, it would be reasonable to assume that the transpose of a
-zero-padded convolution involves convolving an input padded with {\em less}
+zero padded input, it would be reasonable to assume that the transpose of a
+zero padded convolution involves convolving an input padded with {\em less}
 zeros.
 
 \autoref{fig:arbitrary_padding_no_strides_transposed} shows that it is indeed
 the case by providing an example for $i = 5$, $k = 4$ and $p = 2$.
 
-The following relationship applies for zero-padded convolutions:
+The following relationship applies for zero padded convolutions:
 
 \begin{relationship}\label{rel:arbitrary_padding_no_strides_transposed}
 A convolution described by $k$, $s = 1$ and $p$ has an associated transposed
@@ -945,9 +945,9 @@ output size is
 \autoref{fig:full_padding_no_strides_transposed} provides an example for $i =
 5$, $k = 3$ and (therefore) $p = 2$.
 
-\section{No zero-padding, non-unit strides, transposed}
+\section{No zero padding, non-unit strides, transposed}
 
-Using the same kind of deductive logic as for zero-padded convolutions, one
+Using the same kind of deductive logic as for zero padded convolutions, one
 might expect that the transpose of a convolution with $s > 1$ involves a
 convolution with $s < 1$. As will be explained, this is a valid intuition, which
 is why transposed convolutions have sometimes been called {\em fractionally
@@ -1023,10 +1023,10 @@ between each input unit, and its output size is
         $\tilde{i}' = 5$, $k' = k$, $s' = 1$ and $p' = 1$).}
 \end{figure}
 
-\section{Zero-padding, non-unit strides, transposed}
+\section{Zero padding, non-unit strides, transposed}
 
 Still assuming that the convolution's input size $i$ is such that $i + 2p - k$
-is a multiple of $s$, the analysis is extended to the zero-padded case by
+is a multiple of $s$, the analysis is extended to the zero padded case by
 combining \autoref{rel:arbitrary_padding_no_strides_transposed} and
 \autoref{rel:no_padding_strides_transposed}:
 
