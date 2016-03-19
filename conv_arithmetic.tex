@@ -762,8 +762,9 @@ For $i$, $k$ and $s$,
 
 \chapter{Transposed convolution arithmetic}
 
-Like for convolution arithmetic, transposed convolution arithmetic is simplified
-by the fact that transposed convolution properties don't interact across axes.
+Like for convolution arithmetic, the dissertation about transposed convolution
+arithmetic is simplified by the fact that transposed convolution properties
+don't interact across axes.
 
 The chapter will focus on the following setting:
 
@@ -775,17 +776,18 @@ The chapter will focus on the following setting:
     \item same zero padding along both axes ($p_1 = p_2 = p$).
 \end{itemize}
 
-Once again, the results outlined generalize to the N-D and non-square cases.
+\noindent Once again, the results outlined generalize to the N-D and non-square
+cases.
 
 \section{Convolution vs. transposed convolution}
 
 The need for transposed convolutions generally arises from the desire to use a
-transformation going from something that has the output shape of some
-convolution to something that has the input shape of the same convolution while
-maintaining a connectivity pattern that is compatible with said convolution.
-For instance, one might use such a transformation as the decoding layer of a
-convolutional autoencoder in order to obtain a learned inverse of the encoding
-convolution.
+transformation going in the opposite direction of a normal convolution, i.e.,
+from something that has the shape of the output of some convolution to
+something that has the shape of its input while maintaining a connectivity
+pattern that is compatible with said convolution. For instance, one might use
+such a transformation as the decoding layer of a convolutional autoencoder in
+order to obtain a \emph{learned} inverse of the encoding convolution.
 
 Once again, the convolutional case is considerably more complex than the
 fully-connected case, which only requires to use a weight matrix whose shape has
