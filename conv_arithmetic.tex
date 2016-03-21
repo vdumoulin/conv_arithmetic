@@ -762,6 +762,20 @@ For $i$, $k$ and $s$,
 
 \chapter{Transposed convolution arithmetic}
 
+The need for transposed convolutions generally arises from the desire to use a
+transformation going in the opposite direction of a normal convolution, i.e.,
+from something that has the shape of the output of some convolution to
+something that has the shape of its input while maintaining a connectivity
+pattern that is compatible with said convolution. For instance, one might use
+such a transformation as the decoding layer of a convolutional autoencoder in
+order to obtain a \emph{learned} inverse of the encoding convolution.
+
+Once again, the convolutional case is considerably more complex than the
+fully-connected case, which only requires to use a weight matrix whose shape
+has been transposed. However, since every convolution boils down to an
+efficient implementation of a matrix operation, the insights gained from the
+fully-connected case are useful in solving the convolutional case.
+
 Like for convolution arithmetic, the dissertation about transposed convolution
 arithmetic is simplified by the fact that transposed convolution properties
 don't interact across axes.
@@ -779,26 +793,14 @@ The chapter will focus on the following setting:
 \noindent Once again, the results outlined generalize to the N-D and non-square
 cases.
 
-\section{Convolution vs. transposed convolution}
+\section{Convolution as a matrix operation}
 
-The need for transposed convolutions generally arises from the desire to use a
-transformation going in the opposite direction of a normal convolution, i.e.,
-from something that has the shape of the output of some convolution to
-something that has the shape of its input while maintaining a connectivity
-pattern that is compatible with said convolution. For instance, one might use
-such a transformation as the decoding layer of a convolutional autoencoder in
-order to obtain a \emph{learned} inverse of the encoding convolution.
-
-Once again, the convolutional case is considerably more complex than the
-fully-connected case, which only requires to use a weight matrix whose shape has
-been transposed. However, since every convolution boils down to an efficient
-implementation of a matrix operation, the insights gained from the
-fully-connected case are useful in solving the convolutional case.
-
-Take for instance the convolution represented in
-\autoref{fig:no_padding_no_strides}. If the input and output were to be unrolled
-into vectors from left to right, top to bottom, the matrix representation of the
-convolution would look like
+Take as an example the convolution represented in
+\autoref{fig:no_padding_no_strides}. If the input and output were to be
+unrolled into vectors from left to right, top to bottom, the convolution could
+be represented as a sparse matrix $\mathbf{C}$ where some of the elements are
+zero and some of them are the $w_{i,j}$ elements of the kernel (with $i$ and 
+$j$ the rows and columns of the kernel respectively):
 
 \begin{equation*}
 \resizebox{.98\hsize}{!}{$
@@ -814,31 +816,44 @@ convolution would look like
     \end{pmatrix}$}
 \end{equation*}
 
-where $w_{i,j}$ is the element of the kernel located at row $i$ and column $j$.
-This linear operation takes the input flattened as a 16-dimensional vector and
-produces a 4-dimensional vector that is reshaped as the $2 \times 2$ output.
+As you might have noticed, this representation is an instance of a
+\emph{Toeplitz matrix}, as the elements of each descending diagonal from left
+to right are the same.  This linear operation takes the input matrix
+$\mathbf{I}$ flattened as a 16-dimensional vector and produces a 4-dimensional
+vector that is later reshaped as the $2 \times 2$ output matrix $\mathbf{O}$.  
 
-What would happen if this matrix was transposed and the values for $\mathbf{w}$
-were replaced with the values of another $3 \times 3$ kernel $\mathbf{u}$? The
-transformation would take a 4-dimensional vector as input and produce a
-16-dimensional vector as output {\em while keeping a connectivity pattern
-compatible with the convolution presented in
-\autoref{fig:no_padding_no_strides}}. This is what is referred to as a {\em
-transposed convolution}.
+\section{Transposed convolution}
 
-Note that if $\mathbf{w}$ is {\em not} replaced with $\mathbf{u}$, the resulting
-operation is a direct transpose of the convolution defined by $\mathbf{w}$,
-which is {\em exactly} what is needed for gradient backpropagation. In other
-words, the transposed convolution operation can be thought of as the gradient of
-{\em some} convolution with respect to its input.\footnote{
-    In practice, this is how transposed convolutions are implemented.}
+Let's now consider what would happen if we wanted to invert the operation we
+just described, i.e., to expand the $2 \times 2$ matrix $\mathbf{O}$ with a
+convolutional kernel in order to obtain the $4 \times 4$ matrix $\mathbf{I}$.
+
+To do so we would transpose the matrix $\mathbf{C}$ and take its product with
+the flattened 4-dimensional vector representation of $\mathbf{O}$ to produce a
+flattened 16-dimensional vector representation of $\mathbf{I}$. This operation
+-- usually referred to as a {\em transposed convolution\/} or {\em fractional 
+convolution\/} -- keeps a connectivity pattern compatible with the convolution
+presented in \autoref{fig:no_padding_no_strides} and is exactly what is being
+done to compute the gradient backpropagation of a convolution with respect to
+its input.\footnote{The transposed convolution operation can be thought of as
+the gradient of {\em some\/} convolution with respect to its input, which is in
+practice how transposed convolutions are usually implemented.}
+
+We defined so far how to invert an existing convolution by applying the
+transpose of its matrix representation. It is trivial to note that if we are
+only interested in the transposed convolution, we don't necessarly need to
+learn the direct convolution and then transpose it, but we can rather directly
+learn the kernel used for the transpose operation. In this case the 
+{\em forward pass\/} of the algorithm will be the transposed convolution, while
+its {\em backward pass\/} will be the direct convolution.
+
 
 The fortunate thing about transposed convolutions is that they are themselves
-convolutions, albeit with some additional processing on the input.
-
-This chapter will proceed somewhat backwards with respect to the convolution
-arithmetic chapter. Case by case, the analysis will concentrate on how the
-transpose of convolutions can be expressed in terms of convolutions.
+convolutions, albeit with some additional processing on the input. This allows 
+for expressing transposed convolutions in terms of direct convolutions. 
+Building on that, this chapter will proceed somewhat backwards with respect to
+the convolution arithmetic chapter, deriving the properties of each transposed
+convolution by referring to its corresponding direct convolution.
 
 \section{No zero padding, unit strides, transposed}
 
