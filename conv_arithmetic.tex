@@ -77,15 +77,14 @@
     were used for the figures.
 \end{abstract}
 
-\renewcommand{\abstractname}{Feedbacks}
+\renewcommand{\abstractname}{Feedback}
 \begin{abstract}
-    Your feedback is welcome!  We did our best to be as precise, informative
-    and up to the point as possible, but should there be anything you feel
-    might be an error or could be rephrased to be more precise or
-    comprehensible, please don't refrain from contacting us. Likewise, drop us
-    a line if you think there is something that might fit this technical report
-    and you would like us to discuss -- we will make our best effort to update
-    this document.
+    Your feedback is welcomed! We did our best to be as precise, informative and
+    up to the point as possible, but should there be anything you feel might be
+    an error or could be rephrased to be more precise or comprehensible, please
+    don't refrain from contacting us. Likewise, drop us a line if you think
+    there is something that might fit this technical report and you would like
+    us to discuss -- we will make our best effort to update this document.
 \end{abstract}
 
 \renewcommand{\abstractname}{Source code and animations}
@@ -169,32 +168,33 @@ topological information may prove very handy in solving some tasks, like
 computer vision and speech recognition, and in these cases it would be best to
 preserve it. This is where discrete convolutions come into play.
 
-A discrete convolution is a linear transformation that is sparse (only a few
-input units contribute to a given output unit) and reuses parameters (the same
-transformation is applied to multiple locations in the input).
+A discrete convolution is a linear transformation that preserves this notion of
+ordering. It is sparse (only a few input units contribute to a given output
+unit) and reuses parameters (the same transformation is applied to multiple
+locations in the input).
 
 \autoref{fig:numerical_no_padding_no_strides} provides an example of a discrete
 convolution. The light blue grid is called the {\em input feature map}. To keep
-the drawing simple a single input feature map is represented, but it is not
-uncommon to have multiple feature maps stacked one over another.\footnote{%
+the drawing simple, a single input feature map is represented, but it is not
+uncommon to have multiple feature maps stacked one onto another.\footnote{%
     An example of this is what was referred to earlier as {\em channels} for 
     images and sound clips.}
 A {\em kernel} (shaded area) of value
 
 \begin{figure}[h]
     \centering
-    \begin{tikzpicture}[scale=.5,every node/.style={minimum size=1cm}, on grid]
+    \begin{tikzpicture}[scale=.4,every node/.style={minimum size=1cm}, on grid]
             \draw[fill=base02,opacity=0.4] (0,0) rectangle (3,3);
             \draw[draw=base03,thick] (0,0) grid (3,3);
-            \node (00) at (0.5,0.5) {\tiny 0};
-            \node (01) at (0.5,1.5) {\tiny 1};
-            \node (02) at (0.5,2.5) {\tiny 2};
-            \node (10) at (1.5,0.5) {\tiny 2};
+            \node (00) at (0.5,2.5) {\tiny 0};
+            \node (01) at (1.5,2.5) {\tiny 1};
+            \node (02) at (2.5,2.5) {\tiny 2};
+            \node (10) at (0.5,1.5) {\tiny 2};
             \node (11) at (1.5,1.5) {\tiny 2};
-            \node (12) at (1.5,2.5) {\tiny 0};
-            \node (20) at (2.5,0.5) {\tiny 0};
-            \node (21) at (2.5,1.5) {\tiny 1};
-            \node (22) at (2.5,2.5) {\tiny 2};
+            \node (12) at (2.5,1.5) {\tiny 0};
+            \node (20) at (0.5,0.5) {\tiny 0};
+            \node (21) at (1.5,0.5) {\tiny 1};
+            \node (22) at (2.5,0.5) {\tiny 2};
     \end{tikzpicture}
 \end{figure}
 
@@ -230,11 +230,11 @@ A {\em kernel} (shaded area) of value
 \end{figure}
 
 \noindent slides across the input feature map. At each location, the product
-between each element of the kernel and the corresponding elements of the
-overlapped input is computed and the results are summed up to obtain the output
-in the current location. The procedure can be repeated using different kernels
-to form as many output feature maps as desired (\autoref{fig:full_picture}). The
-final output of this procedure is called
+between each element of the kernel and the input element it overlaps is computed
+and the results are summed up to obtain the output in the current location. The
+procedure can be repeated using different kernels to form as many output feature
+maps as desired (\autoref{fig:full_picture}). The final output of this procedure
+is called
 {\em output feature map}.\footnote{%
     While there is a distinction between convolution and cross-correlation from
     a signal processing perspective, the two become interchangeable when the
@@ -521,7 +521,7 @@ For $i$, $k$, $s = 1$ and $p = 0$,
     \includegraphics[width=0.24\textwidth]{pdf/same_padding_no_strides_01.pdf}
     \includegraphics[width=0.24\textwidth]{pdf/same_padding_no_strides_02.pdf}
     \includegraphics[width=0.24\textwidth]{pdf/same_padding_no_strides_03.pdf}
-    \caption{\label{fig:same_padding_no_strides} (Same padding, no strides) 
+    \caption{\label{fig:same_padding_no_strides} (Half padding, no strides)
         Convolving a $3 \times 3$ kernel over a $5 \times 5$ input using half 
         padding and unit strides (i.e., $i = 5$, $k = 3$, $s = 1$ and $p = 1$).}
 \end{figure}
@@ -559,7 +559,7 @@ because of their respective properties. Let's discuss them in more detail.
 
 \subsection{Half (same) padding}
 
-Having the output size be the same as the input size (i.e., $i = o$) can be a
+Having the output size be the same as the input size (i.e., $o = i$) can be a
 desirable property:
 
 \begin{relationship}\label{rel:same_padding_no_strides}
@@ -582,7 +582,7 @@ and (therefore) $p = 1$.
 
 While convolving a kernel generally {\em decreases} the output size with respect
 to the input size, sometimes the opposite is required. This can be achieved
-with a proper zero padding:
+with proper zero padding:
 
 \begin{relationship}\label{rel:full_padding_no_strides}
 For $p = k - 1$, $\forall i$, $k$ and $s = 1$,
@@ -634,7 +634,7 @@ input, i.e., some input units are left out (see
 
 The most general case (convolving over a zero padded input using non-unit
 strides) can be derived by applying \autoref{rel:no_padding_strides} on an
-effective input of size $i + 2p$, analogously to what was done for
+effective input of size $i + 2p$, in analogy to what was done for
 \autoref{rel:arbitrary_padding_no_strides}:
 
 \begin{relationship}\label{rel:padding_strides}
@@ -653,7 +653,7 @@ ambiguity applies only for $s > 1$.
 \autoref{fig:padding_strides} shows an example with $i = 5$, $k = 3$, $s = 2$ 
 and $p = 1$, while \autoref{fig:padding_strides_odd} provides an example for 
 $i = 6$, $k = 3$, $s = 2$ and $p = 1$. Interestingly, despite having different
-input sizes these convolution share the same output size. While this doesn't
+input sizes these convolutions share the same output size. While this doesn't
 affect the analysis for {\em convolutions}, this will complicate the analysis
 in the case of {\em transposed convolutions}.
 
@@ -663,8 +663,8 @@ in the case of {\em transposed convolutions}.
     \includegraphics[width=0.24\textwidth]{pdf/no_padding_strides_01.pdf}
     \includegraphics[width=0.24\textwidth]{pdf/no_padding_strides_02.pdf}
     \includegraphics[width=0.24\textwidth]{pdf/no_padding_strides_03.pdf}
-    \caption{\label{fig:no_padding_strides} (No zero-padding, arbitrary 
-        stripes) Convolving a $3 \times 3$ kernel over a $5 \times 5$ input 
+    \caption{\label{fig:no_padding_strides} (No zero padding, arbitrary
+        strides) Convolving a $3 \times 3$ kernel over a $5 \times 5$ input
         using $2 \times 2$ strides (i.e., $i = 5$, $k = 3$, $s = 2$ and 
         $p = 0$).}
 \end{figure}
@@ -737,12 +737,12 @@ in the case of {\em transposed convolutions}.
 
 \chapter{Pooling arithmetic}
 
-In a neural network, pooling layers provide invariance to small translation of 
+In a neural network, pooling layers provide invariance to small translations of
 the input. The most common kind of pooling is \emph{max pooling}, which
 consists in splitting the input in (usually non-overlapping) patches and 
 outputting the maximum value of each patch. Other kinds of pooling exist, e.g.,
 mean or average pooling, which all share the same idea of aggregating the input
-locally by applying a non-linearity to the content of some patches\citep{%
+locally by applying a non-linearity to the content of some patches \citep{%
 boureau-cvpr-10,boureau-icml-10,boureau-iccv-11,ICML2011Saxe_551}. 
 
 Some readers may have noticed that the treatment of convolution arithmetic only
@@ -945,7 +945,7 @@ size is
         = 1$ and $p' = 1$).}
 \end{figure}
 
-\subsection{Half padding, transposed}
+\subsection{Half (same) padding, transposed}
 
 Knowing that a half padded convolution produces an output with the same size as
 the input, it is unsurprising that the transpose of a half padded convolution
@@ -1068,9 +1068,9 @@ between each input unit, and its output size is
 
 \section{Zero padding, non-unit strides, transposed}
 
-Still assuming that the convolution's input size $i$ is such that $i + 2p - k$
-is a multiple of $s$, the analysis is extended to the zero padded case by
-combining \autoref{rel:arbitrary_padding_no_strides_transposed} and
+Assuming that the convolution's input size $i$ is such that $i + 2p - k$ is a
+multiple of $s$, the analysis is extended to the zero padded case by combining
+\autoref{rel:arbitrary_padding_no_strides_transposed} and
 \autoref{rel:no_padding_strides_transposed}:
 
 \begin{relationship}\label{rel:padding_strides_transposed}
