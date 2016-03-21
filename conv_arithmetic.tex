@@ -824,9 +824,9 @@ vector that is later reshaped as the $2 \times 2$ output matrix $\mathbf{O}$.
 
 \section{Transposed convolution}
 
-Let's now consider what would happen if we wanted to invert the operation we
-just described, i.e., to expand the $2 \times 2$ matrix $\mathbf{O}$ with a
-convolutional kernel in order to obtain the $4 \times 4$ matrix $\mathbf{I}$.
+Let's now consider what would happen if we wanted to go the other way around, 
+i.e., to expand the $2 \times 2$ matrix $\mathbf{O}$ with a convolutional
+kernel in order to obtain the $4 \times 4$ matrix $\mathbf{I}$.
 
 To do so we would transpose the matrix $\mathbf{C}$ and take its product with
 the flattened 4-dimensional vector representation of $\mathbf{O}$ to produce a
@@ -839,9 +839,9 @@ its input.\footnote{The transposed convolution operation can be thought of as
 the gradient of {\em some\/} convolution with respect to its input, which is in
 practice how transposed convolutions are usually implemented.}
 
-We defined so far how to invert an existing convolution by applying the
-transpose of its matrix representation. It is trivial to note that if we are
-only interested in the transposed convolution, we don't necessarly need to
+We defined so far how to start from an existing convolution and then applying 
+the transpose of its matrix representation. It is trivial to note that if we
+are only interested in the transposed convolution, we don't necessarily need to
 learn the direct convolution and then transpose it, but we can rather directly
 learn the kernel used for the transpose operation. In this case the 
 {\em forward pass\/} of the algorithm will be the transposed convolution, while
