@@ -815,8 +815,8 @@ convolution would look like
 \end{equation*}
 
 where $w_{i,j}$ is the element of the kernel located at row $i$ and column $j$.
-This linear operation takes a 16-dimensional vector as input and produces a
-4-dimensional vector as output.
+This linear operation takes the input flattened as a 16-dimensional vector and
+produces a 4-dimensional vector that is reshaped as the $2 \times 2$ output.
 
 What would happen if this matrix was transposed and the values for $\mathbf{w}$
 were replaced with the values of another $3 \times 3$ kernel $\mathbf{u}$? The
