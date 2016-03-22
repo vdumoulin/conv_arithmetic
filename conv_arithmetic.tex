@@ -823,12 +823,12 @@ vector and produces a 4-dimensional vector that is later reshaped as the $2
 \times 2$ output matrix.
 
 Using this representation, the backward pass is easily obtained by transposing
-$\mathbf{C}$; in other words, the error is backpropagated by multiplying with
-$\mathbf{C}^T$. This operation takes a 4-dimensional vector as input and
-produces a 16-dimensional vector as output, and its connectivity pattern is
+$\mathbf{C}$; in other words, the error is backpropagated by multiplying the
+loss with $\mathbf{C}^T$. This operation takes a 4-dimensional vector as input
+and produces a 16-dimensional vector as output, and its connectivity pattern is
 compatible with $\mathbf{C}$ by construction.
 
-In other words, the kernel $\mathbf{w}$ defines the matrices $\mathbf{C}$ and
+Notably, the kernel $\mathbf{w}$ defines both the matrices $\mathbf{C}$ and
 $\mathbf{C}^T$ used for the forward and backward passes.
 
 \section{Transposed convolution}
