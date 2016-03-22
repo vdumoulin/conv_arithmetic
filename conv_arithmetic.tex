@@ -486,7 +486,7 @@ applies for the height axis.
 More formally, the following relationship can be inferred:
 
 \begin{relationship}\label{rel:no_padding_no_strides}
-For $i$, $k$, $s = 1$ and $p = 0$,
+For $\forall i$, $\forall k$, $s = 1$ and $p = 0$,
 \begin{equation*}
     o = (i - k) + 1.
 \end{equation*}
@@ -545,7 +545,7 @@ effective input size from $i$ to $i + 2p$. In the general case, we can then use
 \autoref{rel:no_padding_no_strides} to infer the following relationship:
 
 \begin{relationship}\label{rel:arbitrary_padding_no_strides}
-For $i$, $k$, $s = 1$ and $p$,
+For $\forall i$, $\forall k$, $s = 1$ and $\forall p$,
 \begin{equation*}
     o = (i - k) + 2p + 1.
 \end{equation*}
@@ -585,7 +585,7 @@ to the input size, sometimes the opposite is required. This can be achieved
 with proper zero padding:
 
 \begin{relationship}\label{rel:full_padding_no_strides}
-For $p = k - 1$, $\forall i$, $k$ and $s = 1$,
+For $p = k - 1$, $\forall i$, $\forall k$ and $s = 1$,
 \begin{equation*}
 \begin{split}
     o &= i + 2(k - 1) - (k - 1) \\
@@ -619,7 +619,7 @@ height axis.
 From this, the following relationship can be inferred:
 
 \begin{relationship}\label{rel:no_padding_strides}
-For $i$, $k$, $p = 0$ and $s$,
+For $\forall i$, $\forall k$, $p = 0$ and $\forall s$,
 \begin{equation*}
     o = \left\lfloor \frac{i - k}{s} \right\rfloor + 1.
 \end{equation*}
@@ -638,7 +638,7 @@ effective input of size $i + 2p$, in analogy to what was done for
 \autoref{rel:arbitrary_padding_no_strides}:
 
 \begin{relationship}\label{rel:padding_strides}
-For $i$, $k$, $p$ and $s$,
+For $\forall i$, $\forall k$, $\forall p$ and $\forall s$,
 \begin{equation*}
     o = \left\lfloor \frac{i + 2p - k}{s} \right\rfloor + 1.
 \end{equation*}
@@ -752,7 +752,7 @@ can be reused in the case of pooling arithmetic. Since pooling does not involve
 zero padding, the relationship describing the general case is as follows:
 
 \begin{relationship}\label{rel:pooling}
-For $i$, $k$ and $s$,
+For $\forall i$, $\forall k$ and $\forall s$,
 \begin{equation*}
     o = \left\lfloor \frac{i - k}{s} \right\rfloor + 1.
 \end{equation*}
@@ -895,9 +895,9 @@ for the other elements of the image, giving rise to the following general
 relationship:
 
 \begin{relationship}\label{rel:no_padding_no_strides_transposed}
-A convolution described by $k$, $s = 1$ and $p = 0$ has an associated transposed
-convolution described by $k' = k$, $s' = s$ and $p' = k - 1$ and its output size
-is
+A convolution described by $\forall k$, $s = 1$ and $p = 0$ has an associated
+transposed convolution described by $k' = k$, $s' = s$ and $p' = k - 1$ and its
+output size is
 \begin{equation*}
     o' = i' + (k - 1).
 \end{equation*}
@@ -920,9 +920,9 @@ $i = 5$, $k = 4$ and $p = 2$.
 Formally, the following relationship applies for zero padded convolutions:
 
 \begin{relationship}\label{rel:arbitrary_padding_no_strides_transposed}
-A convolution described by $k$, $s = 1$ and $p$ has an associated transposed
-convolution described by $k' = k$, $s' = s$ and $p' = k - p - 1$ and its output
-size is
+A convolution described by $\forall k$, $s = 1$ and $\forall p$ has an
+associated transposed convolution described by $k' = k$, $s' = s$ and $p' = k -
+p - 1$ and its output size is
 \begin{equation*}
     o' = i' + (k - 1) - 2p.
 \end{equation*}
@@ -1002,9 +1002,9 @@ padding, it is unsurprising that the transpose of a fully padded convolution is
 a non-padded convolution:
 
 \begin{relationship}\label{rel:full_padding_no_strides_transposed}
-A convolution described by $k$, $s = 1$ and $p = k - 1$ has an associated
-transposed convolution described by $k' = k$, $s' = s$ and $p' = 0$ and its
-output size is
+A convolution described by $\forall k$, $s = 1$ and $p = k - 1$ has an
+associated transposed convolution described by $k' = k$, $s' = s$ and $p' = 0$
+and its output size is
 \begin{equation*}
 \begin{split}
     o' &= i' + (k - 1) - 2p \\
@@ -1037,11 +1037,11 @@ and that its input size $i$ is such that $i - k$ is a multiple of $s$. In that
 case, the following relationship holds:
 
 \begin{relationship}\label{rel:no_padding_strides_transposed}
-A convolution described by $k$, $s$ and $p = 0$ and whose input size is such
-that $i - k$ is a multiple of $s$, has an associated transposed convolution
-described by $\tilde{i}'$, $k' = k$, $s' = 1$ and $p' = k - 1$, where
-$\tilde{i}'$ is the size of the stretched input obtained by adding $s - 1$ zeros
-between each input unit, and its output size is
+A convolution described by $\forall k$, $\forall s$ and $p = 0$ and whose input
+size is such that $i - k$ is a multiple of $s$, has an associated transposed
+convolution described by $\tilde{i}'$, $k' = k$, $s' = 1$ and $p' = k - 1$,
+where $\tilde{i}'$ is the size of the stretched input obtained by adding
+$s - 1$ zeros between each input unit, and its output size is
 \begin{equation*}
 \begin{split}
     o' = s (\tilde{i}' - 1) + k.
@@ -1095,17 +1095,18 @@ between each input unit, and its output size is
 
 \section{Zero padding, non-unit strides, transposed}
 
-Assuming that the convolution's input size $i$ is such that $i + 2p - k$ is a
-multiple of $s$, the analysis is extended to the zero padded case by combining
+When the convolution's input size $i$ is such that $i + 2p - k$ is a multiple
+of $s$, the analysis can extended to the zero padded case by combining
 \autoref{rel:arbitrary_padding_no_strides_transposed} and
 \autoref{rel:no_padding_strides_transposed}:
 
 \begin{relationship}\label{rel:padding_strides_transposed}
-A convolution described by $k$, $s$ and $p$ and whose input size is such that $i
-+ 2p - k$ is a multiple of $s$ has an associated transposed convolution
-described by $\tilde{i}'$, $k' = k$, $s' = 1$ and $p' = k - p - 1$, where
-$\tilde{i}'$ is the size of the stretched input obtained by adding $s - 1$ zeros
-between each input unit, and its output size is
+A convolution described by $\forall k$, $\forall s$ and $\forall p$ and whose
+input size $i$ is such that $i + 2p - k$ is a multiple of $s$ has an associated
+transposed convolution described by $\tilde{i}'$, $k' = k$, $s' = 1$ and
+$p' = k - p - 1$, where $\tilde{i}'$ is the size of the stretched input
+obtained by adding $s - 1$ zeros between each input unit, and its output size
+is
 \begin{equation*}
 \begin{split}
     o' = s (i' - 1) + k - 2p.
@@ -1116,17 +1117,17 @@ between each input unit, and its output size is
 \autoref{fig:padding_strides_transposed} provides an example for $i = 5$, $k =
 3$, $s = 2$ and $p = 1$.
 
-The assumption that $i$ is such that $i + 2p - k$ is a multiple of $s$ is
-relaxed by introducing another parameter $a \in \{0, \ldots, s - 1\}$ that
-allows to distinguish between the $s$ different cases leading to $i'$:
+The constrain on the size of the input $i$ can be relaxed by introducing
+another parameter $a \in \{0, \ldots, s - 1\}$ that allows to distinguish
+between the $s$ different cases that all lead to the same $i'$:
 
 \begin{relationship}\label{rel:padding_strides_transposed_odd}
-A convolution described by $k$, $s$ and $p$ has an associated transposed
-convolution described by $a$, $\tilde{i}'$, $k' = k$, $s' = 1$ and $p' = k - p -
-1$, where $\tilde{i}'$ is the size of the stretched input obtained by adding $s
-- 1$ zeros between each input unit, and $a = (i + 2p - k) \mod s$ represents the
-number of zeros added to the top and right edges of the input, and its output
-size is
+A convolution described by $\forall k$, $\forall s$ and $\forall p$ has an
+associated transposed convolution described by $a$, $\tilde{i}'$, $k' = k$, $s'
+= 1$ and $p' = k - p - 1$, where $\tilde{i}'$ is the size of the stretched
+input obtained by adding $s - 1$ zeros between each input unit, and $a = (i +
+2p - k) \mod s$ represents the number of zeros added to the top and right edges
+of the input, and its output size is
 \begin{equation*}
 \begin{split}
     o' = s (i' - 1) + a + k - 2p.
