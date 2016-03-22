@@ -10,6 +10,7 @@
 \usepackage{tikz}
 \usepackage{xcolor}
 \usepackage{epigraph}
+\usepackage{float}
 
 \usepackage{hyperref}
 
@@ -162,16 +163,17 @@ structure. More formally, they share these important properties:
         the left and right channels of a stereo audio track).
 \end{itemize}
 
-These properties get thrown away when an affine transformation is applied, due
-to the flattening step that has to precede the transformation itself. Still, the
-topological information may prove very handy in solving some tasks, like
-computer vision and speech recognition, and in these cases it would be best to
-preserve it. This is where discrete convolutions come into play.
+These properties are not exploited when an affine transformation is applied; in
+fact, all the axes are treated in the same way and the topological information
+is not taken into account. Still, taking advantage of the implicit structure of
+the data may prove very handy in solving some tasks, like computer vision and
+speech recognition, and in these cases it would be best to preserve it. This is
+where discrete convolutions come into play.
 
 A discrete convolution is a linear transformation that preserves this notion of
 ordering. It is sparse (only a few input units contribute to a given output
-unit) and reuses parameters (the same transformation is applied to multiple
-locations in the input).
+unit) and reuses parameters (the same weights are applied to multiple locations
+in the input).
 
 \autoref{fig:numerical_no_padding_no_strides} provides an example of a discrete
 convolution. The light blue grid is called the {\em input feature map}. To keep
@@ -181,7 +183,7 @@ uncommon to have multiple feature maps stacked one onto another.\footnote{%
     images and sound clips.}
 A {\em kernel} (shaded area) of value
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \begin{tikzpicture}[scale=.4,every node/.style={minimum size=1cm}, on grid]
             \draw[fill=base02,opacity=0.4] (0,0) rectangle (3,3);
