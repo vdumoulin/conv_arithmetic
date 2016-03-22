@@ -909,18 +909,19 @@ on the transposed convolution's input.
 \section{Zero padding, unit strides, transposed}
 
 Knowing that the transpose of a non-padded convolution involves convolving a
-zero padded input, it would be reasonable to assume that the transpose of a
-zero padded convolution involves convolving an input padded with {\em less}
+zero padded input, it would be reasonable to suppose that the transpose of a
+zero padded convolution involves convolving an input padded with {\em less\/}
 zeros.
 
-\autoref{fig:arbitrary_padding_no_strides_transposed} shows that it is indeed
-the case by providing an example for $i = 5$, $k = 4$ and $p = 2$.
+It is indeed the case, as shown in
+\autoref{fig:arbitrary_padding_no_strides_transposed} providing an example for
+$i = 5$, $k = 4$ and $p = 2$.
 
-The following relationship applies for zero padded convolutions:
+Formally, the following relationship applies for zero padded convolutions:
 
 \begin{relationship}\label{rel:arbitrary_padding_no_strides_transposed}
 A convolution described by $k$, $s = 1$ and $p$ has an associated transposed
-convolution described by $k' = k$, $s' = 1$ and $p' = k - p - 1$ and its output
+convolution described by $k' = k$, $s' = s$ and $p' = k - p - 1$ and its output
 size is
 \begin{equation*}
     o' = i' + (k - 1) - 2p.
