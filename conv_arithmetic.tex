@@ -973,14 +973,16 @@ size is
 
 \subsection{Half (same) padding, transposed}
 
-Knowing that a half padded convolution produces an output with the same size as
-the input, it is unsurprising that the transpose of a half padded convolution
-is itself a half padded convolution:
+By applying the same inductive reasoning as before it is possible to argue that,
+basing on the knowledge that a half padded convolution produces an output with
+the same size as the input, it is reasonable to expect that the transpose of a
+half padded convolution is itself a half padded convolution. It is easy to
+proof that the following relation applies:
 
 \begin{relationship}\label{rel:half_padding_no_strides_transposed}
 A convolution described by $k = 2n + 1, \quad n \in \mathbb{N}$, $s = 1$ and $p
 = \lfloor k / 2 \rfloor = n$ has an associated transposed convolution described
-by $k' = k$, $s' = 1$ and $p' = p$ and its output size is
+by $k' = k$, $s' = s$ and $p' = p$ and its output size is
 \begin{equation*}
 \begin{split}
     o' &= i' + (k - 1) - 2p \\
