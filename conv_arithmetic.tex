@@ -799,7 +799,7 @@ Take as an example the convolution represented in
 \autoref{fig:no_padding_no_strides}. If the input and output were to be
 unrolled into vectors from left to right, top to bottom, the convolution could
 be represented as a sparse matrix $\mathbf{C}$ where some of the elements are
-zero and some of them are the $w_{i,j}$ elements of the kernel (with $i$ and 
+zero and some of them are the $w_{i,j}$ elements of the kernel (with $i$ and
 $j$ the rows and columns of the kernel respectively):
 
 \begin{equation*}
@@ -820,80 +820,91 @@ As you might have noticed, this representation is an instance of a
 \emph{Toeplitz matrix}, as the elements of each descending diagonal from left
 to right are the same.  This linear operation takes the input matrix
 $\mathbf{I}$ flattened as a 16-dimensional vector and produces a 4-dimensional
-vector that is later reshaped as the $2 \times 2$ output matrix $\mathbf{O}$.  
+vector that is later reshaped as the $2 \times 2$ output matrix $\mathbf{O}$.
 
 \section{Transposed convolution}
 
-Let's now consider what would happen if we wanted to go the other way around, 
+Let's now consider what would happen if we wanted to go the other way around,
 i.e., to expand the $2 \times 2$ matrix $\mathbf{O}$ with a convolutional
 kernel in order to obtain the $4 \times 4$ matrix $\mathbf{I}$.
 
 To do so we would transpose the matrix $\mathbf{C}$ and take its product with
 the flattened 4-dimensional vector representation of $\mathbf{O}$ to produce a
 flattened 16-dimensional vector representation of $\mathbf{I}$. This operation
--- usually referred to as a {\em transposed convolution\/} or {\em fractional 
+-- usually referred to as a {\em transposed convolution\/} or {\em fractional
 convolution\/} -- keeps a connectivity pattern compatible with the convolution
 presented in \autoref{fig:no_padding_no_strides} and is exactly what is being
 done to compute the gradient backpropagation of a convolution with respect to
 its input.\footnote{The transposed convolution operation can be thought of as
-the gradient of {\em some\/} convolution with respect to its input, which is in
-practice how transposed convolutions are usually implemented.}
+    the gradient of {\em some\/} convolution with respect to its input, which
+    is in practice how transposed convolutions are usually implemented.}
 
-We defined so far how to start from an existing convolution and then applying 
+We defined so far how to start from an existing convolution and then applying
 the transpose of its matrix representation. It is trivial to note that if we
 are only interested in the transposed convolution, we don't necessarily need to
 learn the direct convolution and then transpose it, but we can rather directly
-learn the kernel used for the transpose operation. In this case the 
+learn the kernel used for the transpose operation. In this case the
 {\em forward pass\/} of the algorithm will be the transposed convolution, while
 its {\em backward pass\/} will be the direct convolution.
 
 The fortunate thing about transposed convolutions is that they are themselves
-convolutions, albeit with some additional processing on the input. This allows 
-for expressing transposed convolutions in terms of direct convolutions. 
+convolutions, albeit with some additional processing on the input. This allows
+for expressing transposed convolutions in terms of direct convolutions.
 Building on that, this chapter will proceed somewhat backwards with respect to
 the convolution arithmetic chapter, deriving the properties of each transposed
 convolution by referring to its corresponding direct convolution.
 
 \section{No zero padding, unit strides, transposed}
 
-\autoref{fig:no_padding_no_strides_transposed} shows the effect of applying the
-transpose of the matrix above on a $4 \times 4$ input (i.e., $i = 4$, $k = 3$, $s
-= 1$ and $p = 0$).
+The simplest way to think about a transposed convolution is by computing the
+output shape of the forward convolution for a given input shape first, and then
+inverting the input and the output shapes.
 
-Note that although equivalent to the transposed matrix, this visualization adds
-a lot of zero multiplications in the form of zero padding. This is done for
-illustration purposes, but it is inefficient, and software implementations will
-normally not perform the useless zero multiplications.
+Let's consider the convolution of a $3 \times 3$ kernel on a $4 \times 4$
+matrix with unitary stride and no padding (i.e., $i = 4$, $k = 3$, $s = 1$ and
+$p = 0$). As depicted in \autoref{fig:no_padding_no_strides}, this produces a
+$2 \times 2$ output. The transpose of this convolution will then have an output
+of shape $4 \times 4$ when applied on a $2 \times 2$ matrix.
 
-The transposed convolution is equivalent to convolving a $3 \times 3$ kernel
-over a $2 \times 2$ input padded with a $2 \times 2$ border of zeros using unit
-strides (i.e., $i' = 2$, $k' = k$, $s' = 1$ and $p' = 2$). The kernel size and
-stride remain the same, but the input to the transposed convolution is now
-zero padded.
+Another way to think about a transposed convolution is by considering its
+corresponding direct convolution. The example described so far would be
+equivalent to convolving a $3 \times 3$ kernel over a $2 \times 2$ input padded
+with a $2 \times 2$ border of zeros using unit strides (i.e., $i' = 2$, $k' =
+k$, $s' = 1$ and $p' = 2$), as shown in
+\autoref{fig:no_padding_no_strides_transposed}. Notably, the kernel's and
+stride's sizes remain the same, but the input of the transposed convolution is
+now zero padded.\footnote{Note that although equivalent to applying the
+    transposed matrix, this visualization adds a lot of zero multiplications in
+    the form of zero padding.  This is done here for illustration purposes, but
+    it is inefficient, and software implementations will normally not perform
+    the useless zero multiplications.}
 
-One way to understand the logic behind zero padding is to consider what would be
-necessary to produce a transposed convolution with the same connectivity pattern
-as its converse convolution.
+One way to understand the logic behind zero padding is to consider the
+connectivity pattern of the direct convolution and use it to guide the design
+of the converse convolution. For example, the top left pixel of the input of
+the direct convolution only contribute to the top left pixel of the output, the
+top right pixel is only connected to the top right output pixel, and so on.
 
-In particular, the corner pixels of the input only contribute to the corner
-pixels of the output: the top left input pixel is only connected to the top left
-output pixel, the top right pixel is only connected to the top right output
-pixel, and so on. This is achieved by zero padding the input such that the
-kernel only touches a corner pixel when it is in the associated corner position.
+To maintain the same connectivity pattern in the converse convolution it is
+necessary to zero pad the input in such a way that the first (top-left)
+application of the kernel only touches the top-left pixel, i.e., the padding
+has to be equal to the size of the kernel minus one.
 
-These observations give rise to the following relationship:
+Proceeding in the same fashion it is possible to determine similar observations
+for the other elements of the image, giving rise to the following general
+relationship:
 
 \begin{relationship}\label{rel:no_padding_no_strides_transposed}
 A convolution described by $k$, $s = 1$ and $p = 0$ has an associated transposed
-convolution described by $k' = k$, $s' = 1$ and $p' = k - 1$ and its output size
+convolution described by $k' = k$, $s' = s$ and $p' = k - 1$ and its output size
 is
 \begin{equation*}
     o' = i' + (k - 1).
 \end{equation*}
 \end{relationship}
 
-Note that this corresponds to a fully padded convolution with unit strides on
-the transposed convolution's input.
+Interestingly, this corresponds to a fully padded convolution with unit strides
+on the transposed convolution's input.
 
 \section{Zero padding, unit strides, transposed}
 
