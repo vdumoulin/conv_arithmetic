@@ -543,8 +543,9 @@ For $\forall i$, $\forall k$, $s = 1$ and $p = 0$,
 
 To factor in zero padding (i.e., only restricting to $s = 0$), let's consider
 its effect on the effective input size: padding with $p$ zeros changes the
-effective input size from $i$ to $i + 2p$. In the general case, we can then use
-\autoref{rel:no_padding_no_strides} to infer the following relationship:
+effective input size from $i$ to $i + 2p$. In the general case,
+\autoref{rel:no_padding_no_strides} can then be used to infer the following
+relationship:
 
 \begin{relationship}\label{rel:arbitrary_padding_no_strides}
 For $\forall i$, $\forall k$, $s = 1$ and $\forall p$,
@@ -769,8 +770,8 @@ transformation going in the opposite direction of a normal convolution, i.e.,
 from something that has the shape of the output of some convolution to
 something that has the shape of its input while maintaining a connectivity
 pattern that is compatible with said convolution. For instance, one might use
-such a transformation as the decoding layer of a convolutional autoencoder in
-order to obtain a \emph{learned} inverse of the encoding convolution.
+such a transformation as the decoding layer of a convolutional autoencoder or to
+project feature maps to a higher-dimensional space.
 
 Once again, the convolutional case is considerably more complex than the
 fully-connected case, which only requires to use a weight matrix whose shape
@@ -797,13 +798,12 @@ cases.
 
 \section{Convolution as a matrix operation}
 
-Take as an example the convolution represented in
-\autoref{fig:no_padding_no_strides}. If the input and output were to be
-unrolled into vectors from left to right, top to bottom, the convolution could
-be represented as a sparse matrix $\mathbf{C}$ where some of the elements are
-zero and some of them are the $w_{i,j}$ elements of the kernel (with $i$ and
-$j$ the rows and columns of the kernel respectively):
-
+Take for example the convolution represented in
+\autoref{fig:no_padding_no_strides}. If the input and output were to be unrolled
+into vectors from left to right, top to bottom, the convolution could be
+represented as a sparse matrix $\mathbf{C}$ where the non-zero elements are the
+elements $w_{i,j}$ of the kernel (with $i$ and $j$ being the row and column of
+the kernel respectively):
 \begin{equation*}
 \resizebox{.98\hsize}{!}{$
     \begin{pmatrix}
@@ -818,40 +818,42 @@ $j$ the rows and columns of the kernel respectively):
     \end{pmatrix}$}
 \end{equation*}
 
-As you might have noticed, this representation is an instance of a
-\emph{Toeplitz matrix}, as the elements of each descending diagonal from left
-to right are the same.  This linear operation takes the input matrix
-$\mathbf{I}$ flattened as a 16-dimensional vector and produces a 4-dimensional
-vector that is later reshaped as the $2 \times 2$ output matrix $\mathbf{O}$.
+This linear operation takes the input matrix flattened as a 16-dimensional
+vector and produces a 4-dimensional vector that is later reshaped as the $2
+\times 2$ output matrix.
+
+Using this representation, the backward pass is easily obtained by transposing
+$\mathbf{C}$; in other words, the error is backpropagated by multiplying with
+$\mathbf{C}^T$. This operation takes a 4-dimensional vector as input and
+produces a 16-dimensional vector as output, and its connectivity pattern is
+compatible with $\mathbf{C}$ by construction.
+
+In other words, the kernel $\mathbf{w}$ defines the matrices $\mathbf{C}$ and
+$\mathbf{C}^T$ used for the forward and backward passes.
 
 \section{Transposed convolution}
 
-Let's now consider what would happen if we wanted to go the other way around,
-i.e., to expand the $2 \times 2$ matrix $\mathbf{O}$ with a convolutional
-kernel in order to obtain the $4 \times 4$ matrix $\mathbf{I}$.
+Let's now consider what would be required to go the other way around, i.e., map
+from a 4-dimensional space to a 16-dimensional space, while keeping the
+connectivity pattern of the convolution depicted in
+\autoref{fig:no_padding_no_strides}. This operation is known as a {\em
+transposed convolution}.
 
-To do so we would transpose the matrix $\mathbf{C}$ and take its product with
-the flattened 4-dimensional vector representation of $\mathbf{O}$ to produce a
-flattened 16-dimensional vector representation of $\mathbf{I}$. This operation
--- usually referred to as a {\em transposed convolution\/} or {\em fractional
-convolution\/} -- keeps a connectivity pattern compatible with the convolution
-presented in \autoref{fig:no_padding_no_strides} and is exactly what is being
-done to compute the gradient backpropagation of a convolution with respect to
-its input.\footnote{The transposed convolution operation can be thought of as
-    the gradient of {\em some\/} convolution with respect to its input, which
-    is in practice how transposed convolutions are usually implemented.}
+Transposed convolutions -- also called {\em fractionally strided convolutions\/}
+-- work by swapping the forward and backward passes of a convolution. One way to
+put it is to note that the kernel defines a convolution, but its
+nature (convolution or transposed convolution) is determined by how the forward
+and backward passes are computed.
 
-We defined so far how to start from an existing convolution and then applying
-the transpose of its matrix representation. It is trivial to note that if we
-are only interested in the transposed convolution, we don't necessarily need to
-learn the direct convolution and then transpose it, but we can rather directly
-learn the kernel used for the transpose operation. In this case the
-{\em forward pass\/} of the algorithm will be the transposed convolution, while
-its {\em backward pass\/} will be the direct convolution.
+For instance, although the kernel $\mathbf{w}$ defines a convolution whose
+forward and backward passes are computed by multiplying with $\mathbf{C}$ and
+$\mathbf{C}^T$ respectively, it {\em also} defines a transposed convolution
+whose forward and backward passes are computed by multiplying with
+$\mathbf{C}^T$ and $(\mathbf{C}^T)^T = \mathbf{C}$ respectively.\footnote{The
+    transposed convolution operation can be thought of as the gradient of {\em
+    some\/} convolution with respect to its input, which is usually how
+    transposed convolutions are implemented in practice.}
 
-The fortunate thing about transposed convolutions is that they are themselves
-convolutions, albeit with some additional processing on the input. This allows
-for expressing transposed convolutions in terms of direct convolutions.
 Building on that, this chapter will proceed somewhat backwards with respect to
 the convolution arithmetic chapter, deriving the properties of each transposed
 convolution by referring to its corresponding direct convolution.
