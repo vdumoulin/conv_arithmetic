@@ -1021,17 +1021,16 @@ output size is
 Using the same kind of deductive logic as for zero padded convolutions, one
 might expect that the transpose of a convolution with $s > 1$ involves a
 convolution with $s < 1$. As will be explained, this is a valid intuition, which
-is why transposed convolutions have sometimes been called {\em fractionally
-strided convolutions}.
+is why transposed convolutions are sometimes called {\em fractionally strided
+convolutions}.
 
 \autoref{fig:no_padding_strides_transposed} provides an example for $i = 5$, $k
 = 3$ and $s = 2$ which helps understand what fractional strides involve: zeros
 are inserted {\em between} input units, which makes the kernel move around at a
-slower pace than with unit strides.
-
-Doing so is inefficient and real-world implementations avoid useless
-multiplications by zero, but conceptually it is how the transpose of a strided
-convolution can be thought of.
+slower pace than with unit strides.\footnote{Doing so is inefficient and
+    real-world implementations avoid useless multiplications by zero, but
+    conceptually it is how the transpose of a strided convolution can be
+    thought of.}
 
 For the moment, it will be assumed that the convolution is non-padded ($p = 0$)
 and that its input size $i$ is such that $i - k$ is a multiple of $s$. In that
@@ -1039,13 +1038,13 @@ case, the following relationship holds:
 
 \begin{relationship}\label{rel:no_padding_strides_transposed}
 A convolution described by $k$, $s$ and $p = 0$ and whose input size is such
-that $i - k$ is a multiple of $s$ has an associated transposed convolution
+that $i - k$ is a multiple of $s$, has an associated transposed convolution
 described by $\tilde{i}'$, $k' = k$, $s' = 1$ and $p' = k - 1$, where
 $\tilde{i}'$ is the size of the stretched input obtained by adding $s - 1$ zeros
 between each input unit, and its output size is
 \begin{equation*}
 \begin{split}
-    o' = s (i' - 1) + k.
+    o' = s (\tilde{i}' - 1) + k.
 \end{split}
 \end{equation*}
 \end{relationship}
