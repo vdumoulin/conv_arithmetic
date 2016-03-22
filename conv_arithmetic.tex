@@ -42,7 +42,7 @@
 
 \setcounter{MaxMatrixCols}{16}
 
-\let\originalepigraph\epigraph 
+\let\originalepigraph\epigraph
 \renewcommand\epigraph[2]{\originalepigraph{\textit{#1}}{\textsc{#2}}}
 
 % Use arabic numbers for thanks
@@ -116,8 +116,8 @@ pooling} stage, adding yet another level of complexity with respect to
 fully-connected networks.  Finally, so-called transposed convolutional layers
 (also known as fractionally strided convolutional layers) have been employed in
 more and more work as of late \citep{zeiler2011adaptive,zeiler2014visualizing,
-long2015fully,radford2015unsupervised,visin15,im2016generating}, and their 
-relationship with convolutional layers has been explained with various degrees 
+long2015fully,radford2015unsupervised,visin15,im2016generating}, and their
+relationship with convolutional layers has been explained with various degrees
 of clarity.
 
 This guide's objective is twofold:
@@ -142,12 +142,12 @@ convolutions and pooling. For an in-depth treatment of the subject, see Chapter
 
 \section{Discrete convolutions}
 
-The bread and butter of neural networks is \emph{affine transformations}: a 
-vector is received as input and is multiplied with a matrix to produce an 
-output (to which a bias vector is usually added before passing the result 
-through a nonlinearity). This is applicable to any type of input, be it an 
+The bread and butter of neural networks is \emph{affine transformations}: a
+vector is received as input and is multiplied with a matrix to produce an
+output (to which a bias vector is usually added before passing the result
+through a nonlinearity). This is applicable to any type of input, be it an
 image, a sound clip or an unordered collection of features: whatever their
-dimensionality, their representation can always be flattened into a vector 
+dimensionality, their representation can always be flattened into a vector
 before the transformation.
 
 Images, sound clips and many other similar kinds of data have an intrinsic
@@ -177,7 +177,7 @@ locations in the input).
 convolution. The light blue grid is called the {\em input feature map}. To keep
 the drawing simple, a single input feature map is represented, but it is not
 uncommon to have multiple feature maps stacked one onto another.\footnote{%
-    An example of this is what was referred to earlier as {\em channels} for 
+    An example of this is what was referred to earlier as {\em channels} for
     images and sound clips.}
 A {\em kernel} (shaded area) of value
 
@@ -244,7 +244,7 @@ is called
 If there are multiple input feature maps, the kernel will have to be
 3-dimensional -- or, equivalently each one of the feature maps will be
 convolved with a distinct kernel -- and the resulting feature maps will
-be summed up elementwise to produce the output feature map. 
+be summed up elementwise to produce the output feature map.
 
 The convolution depicted in \autoref{fig:numerical_no_padding_no_strides} is an
 instance of a 2-D convolution, but it can be generalized to N-D convolutions.
@@ -510,7 +510,7 @@ For $i$, $k$, $s = 1$ and $p = 0$,
     \includegraphics[width=0.24\textwidth]{pdf/arbitrary_padding_no_strides_02.pdf}
     \includegraphics[width=0.24\textwidth]{pdf/arbitrary_padding_no_strides_03.pdf}
     \caption{\label{fig:arbitrary_padding_no_strides} (Arbitrary padding, no
-        strides) Convolving a $4 \times 4$ kernel over a $5 \times 5$ input 
+        strides) Convolving a $4 \times 4$ kernel over a $5 \times 5$ input
         padded with a $2 \times 2$ border of zeros using unit strides (i.e.,
         $i = 5$, $k = 4$, $s = 1$ and $p = 2$).}
 \end{figure}
@@ -522,7 +522,7 @@ For $i$, $k$, $s = 1$ and $p = 0$,
     \includegraphics[width=0.24\textwidth]{pdf/same_padding_no_strides_02.pdf}
     \includegraphics[width=0.24\textwidth]{pdf/same_padding_no_strides_03.pdf}
     \caption{\label{fig:same_padding_no_strides} (Half padding, no strides)
-        Convolving a $3 \times 3$ kernel over a $5 \times 5$ input using half 
+        Convolving a $3 \times 3$ kernel over a $5 \times 5$ input using half
         padding and unit strides (i.e., $i = 5$, $k = 3$, $s = 1$ and $p = 1$).}
 \end{figure}
 
@@ -532,8 +532,8 @@ For $i$, $k$, $s = 1$ and $p = 0$,
     \includegraphics[width=0.24\textwidth]{pdf/full_padding_no_strides_01.pdf}
     \includegraphics[width=0.24\textwidth]{pdf/full_padding_no_strides_02.pdf}
     \includegraphics[width=0.24\textwidth]{pdf/full_padding_no_strides_03.pdf}
-    \caption{\label{fig:full_padding_no_strides} (Full padding, no strides) 
-        Convolving a $3 \times 3$ kernel over a $5 \times 5$ input using full 
+    \caption{\label{fig:full_padding_no_strides} (Full padding, no strides)
+        Convolving a $3 \times 3$ kernel over a $5 \times 5$ input using full
         padding and unit strides (i.e., $i = 5$, $k = 3$, $s = 1$ and $p = 2$).}
 \end{figure}
 
@@ -648,10 +648,10 @@ For $i$, $k$, $p$ and $s$,
 will produce the same output size for multiple input sizes. More specifically,
 if $i + 2p - k$ is a multiple of $s$, then any input size $j = i + a, \quad a
 \in \{0,\ldots,s - 1\}$ will produce the same output size. Note that this
-ambiguity applies only for $s > 1$. 
+ambiguity applies only for $s > 1$.
 
-\autoref{fig:padding_strides} shows an example with $i = 5$, $k = 3$, $s = 2$ 
-and $p = 1$, while \autoref{fig:padding_strides_odd} provides an example for 
+\autoref{fig:padding_strides} shows an example with $i = 5$, $k = 3$, $s = 2$
+and $p = 1$, while \autoref{fig:padding_strides_odd} provides an example for
 $i = 6$, $k = 3$, $s = 2$ and $p = 1$. Interestingly, despite having different
 input sizes these convolutions share the same output size. While this doesn't
 affect the analysis for {\em convolutions}, this will complicate the analysis
@@ -665,7 +665,7 @@ in the case of {\em transposed convolutions}.
     \includegraphics[width=0.24\textwidth]{pdf/no_padding_strides_03.pdf}
     \caption{\label{fig:no_padding_strides} (No zero padding, arbitrary
         strides) Convolving a $3 \times 3$ kernel over a $5 \times 5$ input
-        using $2 \times 2$ strides (i.e., $i = 5$, $k = 3$, $s = 2$ and 
+        using $2 \times 2$ strides (i.e., $i = 5$, $k = 3$, $s = 2$ and
         $p = 0$).}
 \end{figure}
 
@@ -675,9 +675,9 @@ in the case of {\em transposed convolutions}.
     \includegraphics[width=0.24\textwidth]{pdf/padding_strides_01.pdf}
     \includegraphics[width=0.24\textwidth]{pdf/padding_strides_02.pdf}
     \includegraphics[width=0.24\textwidth]{pdf/padding_strides_03.pdf}
-    \caption{\label{fig:padding_strides} (Arbitrary padding and strides) 
-        Convolving a $3 \times 3$ kernel over a $5 \times 5$ input padded with 
-        a $1 \times 1$ border of zeros using $2 \times 2$ strides (i.e., 
+    \caption{\label{fig:padding_strides} (Arbitrary padding and strides)
+        Convolving a $3 \times 3$ kernel over a $5 \times 5$ input padded with
+        a $1 \times 1$ border of zeros using $2 \times 2$ strides (i.e.,
         $i = 5$, $k = 3$, $s = 2$ and $p = 1$).}
 \end{figure}
 
@@ -687,11 +687,11 @@ in the case of {\em transposed convolutions}.
     \includegraphics[width=0.24\textwidth]{pdf/padding_strides_odd_01.pdf}
     \includegraphics[width=0.24\textwidth]{pdf/padding_strides_odd_02.pdf}
     \includegraphics[width=0.24\textwidth]{pdf/padding_strides_odd_03.pdf}
-    \caption{\label{fig:padding_strides_odd} (Arbitrary padding and strides) 
-        Convolving a $3 \times 3$ kernel over a $6 \times 6$ input padded with 
-        a $1 \times 1$ border of zeros using $2 \times 2$ strides (i.e., 
-        $i = 6$, $k = 3$, $s = 2$ and $p = 1$). In this case, the bottom row 
-        and right column of the zero padded input are not covered by the 
+    \caption{\label{fig:padding_strides_odd} (Arbitrary padding and strides)
+        Convolving a $3 \times 3$ kernel over a $6 \times 6$ input padded with
+        a $1 \times 1$ border of zeros using $2 \times 2$ strides (i.e.,
+        $i = 6$, $k = 3$, $s = 2$ and $p = 1$). In this case, the bottom row
+        and right column of the zero padded input are not covered by the
         kernel.}
 \end{figure}
 
@@ -712,7 +712,7 @@ in the case of {\em transposed convolutions}.
         \end{tikzpicture}
         \caption{\label{fig:no_padding_no_strides_explained} The kernel has to
             slide two steps to the right to touch the right side of the input
-            (and equivalently downwards).  Adding one to account for the 
+            (and equivalently downwards).  Adding one to account for the
             initial kernel position, the output size is $3 \times 3$.}
     \end{subfigure}
     ~
@@ -729,7 +729,7 @@ in the case of {\em transposed convolutions}.
         \end{tikzpicture}
         \caption{\label{fig:no_padding_strides_explained} The kernel has to
             slide one step of size two to the right to touch the right side of
-            the input (and equivalently downwards).  Adding one to account for 
+            the input (and equivalently downwards).  Adding one to account for
             the initial kernel position, the output size is $2 \times 2$.}
     \end{subfigure}
     \caption{Counting kernel positions.}
@@ -739,16 +739,16 @@ in the case of {\em transposed convolutions}.
 
 In a neural network, pooling layers provide invariance to small translations of
 the input. The most common kind of pooling is \emph{max pooling}, which
-consists in splitting the input in (usually non-overlapping) patches and 
+consists in splitting the input in (usually non-overlapping) patches and
 outputting the maximum value of each patch. Other kinds of pooling exist, e.g.,
 mean or average pooling, which all share the same idea of aggregating the input
 locally by applying a non-linearity to the content of some patches \citep{%
-boureau-cvpr-10,boureau-icml-10,boureau-iccv-11,ICML2011Saxe_551}. 
+boureau-cvpr-10,boureau-icml-10,boureau-iccv-11,ICML2011Saxe_551}.
 
 Some readers may have noticed that the treatment of convolution arithmetic only
 relies on the assumption that some function is repeatedly applied onto subsets
 of the input. This means that the relationships derived in the previous chapter
-can be reused in the case of pooling arithmetic. Since pooling does not involve 
+can be reused in the case of pooling arithmetic. Since pooling does not involve
 zero padding, the relationship describing the general case is as follows:
 
 \begin{relationship}\label{rel:pooling}
