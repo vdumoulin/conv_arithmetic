@@ -998,12 +998,12 @@ by $k' = k$, $s' = s$ and $p' = p$ and its output size is
 \subsection{Full padding, transposed}
 
 Knowing that a non-padded convolution has a transpose which involves full
-padding, it is also unsurprising that the transpose of a fully padded
-convolution is a non-padded convolution:
+padding, it is unsurprising that the transpose of a fully padded convolution is
+a non-padded convolution:
 
 \begin{relationship}\label{rel:full_padding_no_strides_transposed}
 A convolution described by $k$, $s = 1$ and $p = k - 1$ has an associated
-transposed convolution described by $k' = k$, $s' = 1$ and $p' = 0$ and its
+transposed convolution described by $k' = k$, $s' = s$ and $p' = 0$ and its
 output size is
 \begin{equation*}
 \begin{split}
