@@ -853,15 +853,15 @@ $\mathbf{C}^T$ and $(\mathbf{C}^T)^T = \mathbf{C}$ respectively.\footnote{The
     some\/} convolution with respect to its input, which is usually how
     transposed convolutions are implemented in practice.}
 
-Finally note that it is always possible to obtain the same result of a
-transposed convolution with a direct convolution. The disadvantage is that it
-usually involves adding many columns and rows of zeros to the input, resulting
-in a much less efficient implementation.
+Finally note that it is always possible to emulate a transposed convolution with
+a direct convolution. The disadvantage is that it usually involves adding many
+columns and rows of zeros to the input, resulting in a much less efficient
+implementation.
 
 Building on what has been introduced so far, this chapter will proceed somewhat
 backwards with respect to the convolution arithmetic chapter, deriving the
 properties of each transposed convolution by referring to the direct
-convolution with which shares the kernel, and defining the equivalent direct
+convolution with which it shares the kernel, and defining the equivalent direct
 convolution.
 
 \section{No zero padding, unit strides, transposed}
