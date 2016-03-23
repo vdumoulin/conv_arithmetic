@@ -316,7 +316,7 @@ retaining only odd output elements (\autoref{fig:strides_subsampling}).
             \end{scope}\end{scope}
         }
         \begin{scope}[xshift=1cm,yshift=30cm]
-            \foreach \s in {1,0.5,1.0} {%
+            \foreach \s in {0.0,0.5,1.0} {%
                 \begin{scope}[xshift=\s cm,yshift=\s cm]
                     \draw[draw=base03,fill=cyan,thick]
                         (0,0) grid (3,3) rectangle (0,0);
@@ -841,8 +841,8 @@ transposed convolution}.
 
 Transposed convolutions -- also called {\em fractionally strided convolutions\/}
 -- work by swapping the forward and backward passes of a convolution. One way to
-put it is to note that the kernel defines a convolution, but its
-nature (convolution or transposed convolution) is determined by how the forward
+put it is to note that the kernel defines a convolution, but whether it's a
+direct convolution or a transposed convolution is determined by how the forward
 and backward passes are computed.
 
 For instance, although the kernel $\mathbf{w}$ defines a convolution whose
@@ -861,31 +861,30 @@ convolution by referring to its corresponding direct convolution.
 \section{No zero padding, unit strides, transposed}
 
 The simplest way to think about a transposed convolution is by computing the
-output shape of the forward convolution for a given input shape first, and then
-inverting the input and the output shapes.
+output shape of the direct convolution for a given input shape first, and then
+inverting the input and output shapes for the transposed convolution.
 
 Let's consider the convolution of a $3 \times 3$ kernel on a $4 \times 4$
-matrix with unitary stride and no padding (i.e., $i = 4$, $k = 3$, $s = 1$ and
+input with unitary stride and no padding (i.e., $i = 4$, $k = 3$, $s = 1$ and
 $p = 0$). As depicted in \autoref{fig:no_padding_no_strides}, this produces a
 $2 \times 2$ output. The transpose of this convolution will then have an output
-of shape $4 \times 4$ when applied on a $2 \times 2$ matrix.
+of shape $4 \times 4$ when applied on a $2 \times 2$ input.
 
-Another way to think about a transposed convolution is by considering its
-corresponding direct convolution. The example described so far would be
-equivalent to convolving a $3 \times 3$ kernel over a $2 \times 2$ input padded
-with a $2 \times 2$ border of zeros using unit strides (i.e., $i' = 2$, $k' =
-k$, $s' = 1$ and $p' = 2$), as shown in
-\autoref{fig:no_padding_no_strides_transposed}. Notably, the kernel's and
-stride's sizes remain the same, but the input of the transposed convolution is
-now zero padded.\footnote{Note that although equivalent to applying the
-    transposed matrix, this visualization adds a lot of zero multiplications in
-    the form of zero padding.  This is done here for illustration purposes, but
-    it is inefficient, and software implementations will normally not perform
-    the useless zero multiplications.}
+Another way to think about a transposed convolution is to try to explain it in
+terms of a direct convolution. The example described so far would be equivalent
+to convolving a $3 \times 3$ kernel over a $2 \times 2$ input padded with a $2
+\times 2$ border of zeros using unit strides (i.e., $i' = 2$, $k' = k$, $s' = 1$
+and $p' = 2$), as shown in \autoref{fig:no_padding_no_strides_transposed}.
+Notably, the kernel's and stride's sizes remain the same, but the input of the
+transposed convolution is now zero padded.\footnote{Note that although
+    equivalent to applying the transposed matrix, this visualization adds a lot
+    of zero multiplications in the form of zero padding.  This is done here for
+    illustration purposes, but it is inefficient, and software implementations
+    will normally not perform the useless zero multiplications.}
 
 One way to understand the logic behind zero padding is to consider the
 connectivity pattern of the direct convolution and use it to guide the design
-of the converse convolution. For example, the top left pixel of the input of
+of the transposed convolution. For example, the top left pixel of the input of
 the direct convolution only contribute to the top left pixel of the output, the
 top right pixel is only connected to the top right output pixel, and so on.
 
@@ -895,8 +894,7 @@ application of the kernel only touches the top-left pixel, i.e., the padding
 has to be equal to the size of the kernel minus one.
 
 Proceeding in the same fashion it is possible to determine similar observations
-for the other elements of the image, giving rise to the following general
-relationship:
+for the other elements of the image, giving rise to the following relationship:
 
 \begin{relationship}\label{rel:no_padding_no_strides_transposed}
 A convolution described by $s = 1$, $p = 0$ and $k$ has an associated
@@ -918,8 +916,8 @@ zero padded convolution involves convolving an input padded with {\em less\/}
 zeros.
 
 It is indeed the case, as shown in
-\autoref{fig:arbitrary_padding_no_strides_transposed} providing an example for
-$i = 5$, $k = 4$ and $p = 2$.
+\autoref{fig:arbitrary_padding_no_strides_transposed} for $i = 5$, $k = 4$ and
+$p = 2$.
 
 Formally, the following relationship applies for zero padded convolutions:
 
@@ -977,11 +975,10 @@ p - 1$ and its output size is
 
 \subsection{Half (same) padding, transposed}
 
-By applying the same inductive reasoning as before it is possible to argue that,
-basing on the knowledge that a half padded convolution produces an output with
-the same size as the input, it is reasonable to expect that the transpose of a
-half padded convolution is itself a half padded convolution. It is easy to
-proof that the following relation applies:
+By applying the same inductive reasoning as before, it is reasonable to expect
+that the transpose of a half padded convolution is itself a half padded
+convolution, given that the output size of a half padded convolution is the same
+as its input size. Thus the following relation applies:
 
 \begin{relationship}\label{rel:half_padding_no_strides_transposed}
 A convolution described by $k = 2n + 1, \quad n \in \mathbb{N}$, $s = 1$ and $p
@@ -1022,7 +1019,7 @@ and its output size is
 
 \section{No zero padding, non-unit strides, transposed}
 
-Using the same kind of deductive logic as for zero padded convolutions, one
+Using the same kind of inductive logic as for zero padded convolutions, one
 might expect that the transpose of a convolution with $s > 1$ involves a
 convolution with $s < 1$. As will be explained, this is a valid intuition, which
 is why transposed convolutions are sometimes called {\em fractionally strided
@@ -1121,7 +1118,7 @@ is
 \autoref{fig:padding_strides_transposed} provides an example for $i = 5$, $k =
 3$, $s = 2$ and $p = 1$.
 
-The constrain on the size of the input $i$ can be relaxed by introducing
+The constraint on the size of the input $i$ can be relaxed by introducing
 another parameter $a \in \{0, \ldots, s - 1\}$ that allows to distinguish
 between the $s$ different cases that all lead to the same $i'$:
 
