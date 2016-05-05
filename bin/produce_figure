@@ -63,16 +63,16 @@ def make_numerical_tex_string(step, input_size, output_size, padding,
                                                 range(output_size)):
         if mode == 'convolution':
             output[offset_x, offset_y] = (
-                input_[offset_x: offset_x + kernel_size,
-                       offset_y: offset_y + kernel_size] * kernel).sum()
+                input_[stride * offset_x: stride * offset_x + kernel_size,
+                       stride * offset_y: stride * offset_y + kernel_size] * kernel).sum()
         elif mode == 'average':
             output[offset_x, offset_y] = (
-                input_[offset_x: offset_x + kernel_size,
-                       offset_y: offset_y + kernel_size]).mean()
+                input_[stride * offset_x: stride * offset_x + kernel_size,
+                       stride * offset_y: stride * offset_y + kernel_size]).mean()
         else:
             output[offset_x, offset_y] = (
-                input_[offset_x: offset_x + kernel_size,
-                       offset_y: offset_y + kernel_size]).max()
+                input_[stride * offset_x: stride * offset_x + kernel_size,
+                       stride * offset_y: stride * offset_y + kernel_size]).max()
 
     offsets = list(itertools.product(range(output_size - 1, -1, -1),
                                      range(output_size)))
