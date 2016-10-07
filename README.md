@@ -53,6 +53,18 @@ A technical report on convolution arithmetic in the context of deep learning.
     <td>Padding, strides, transposed (odd)</td>
     <td></td>
   </tr>
+  <tr>
+    <td><img src="gif/dilation.gif"></td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>No padding, no stride, dilation</td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
 </table>
 
 ## Generating the Makefile

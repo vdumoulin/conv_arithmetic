@@ -13,14 +13,19 @@
                     yslant=0.5,xslant=-0.7]
         \draw[step=10mm, base03, dashed, thick] (0,0) grid ({PADDING_TO});
         {INPUT_UNITS}
-        \draw[fill=base02, opacity=0.4] ({INPUT_GRID_FROM}) rectangle
-                                        ({INPUT_GRID_TO});
-        \draw[step=10mm, base03, thick] ({INPUT_GRID_FROM}) grid
-                                        ({INPUT_GRID_TO});
-        \coordinate (BL) at ({INPUT_BOTTOM_LEFT});
-        \coordinate (BR) at ({INPUT_BOTTOM_RIGHT});
-        \coordinate (TL) at ({INPUT_TOP_LEFT});
-        \coordinate (TR) at ({INPUT_TOP_RIGHT});
+
+        \foreach \x in {{ {INPUT_GRID_FROM_X},\number\numexpr {INPUT_GRID_FROM_X}+{DILATION},...,\number\numexpr {INPUT_GRID_TO_X}-1 }} {{
+            \foreach \y in {{ {INPUT_GRID_FROM_Y},\number\numexpr {INPUT_GRID_FROM_Y}+{DILATION},...,\number\numexpr {INPUT_GRID_TO_Y}-1 }} {{
+                \draw[fill=base02, opacity=0.4] (\x,\y) rectangle
+                                        (\x+1,\y+1);
+            }}
+        }}
+        \draw[step=10mm, base03, thick] ({INPUT_GRID_FROM_X}, {INPUT_GRID_FROM_Y}) grid
+                                        ({INPUT_GRID_TO_X}, {INPUT_GRID_TO_Y});
+        \coordinate (BL) at ({INPUT_GRID_FROM_X},{INPUT_GRID_FROM_Y});
+        \coordinate (BR) at ({INPUT_GRID_TO_X},{INPUT_GRID_FROM_Y});
+        \coordinate (TL) at ({INPUT_GRID_FROM_X},{INPUT_GRID_TO_Y});
+        \coordinate (TR) at ({INPUT_GRID_TO_X},{INPUT_GRID_TO_Y});
     \end{{scope}}
     \begin{{scope}}[xshift=-5, yshift={OUTPUT_ELEVATION},
                     every node/.append style={{yslant=0.5,xslant=-0.7}},
