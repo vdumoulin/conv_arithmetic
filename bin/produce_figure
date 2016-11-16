@@ -12,7 +12,7 @@ numpy.random.seed(1234)
 
 
 def make_numerical_tex_string(step, input_size, output_size, padding,
-                              kernel_size, stride, mode):
+                              kernel_size, stride, dilation, mode):
     """Creates a LaTeX string for a numerical convolution animation.
 
     Parameters
@@ -42,6 +42,8 @@ def make_numerical_tex_string(step, input_size, output_size, padding,
     if mode not in ('convolution', 'average', 'max'):
         raise ValueError("wrong convolution mode, choices are 'convolution', "
                          "'average' or 'max'")
+    if dilation != 1:
+        raise ValueError("Only a dilation of 1 is currently supported for numerical output")
     max_steps = output_size ** 2
     if step >= max_steps:
         raise ValueError('step {} out of bounds (there are '.format(step) +
@@ -116,7 +118,7 @@ def make_numerical_tex_string(step, input_size, output_size, padding,
 
 
 def make_arithmetic_tex_string(step, input_size, output_size, padding,
-                               kernel_size, stride, transposed):
+                               kernel_size, stride, dilation, transposed):
     """Creates a LaTeX string for a convolution arithmetic animation.
 
     Parameters
@@ -133,6 +135,8 @@ def make_arithmetic_tex_string(step, input_size, output_size, padding,
         Convolution kernel size.
     stride : int
         Convolution stride.
+    dilation: int
+        Input Dilation
     transposed : bool
         If ``True``, generate strings for the transposed convolution
         animation.
@@ -144,6 +148,7 @@ def make_arithmetic_tex_string(step, input_size, output_size, padding,
         animation.
 
     """
+    kernel_size = (kernel_size - 1)*dilation + 1
     if transposed:
         input_size, output_size, padding, spacing, stride = (
             output_size, input_size, kernel_size - 1 - padding, stride, 1)
@@ -177,22 +182,15 @@ def make_arithmetic_tex_string(step, input_size, output_size, padding,
                                  padding + spacing * j + 1)
             for i, j in itertools.product(range(input_size),
                                           range(input_size))),
-        'INPUT_GRID_FROM': '{},{}'.format(
-            stride * offset_x, y_adjustment + stride * offset_y),
-        'INPUT_GRID_TO': '{},{}'.format(
-            stride * offset_x + kernel_size,
-            y_adjustment + stride * offset_y + kernel_size),
-        'INPUT_BOTTOM_LEFT': '{},{}'.format(
-            stride * offset_x, y_adjustment + stride * offset_y),
-        'INPUT_BOTTOM_RIGHT': '{},{}'.format(
-            stride * offset_x + kernel_size,
+        'INPUT_GRID_FROM_X': '{}'.format(
+            stride * offset_x),
+        'INPUT_GRID_FROM_Y': '{}'.format(
             y_adjustment + stride * offset_y),
-        'INPUT_TOP_LEFT': '{},{}'.format(
-            stride * offset_x,
+        'INPUT_GRID_TO_X': '{}'.format(
+            stride * offset_x + kernel_size),
+        'INPUT_GRID_TO_Y': '{}'.format(
             y_adjustment + stride * offset_y + kernel_size),
-        'INPUT_TOP_RIGHT': '{},{}'.format(
-            stride * offset_x + kernel_size,
-            y_adjustment + stride * offset_y + kernel_size),
+        'DILATION': '{}'.format(dilation),
         'OUTPUT_BOTTOM_LEFT': '{},{}'.format(offset_x, offset_y),
         'OUTPUT_BOTTOM_RIGHT': '{},{}'.format(offset_x + 1, offset_y),
         'OUTPUT_TOP_LEFT': '{},{}'.format(offset_x, offset_y + 1),
@@ -239,6 +237,8 @@ if __name__ == "__main__":
                                help="kernel size")
     parent_parser.add_argument("-s", "--stride", type=int, default=1,
                                help="stride")
+    parent_parser.add_argument("-d", "--dilation", type=int, default=1,
+                               help="dilation")
 
     subparser = subparsers.add_parser('arithmetic', parents=[parent_parser],
                                       help='convolution arithmetic animation')
