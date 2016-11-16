@@ -1168,6 +1168,50 @@ of the input, and its output size is
         1$ and $p' = 1$).}
 \end{figure}
 
+\chapter{Miscellaneous convolutions}
+
+\section{Dilated convolutions}
+
+Dilated convolutions, or {\em convolutions \`{a} trous}, have been used in the
+recent literature \todo{Put this into context, cite relevant work}.
+
+Dilated convolutions ``inflate'' the kernel by inserting spaces between the
+kernel elements. The dilation ``rate'' is controlled by an additional
+hyperparameter $d$. Implementations may vary, but there are usually $d - 1$
+spaces inserted between kernel elements such that $d = 1$ corresponds to a
+regular convolution.
+
+To understand the relationship tying the dilation rate $d$ and the output size
+$o$, it is useful to think of the impact of $d$ on the {\em effective kernel
+size}. A kernel of size $k$ dilated by a factor $d$ has an effective size
+\begin{equation*}
+    \hat{k} = k + (k - 1)(d - 1).
+\end{equation*}
+This can be combined with \autoref{rel:padding_strides} to form the following
+relationship for dilated convolutions:
+
+\begin{relationship}\label{rel:dilation}
+For any $i$, $k$, $p$ and $s$, and for a dilation rate $d$,
+\begin{equation*}
+    o = \left\lfloor \frac{i + 2p - k - (k - 1)(d - 1)}{s} \right\rfloor + 1.
+\end{equation*}
+\end{relationship}
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[width=0.24\textwidth]{pdf/dilation_00.pdf}
+    \includegraphics[width=0.24\textwidth]{pdf/dilation_01.pdf}
+    \includegraphics[width=0.24\textwidth]{pdf/dilation_02.pdf}
+    \includegraphics[width=0.24\textwidth]{pdf/dilation_03.pdf}
+    \caption{\label{fig:dilation} (Dilated convolution)
+        Convolving a $3 \times 3$ kernel over a $7 \times 7$ input with a
+        dilation factor of 2 (i.e., $i = 7$, $k = 3$, $d = 2$, $s = 1$ and
+        $p = 0$).}
+\end{figure}
+
+\noindent \autoref{fig:dilation} provides an example for $i = 7$, $k = 3$ and
+$d = 2$.
+
 \bibliography{bibliography}
 \bibliographystyle{natbib}
 \end{document}
