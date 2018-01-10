@@ -4,6 +4,8 @@ A technical report on convolution arithmetic in the context of deep learning.
 
 ## Convolution animations
 
+_N.B.: Blue maps are inputs, and cyan maps are outputs._
+
 <table style="width:100%">
   <tr>
     <td><img src="gif/no_padding_no_strides.gif"></td>
@@ -18,18 +20,6 @@ A technical report on convolution arithmetic in the context of deep learning.
     <td>Full padding, no strides</td>
   </tr>
   <tr>
-    <td><img src="gif/no_padding_no_strides_transposed.gif"></td>
-    <td><img src="gif/arbitrary_padding_no_strides_transposed.gif"></td>
-    <td><img src="gif/same_padding_no_strides_transposed.gif"></td>
-    <td><img src="gif/full_padding_no_strides_transposed.gif"></td>
-  </tr>
-  <tr>
-    <td>No padding, no strides, transposed</td>
-    <td>Arbitrary padding, no strides, transposed</td>
-    <td>Half padding, no strides, transposed</td>
-    <td>Full padding, no strides, transposed</td>
-  </tr>
-  <tr>
     <td><img src="gif/no_padding_strides.gif"></td>
     <td><img src="gif/padding_strides.gif"></td>
     <td><img src="gif/padding_strides_odd.gif"></td>
@@ -40,6 +30,25 @@ A technical report on convolution arithmetic in the context of deep learning.
     <td>Padding, strides</td>
     <td>Padding, strides (odd)</td>
     <td></td>
+  </tr>
+</table>
+
+## Transposed convolution animations
+
+_N.B.: Blue maps are inputs, and cyan maps are outputs._
+
+<table style="width:100%">
+  <tr>
+    <td><img src="gif/no_padding_no_strides_transposed.gif"></td>
+    <td><img src="gif/arbitrary_padding_no_strides_transposed.gif"></td>
+    <td><img src="gif/same_padding_no_strides_transposed.gif"></td>
+    <td><img src="gif/full_padding_no_strides_transposed.gif"></td>
+  </tr>
+  <tr>
+    <td>No padding, no strides, transposed</td>
+    <td>Arbitrary padding, no strides, transposed</td>
+    <td>Half padding, no strides, transposed</td>
+    <td>Full padding, no strides, transposed</td>
   </tr>
   <tr>
     <td><img src="gif/no_padding_strides_transposed.gif"></td>
@@ -53,6 +62,14 @@ A technical report on convolution arithmetic in the context of deep learning.
     <td>Padding, strides, transposed (odd)</td>
     <td></td>
   </tr>
+</table>
+
+## Dilated convolution animations
+
+_N.B.: Blue maps are inputs, and cyan maps are outputs._
+
+
+<table style="width:100%">
   <tr>
     <td><img src="gif/dilation.gif"></td>
     <td></td>
