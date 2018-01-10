@@ -839,10 +839,13 @@ connectivity pattern of the convolution depicted in
 transposed convolution}.
 
 Transposed convolutions -- also called {\em fractionally strided convolutions\/}
--- work by swapping the forward and backward passes of a convolution. One way to
-put it is to note that the kernel defines a convolution, but whether it's a
-direct convolution or a transposed convolution is determined by how the forward
-and backward passes are computed.
+or {\em deconvolutions\/}\footnote{The term ``deconvolution'' is sometimes used
+in the literature, but we advocate against it on the grounds that a
+deconvolution is mathematically defined as the inverse of a convolution, which
+is different from a transposed convolution.}-- work by swapping the forward and
+backward passes of a convolution. One way to put it is to note that the kernel
+defines a convolution, but whether it's a direct convolution or a transposed
+convolution is determined by how the forward and backward passes are computed.
 
 For instance, although the kernel $\mathbf{w}$ defines a convolution whose
 forward and backward passes are computed by multiplying with $\mathbf{C}$ and
