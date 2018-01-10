@@ -150,11 +150,17 @@ def make_arithmetic_tex_string(step, input_size, output_size, padding,
     """
     kernel_size = (kernel_size - 1)*dilation + 1
     if transposed:
+        # Used to add bottom-padding to account for odd shapes
+        bottom_pad = (input_size + 2 * padding - kernel_size) % stride
+
         input_size, output_size, padding, spacing, stride = (
             output_size, input_size, kernel_size - 1 - padding, stride, 1)
         total_input_size = output_size + kernel_size - 1
         y_adjustment = 0
     else:
+        # Not used in convolutions
+        bottom_pad = 0
+
         spacing = 1
         total_input_size = input_size + 2 * padding
         y_adjustment = (total_input_size - (kernel_size - stride)) % stride
@@ -177,9 +183,9 @@ def make_arithmetic_tex_string(step, input_size, output_size, padding,
         'PADDING_TO': '{0},{0}'.format(total_input_size),
         'INPUT_UNITS': ''.join(
             unit_template.format(padding + spacing * i,
-                                 padding + spacing * j,
+                                 bottom_pad + padding + spacing * j,
                                  padding + spacing * i + 1,
-                                 padding + spacing * j + 1)
+                                 bottom_pad + padding + spacing * j + 1)
             for i, j in itertools.product(range(input_size),
                                           range(input_size))),
         'INPUT_GRID_FROM_X': '{}'.format(
