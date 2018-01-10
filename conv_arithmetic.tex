@@ -1185,6 +1185,13 @@ hyperparameter $d$. Implementations may vary, but there are usually $d - 1$
 spaces inserted between kernel elements such that $d = 1$ corresponds to a
 regular convolution.
 
+Dilated convolutions are used to cheaply increase the receptive field of output
+units, which is especially effective when multiple dilated convolutions are
+stacked one after another. For a concrete example, see \citet{oord2016wavenet},
+in which the proposed WaveNet model implements an autoregressive generative
+model for raw audio which uses dilated convolutions to condition new audio
+frames on a large context of past audio frames.
+
 To understand the relationship tying the dilation rate $d$ and the output size
 $o$, it is useful to think of the impact of $d$ on the {\em effective kernel
 size}. A kernel of size $k$ dilated by a factor $d$ has an effective size
@@ -1201,7 +1208,7 @@ For any $i$, $k$, $p$ and $s$, and for a dilation rate $d$,
 \end{equation*}
 \end{relationship}
 
-\begin{figure}[p]
+\begin{figure}[h]
     \centering
     \includegraphics[width=0.24\textwidth]{pdf/dilation_00.pdf}
     \includegraphics[width=0.24\textwidth]{pdf/dilation_01.pdf}
