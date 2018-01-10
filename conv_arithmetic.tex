@@ -1139,7 +1139,7 @@ A convolution described by $k$, $s$ and $p$ has an
 associated transposed convolution described by $a$, $\tilde{i}'$, $k' = k$, $s'
 = 1$ and $p' = k - p - 1$, where $\tilde{i}'$ is the size of the stretched
 input obtained by adding $s - 1$ zeros between each input unit, and $a = (i +
-2p - k) \mod s$ represents the number of zeros added to the top and right edges
+2p - k) \mod s$ represents the number of zeros added to the bottom and right edges
 of the input, and its output size is
 \begin{equation*}
 \begin{split}
@@ -1163,7 +1163,7 @@ of the input, and its output size is
         $k = 3$, $s = 2$ and $p = 1$). It is equivalent to convolving a $3
         \times 3$ kernel over a $2 \times 2$ input (with $1$ zero inserted
         between inputs) padded with a $1 \times 1$ border of zeros (with an
-        additional border of size $1$ added to the top and right edges) using
+        additional border of size $1$ added to the bottom and right edges) using
         unit strides (i.e., $i' = 3$, $\tilde{i}' = 5$, $a = 1$, $k' = k$, $s' =
         1$ and $p' = 1$).}
 \end{figure}
