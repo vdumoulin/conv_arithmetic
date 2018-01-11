@@ -842,7 +842,7 @@ Transposed convolutions -- also called {\em fractionally strided convolutions\/}
 or {\em deconvolutions\/}\footnote{The term ``deconvolution'' is sometimes used
 in the literature, but we advocate against it on the grounds that a
 deconvolution is mathematically defined as the inverse of a convolution, which
-is different from a transposed convolution.}-- work by swapping the forward and
+is different from a transposed convolution.} -- work by swapping the forward and
 backward passes of a convolution. One way to put it is to note that the kernel
 defines a convolution, but whether it's a direct convolution or a transposed
 convolution is determined by how the forward and backward passes are computed.
@@ -869,9 +869,13 @@ convolution.
 
 \section{No zero padding, unit strides, transposed}
 
-The simplest way to think about a transposed convolution is by computing the
-output shape of the direct convolution for a given input shape first, and then
-inverting the input and output shapes for the transposed convolution.
+The simplest way to think about a transposed convolution on a given input is to
+imagine such an input as being the result of a direct convolution applied on
+some initial feature map. The trasposed convolution can be then considered as
+the operation that allows to recover the \emph{shape}~\footnote{Note that the
+  transposed convolution does not guarantee to recover the input itself, as it
+  is not defined as the inverse of the convolution, but rather just returns a
+  feature map that has the same width and height.} of this initial feature map.
 
 Let's consider the convolution of a $3 \times 3$ kernel on a $4 \times 4$
 input with unitary stride and no padding (i.e., $i = 4$, $k = 3$, $s = 1$ and
