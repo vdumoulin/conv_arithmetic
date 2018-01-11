@@ -218,9 +218,13 @@ def compile_figure(which_, name, step, **kwargs):
                           '-output-directory', 'pdf'],
                          stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                          stderr=subprocess.PIPE)
-    p.communicate(input=tex_string)
-    subprocess.call(['rm'] + glob('pdf/{}.aux'.format(jobname)) +
-                    glob('pdf/{}.log'.format(jobname)))
+    stdoutdata, stderrdata = p.communicate(input=tex_string)
+    # Remove logs and aux if compilation was successfull
+    if '! LaTeX Error' in stdoutdata or '! Emergency stop' in stdoutdata:
+        print('! LaTeX Error: check the log file in pdf/{}.log'.format(jobname))
+    else:
+        subprocess.call(['rm'] + glob('pdf/{}.aux'.format(jobname)) +
+                        glob('pdf/{}.log'.format(jobname)))
 
 
 if __name__ == "__main__":
