@@ -2,6 +2,13 @@
 
 A technical report on convolution arithmetic in the context of deep learning.
 
+The code and/or the images of this tutorial are free to use for non-commercial
+purposes with proper attribution:
+
+* \[1\] Vincent Dumoulin, Francesco Visin - [A guide to convolution arithmetic
+  for deep learning](https://arxiv.org/abs/1603.07285)
+  ([BibTeX](https://gist.github.com/fvisin/165ca9935392fa9600a6c94664a01214))
+
 ## Convolution animations
 
 _N.B.: Blue maps are inputs, and cyan maps are outputs._
