@@ -215,6 +215,10 @@ def make_arithmetic_tex_string(step, input_size, output_size, padding,
     }))
 
 
+def compute_output_size(input_size, padding, kernel_size, stride, dilation, **ign_kwargs):
+    return (input_size + 2 * padding - kernel_size - (kernel_size - 1) * (dilation - 1)) // stride + 1
+
+
 def compile_figure(which_, name, step, **kwargs):
     if which_ == 'arithmetic':
         tex_string = make_arithmetic_tex_string(step, **kwargs)
@@ -246,8 +250,6 @@ if __name__ == "__main__":
     parent_parser.add_argument("step", type=int, help="animation step (-1 for all)")
     parent_parser.add_argument("-i", "--input-size", type=int, default=5,
                                help="input size", nargs='+')
-    parent_parser.add_argument("-o", "--output-size", type=int, default=3,
-                               help="output size", nargs='+')
     parent_parser.add_argument("-p", "--padding", type=int, default=0,
                                help="zero padding", nargs='+')
     parent_parser.add_argument("-k", "--kernel-size", type=int, default=3,
@@ -281,12 +283,13 @@ if __name__ == "__main__":
     step = args_dict.pop('step')
 
     # Normalize arguments allowing tuples to numpy arrays of shape (2,)
-    for arg_name in ['input_size', 'output_size', 'padding', 'kernel_size', 'stride', 'dilation']:
+    for arg_name in ['input_size', 'padding', 'kernel_size', 'stride', 'dilation']:
         arg_value = args_dict.pop(arg_name)
         arg_value = numpy.asarray(arg_value).squeeze()
         if arg_value.ndim < 1 or arg_value.shape == (1,):
             arg_value = numpy.stack([arg_value, arg_value])
         args_dict[arg_name] = arg_value
+    args_dict['output_size'] = compute_output_size(**args_dict)
 
     if step < 0:
         for step in range(int(numpy.prod(args_dict['output_size']))):
