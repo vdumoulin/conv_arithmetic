@@ -12,25 +12,32 @@ numpy.random.seed(1234)
 
 
 def make_numerical_tex_string(step, input_size, output_size, padding,
-                              kernel_size, stride, dilation, mode):
+                              kernel_size, stride, dilation, mode,
+                              input_color, output_color):
     """Creates a LaTeX string for a numerical convolution animation.
 
     Parameters
     ----------
     step : int
         Which step of the animation to generate the LaTeX string for.
-    input_size : int
-        Convolution input size.
-    output_size : int
-        Convolution output size.
-    padding : int
-        Zero padding.
-    kernel_size : int
-        Convolution kernel size.
-    stride : int
-        Convolution stride.
+    input_size : ndarray
+        Convolution input size as numpy array of shape (2,), and dtype int.
+    output_size : ndarray
+        Convolution output size as numpy array of shape (2,), and dtype int.
+    padding : ndarray
+        Zero padding as numpy array of shape (2,), and dtype int.
+    kernel_size : ndarray
+        Convolution kernel size as numpy array of shape (2,), and dtype int.
+    stride : ndarray
+        Convolution stride as numpy array of shape (2,), and dtype int.
+    dilation: ndarray
+        Input Dilation as numpy array of shape (2,), and dtype int.
     mode : str
         Kernel mode, one of {'convolution', 'average', 'max'}.
+    input_color: (int, int, int)
+        Color of input (as RGB tuple, 0-255)
+    output_color: (int, int, int)
+        Color of output (as RGB tuple, 0-255)
 
     Returns
     -------
@@ -42,9 +49,9 @@ def make_numerical_tex_string(step, input_size, output_size, padding,
     if mode not in ('convolution', 'average', 'max'):
         raise ValueError("wrong convolution mode, choices are 'convolution', "
                          "'average' or 'max'")
-    if dilation != 1:
+    if (dilation != 1).any():
         raise ValueError("Only a dilation of 1 is currently supported for numerical output")
-    max_steps = output_size ** 2
+    max_steps = numpy.prod(output_size)
     if step >= max_steps:
         raise ValueError('step {} out of bounds (there are '.format(step) +
                          '{} steps for this animation'.format(max_steps))
@@ -54,66 +61,67 @@ def make_numerical_tex_string(step, input_size, output_size, padding,
 
     total_input_size = input_size + 2 * padding
 
-    input_ = numpy.zeros((total_input_size, total_input_size), dtype='int32')
-    input_[padding: padding + input_size,
-           padding: padding + input_size] = numpy.random.randint(
-        low=0, high=4, size=(input_size, input_size))
+    input_ = numpy.zeros(total_input_size, dtype='int32')
+    input_[padding[0]: padding[0] + input_size[0],
+    padding[1]: padding[1] + input_size[1]] = numpy.random.randint(
+        low=0, high=4, size=input_size)
     kernel = numpy.random.randint(
-        low=0, high=3, size=(kernel_size, kernel_size))
-    output = numpy.empty((output_size, output_size), dtype='float32')
-    for offset_x, offset_y in itertools.product(range(output_size),
-                                                range(output_size)):
+        low=0, high=3, size=kernel_size)
+    output = numpy.empty(output_size, dtype='float32')
+    for offset_x, offset_y in itertools.product(range(output_size[0]),
+                                                range(output_size[1])):
         if mode == 'convolution':
             output[offset_x, offset_y] = (
-                input_[stride * offset_x: stride * offset_x + kernel_size,
-                       stride * offset_y: stride * offset_y + kernel_size] * kernel).sum()
+                    input_[stride[0] * offset_x: stride[0] * offset_x + kernel_size[0],
+                    stride[1] * offset_y: stride[1] * offset_y + kernel_size[1]] * kernel).sum()
         elif mode == 'average':
             output[offset_x, offset_y] = (
-                input_[stride * offset_x: stride * offset_x + kernel_size,
-                       stride * offset_y: stride * offset_y + kernel_size]).mean()
+                input_[stride[0] * offset_x: stride[0] * offset_x + kernel_size[0],
+                stride[1] * offset_y: stride[1] * offset_y + kernel_size[1]]).mean()
         else:
             output[offset_x, offset_y] = (
-                input_[stride * offset_x: stride * offset_x + kernel_size,
-                       stride * offset_y: stride * offset_y + kernel_size]).max()
+                input_[stride[0] * offset_x: stride[0] * offset_x + kernel_size[0],
+                stride[1] * offset_y: stride[1] * offset_y + kernel_size[1]]).max()
 
-    offsets = list(itertools.product(range(output_size - 1, -1, -1),
-                                     range(output_size)))
+    offsets = list(itertools.product(reversed(range(output_size[1])), range(output_size[0])))
     offset_y, offset_x = offsets[step]
 
     if mode == 'convolution':
         kernel_values_string = ''.join(
             "\\node (node) at ({0},{1}) {{\\tiny {2}}};\n".format(
-                i + 0.8 + stride * offset_x, j + 0.2 + stride * offset_y,
-                kernel[kernel_size - 1 - j, i])
-            for i, j in itertools.product(range(kernel_size),
-                                          range(kernel_size)))
+                i + 0.8 + stride[0] * offset_x, j + 0.2 + stride[1] * offset_y,
+                kernel[kernel_size[0] - 1 - j, i])
+            for i, j in itertools.product(range(kernel_size[1]),
+                                          range(kernel_size[0])))
     else:
         kernel_values_string = '\n'
 
     return six.b(tex_template.format(**{
-        'PADDING_TO': '{0},{0}'.format(total_input_size),
-        'INPUT_FROM': '{0},{0}'.format(padding),
-        'INPUT_TO': '{0},{0}'.format(padding + input_size),
+        'PADDING_TO': '{},{}'.format(*total_input_size),
+        'INPUT_FROM': '{},{}'.format(*padding),
+        'INPUT_TO': '{},{}'.format(*(padding + input_size)),
         'INPUT_VALUES': ''.join(
             "\\node (node) at ({0},{1}) {{\\footnotesize {2}}};\n".format(
-                i + 0.5, j + 0.5, input_[total_input_size - 1 - j, i])
-            for i, j in itertools.product(range(total_input_size),
-                                          range(total_input_size))),
-        'INPUT_GRID_FROM': '{},{}'.format(stride * offset_x,
-                                          stride * offset_y),
-        'INPUT_GRID_TO': '{},{}'.format(stride * offset_x + kernel_size,
-                                        stride * offset_y + kernel_size),
+                i + 0.5, j + 0.5, input_[total_input_size[0] - 1 - j, i])
+            for i, j in itertools.product(range(total_input_size[0]),
+                                          range(total_input_size[1]))),
+        'INPUT_GRID_FROM': '{},{}'.format(stride[0] * offset_x,
+                                          stride[1] * offset_y),
+        'INPUT_GRID_TO': '{},{}'.format(stride[0] * offset_x + kernel_size[0],
+                                        stride[1] * offset_y + kernel_size[1]),
         'KERNEL_VALUES': kernel_values_string,
-        'OUTPUT_TO': '{0},{0}'.format(output_size),
+        'OUTPUT_TO': '{},{}'.format(*output_size),
         'OUTPUT_GRID_FROM': '{},{}'.format(offset_x, offset_y),
         'OUTPUT_GRID_TO': '{},{}'.format(offset_x + 1, offset_y + 1),
         'OUTPUT_VALUES': ''.join(
             "\\node (node) at ({0},{1}) {{\\tiny {2:.1f}}};\n".format(
-                i + 0.5, j + 0.5, output[output_size - 1 - j, i])
-            for i, j in itertools.product(range(output_size),
-                                          range(output_size))),
-        'XSHIFT': '{}cm'.format(total_input_size + 1),
-        'YSHIFT': '{}cm'.format((total_input_size - output_size) // 2),
+                i + 0.5, j + 0.5, output[output_size[0] - 1 - j, i])
+            for i, j in itertools.product(range(output_size[0]),
+                                          range(output_size[1]))),
+        'XSHIFT': '{}cm'.format(total_input_size[0] + 1),
+        'YSHIFT': '{}cm'.format((total_input_size[1] - output_size[1]) // 2),
+        'INPUT_COLOR': '{},{},{}'.format(*input_color),
+        'OUTPUT_COLOR': '{},{},{}'.format(*output_color),
     }))
 
 
@@ -159,14 +167,14 @@ def make_arithmetic_tex_string(step, input_size, output_size, padding,
         bottom_pad = (input_size + 2 * padding - kernel_size) % stride
 
         input_size, output_size, padding, spacing, stride = (
-            output_size, input_size, kernel_size - 1 - padding, stride, 1)
+            output_size, input_size, kernel_size - 1 - padding, stride, numpy.ones(shape=(2,), dtype=numpy.int32))
         total_input_size = output_size + kernel_size - 1
         y_adjustment = 0
     else:
         # Not used in convolutions
-        bottom_pad = numpy.zeros(shape=(2,))
+        bottom_pad = numpy.zeros(shape=(2,), dtype=numpy.int32)
 
-        spacing = numpy.ones(shape=(2,))
+        spacing = numpy.ones(shape=(2,), dtype=numpy.int32)
         total_input_size = input_size + 2 * padding
         y_adjustment = ((total_input_size - (kernel_size - stride)) % stride).max()
 
@@ -292,7 +300,11 @@ if __name__ == "__main__":
     args_dict['output_size'] = compute_output_size(**args_dict)
 
     if step < 0:
-        for step in range(int(numpy.prod(args_dict['output_size']))):
+        if args_dict['transposed']:
+            max_step = numpy.prod(args_dict['input_size'])
+        else:
+            max_step = numpy.prod(args_dict['output_size'])
+        for step in range(int(max_step)):
             compile_figure(which_, name, step, **args_dict)
     else:
         compile_figure(which_, name, step, **args_dict)
