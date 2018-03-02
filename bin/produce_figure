@@ -243,7 +243,7 @@ if __name__ == "__main__":
 
     parent_parser = argparse.ArgumentParser(add_help=False)
     parent_parser.add_argument("name", type=str, help="name for the animation")
-    parent_parser.add_argument("step", type=int, help="animation step")
+    parent_parser.add_argument("step", type=int, help="animation step (-1 for all)")
     parent_parser.add_argument("-i", "--input-size", type=int, default=5,
                                help="input size", nargs='+')
     parent_parser.add_argument("-o", "--output-size", type=int, default=3,
@@ -288,4 +288,8 @@ if __name__ == "__main__":
             arg_value = numpy.stack([arg_value, arg_value])
         args_dict[arg_name] = arg_value
 
-    compile_figure(which_, name, step, **args_dict)
+    if step < 0:
+        for step in range(int(numpy.prod(args_dict['output_size']))):
+            compile_figure(which_, name, step, **args_dict)
+    else:
+        compile_figure(which_, name, step, **args_dict)
