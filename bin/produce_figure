@@ -125,18 +125,18 @@ def make_arithmetic_tex_string(step, input_size, output_size, padding,
     ----------
     step : int
         Which step of the animation to generate the LaTeX string for.
-    input_size : int
-        Convolution input size.
-    output_size : int
-        Convolution output size.
-    padding : int
-        Zero padding.
-    kernel_size : int
-        Convolution kernel size.
-    stride : int
-        Convolution stride.
-    dilation: int
-        Input Dilation
+    input_size : ndarray
+        Convolution input size as numpy array of shape (2,), and dtype int.
+    output_size : ndarray
+        Convolution output size as numpy array of shape (2,), and dtype int.
+    padding : ndarray
+        Zero padding as numpy array of shape (2,), and dtype int.
+    kernel_size : ndarray
+        Convolution kernel size as numpy array of shape (2,), and dtype int.
+    stride : ndarray
+        Convolution stride as numpy array of shape (2,), and dtype int.
+    dilation: ndarray
+        Input Dilation as numpy array of shape (2,), and dtype int.
     transposed : bool
         If ``True``, generate strings for the transposed convolution
         animation.
@@ -159,13 +159,13 @@ def make_arithmetic_tex_string(step, input_size, output_size, padding,
         y_adjustment = 0
     else:
         # Not used in convolutions
-        bottom_pad = 0
+        bottom_pad = numpy.zeros(shape=(2,))
 
-        spacing = 1
+        spacing = numpy.ones(shape=(2,))
         total_input_size = input_size + 2 * padding
-        y_adjustment = (total_input_size - (kernel_size - stride)) % stride
+        y_adjustment = ((total_input_size - (kernel_size - stride)) % stride).max()
 
-    max_steps = output_size ** 2
+    max_steps = numpy.prod(output_size)
     if step >= max_steps:
         raise ValueError('step {} out of bounds (there are '.format(step) +
                          '{} steps for this animation'.format(max_steps))
@@ -175,36 +175,36 @@ def make_arithmetic_tex_string(step, input_size, output_size, padding,
     with open(os.path.join('templates', 'unit.txt'), 'r') as f:
         unit_template = f.read()
 
-    offsets = list(itertools.product(range(output_size - 1, -1, -1),
-                                     range(output_size)))
+    offsets = list(itertools.product(reversed(range(output_size[1])), range(output_size[0])))
     offset_y, offset_x = offsets[step]
 
     return six.b(tex_template.format(**{
-        'PADDING_TO': '{0},{0}'.format(total_input_size),
+        'PADDING_TO': '{},{}'.format(*total_input_size),
         'INPUT_UNITS': ''.join(
-            unit_template.format(padding + spacing * i,
-                                 bottom_pad + padding + spacing * j,
-                                 padding + spacing * i + 1,
-                                 bottom_pad + padding + spacing * j + 1)
-            for i, j in itertools.product(range(input_size),
-                                          range(input_size))),
+            unit_template.format(padding[0] + spacing[0] * i,
+                                 bottom_pad[1] + padding[1] + spacing[1] * j,
+                                 padding[0] + spacing[0] * i + 1,
+                                 bottom_pad[1] + padding[1] + spacing[1] * j + 1)
+            for i, j in itertools.product(range(input_size[0]),
+                                          range(input_size[1]))),
         'INPUT_GRID_FROM_X': '{}'.format(
-            stride * offset_x),
+            stride[0] * offset_x),
         'INPUT_GRID_FROM_Y': '{}'.format(
-            y_adjustment + stride * offset_y),
+            y_adjustment + stride[1] * offset_y),
         'INPUT_GRID_TO_X': '{}'.format(
-            stride * offset_x + kernel_size),
+            stride[0] * offset_x + kernel_size[0]),
         'INPUT_GRID_TO_Y': '{}'.format(
-            y_adjustment + stride * offset_y + kernel_size),
-        'DILATION': '{}'.format(dilation),
+            y_adjustment + stride[1] * offset_y + kernel_size[1]),
+        'DILATION_X': '{}'.format(dilation[0]),
+        'DILATION_Y': '{}'.format(dilation[1]),
         'OUTPUT_BOTTOM_LEFT': '{},{}'.format(offset_x, offset_y),
         'OUTPUT_BOTTOM_RIGHT': '{},{}'.format(offset_x + 1, offset_y),
         'OUTPUT_TOP_LEFT': '{},{}'.format(offset_x, offset_y + 1),
         'OUTPUT_TOP_RIGHT': '{},{}'.format(offset_x + 1, offset_y + 1),
-        'OUTPUT_TO': '{0},{0}'.format(output_size),
+        'OUTPUT_TO': '{},{}'.format(*output_size),
         'OUTPUT_GRID_FROM': '{},{}'.format(offset_x, offset_y),
         'OUTPUT_GRID_TO': '{},{}'.format(offset_x + 1, offset_y + 1),
-        'OUTPUT_ELEVATION': '{}cm'.format(total_input_size + 1),
+        'OUTPUT_ELEVATION': '{}cm'.format(total_input_size[1] + 1),
     }))
 
 
@@ -238,17 +238,17 @@ if __name__ == "__main__":
     parent_parser.add_argument("name", type=str, help="name for the animation")
     parent_parser.add_argument("step", type=int, help="animation step")
     parent_parser.add_argument("-i", "--input-size", type=int, default=5,
-                               help="input size")
+                               help="input size", nargs='+')
     parent_parser.add_argument("-o", "--output-size", type=int, default=3,
-                               help="output size")
+                               help="output size", nargs='+')
     parent_parser.add_argument("-p", "--padding", type=int, default=0,
-                               help="zero padding")
+                               help="zero padding", nargs='+')
     parent_parser.add_argument("-k", "--kernel-size", type=int, default=3,
-                               help="kernel size")
+                               help="kernel size", nargs='+')
     parent_parser.add_argument("-s", "--stride", type=int, default=1,
-                               help="stride")
+                               help="stride", nargs='+')
     parent_parser.add_argument("-d", "--dilation", type=int, default=1,
-                               help="dilation")
+                               help="dilation", nargs='+')
 
     subparser = subparsers.add_parser('arithmetic', parents=[parent_parser],
                                       help='convolution arithmetic animation')
@@ -268,5 +268,13 @@ if __name__ == "__main__":
     which_ = args_dict.pop('which_')
     name = args_dict.pop('name')
     step = args_dict.pop('step')
+
+    # Normalize arguments allowing tuples to numpy arrays of shape (2,)
+    for arg_name in ['input_size', 'output_size', 'padding', 'kernel_size', 'stride', 'dilation']:
+        arg_value = args_dict.pop(arg_name)
+        arg_value = numpy.asarray(arg_value).squeeze()
+        if arg_value.ndim < 1 or arg_value.shape == (1,):
+            arg_value = numpy.stack([arg_value, arg_value])
+        args_dict[arg_name] = arg_value
 
     compile_figure(which_, name, step, **args_dict)

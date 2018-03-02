@@ -14,8 +14,8 @@
         \draw[step=10mm, base03, dashed, thick] (0,0) grid ({PADDING_TO});
         {INPUT_UNITS}
 
-        \foreach \x in {{ {INPUT_GRID_FROM_X},\number\numexpr {INPUT_GRID_FROM_X}+{DILATION},...,\number\numexpr {INPUT_GRID_TO_X}-1 }} {{
-            \foreach \y in {{ {INPUT_GRID_FROM_Y},\number\numexpr {INPUT_GRID_FROM_Y}+{DILATION},...,\number\numexpr {INPUT_GRID_TO_Y}-1 }} {{
+        \foreach \x in {{ {INPUT_GRID_FROM_X},\number\numexpr {INPUT_GRID_FROM_X}+{DILATION_X},...,\number\numexpr {INPUT_GRID_TO_X}-1 }} {{
+            \foreach \y in {{ {INPUT_GRID_FROM_Y},\number\numexpr {INPUT_GRID_FROM_Y}+{DILATION_Y},...,\number\numexpr {INPUT_GRID_TO_Y}-1 }} {{
                 \draw[fill=base02, opacity=0.4] (\x,\y) rectangle
                                         (\x+1,\y+1);
             }}
