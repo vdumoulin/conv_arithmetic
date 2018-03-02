@@ -118,7 +118,8 @@ def make_numerical_tex_string(step, input_size, output_size, padding,
 
 
 def make_arithmetic_tex_string(step, input_size, output_size, padding,
-                               kernel_size, stride, dilation, transposed):
+                               kernel_size, stride, dilation, transposed,
+                               input_color, output_color):
     """Creates a LaTeX string for a convolution arithmetic animation.
 
     Parameters
@@ -140,6 +141,10 @@ def make_arithmetic_tex_string(step, input_size, output_size, padding,
     transposed : bool
         If ``True``, generate strings for the transposed convolution
         animation.
+    input_color: (int, int, int)
+        Color of input (as RGB tuple, 0-255)
+    output_color: (int, int, int)
+        Color of output (as RGB tuple, 0-255)
 
     Returns
     -------
@@ -205,6 +210,8 @@ def make_arithmetic_tex_string(step, input_size, output_size, padding,
         'OUTPUT_GRID_FROM': '{},{}'.format(offset_x, offset_y),
         'OUTPUT_GRID_TO': '{},{}'.format(offset_x + 1, offset_y + 1),
         'OUTPUT_ELEVATION': '{}cm'.format(total_input_size[1] + 1),
+        'INPUT_COLOR': '{},{},{}'.format(*input_color),
+        'OUTPUT_COLOR': '{},{},{}'.format(*output_color),
     }))
 
 
@@ -249,6 +256,10 @@ if __name__ == "__main__":
                                help="stride", nargs='+')
     parent_parser.add_argument("-d", "--dilation", type=int, default=1,
                                help="dilation", nargs='+')
+    parent_parser.add_argument("--input_color", type=int, nargs=3,
+                               default=[38, 139, 210], help="input color (RGB)")
+    parent_parser.add_argument("--output_color", type=int, nargs=3,
+                               default=[42, 161, 152], help="output color (RGB)")
 
     subparser = subparsers.add_parser('arithmetic', parents=[parent_parser],
                                       help='convolution arithmetic animation')
