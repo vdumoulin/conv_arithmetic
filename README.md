@@ -11,7 +11,7 @@ purposes with proper attribution:
 
 ## Convolution animations
 
-_N.B.: Blue maps are inputs, and cyan maps are outputs._
+_N.B.: Cyan maps are inputs, and blue maps are outputs._
 
 <table style="width:100%; table-layout:fixed;">
   <tr>
