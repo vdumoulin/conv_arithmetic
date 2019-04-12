@@ -2,8 +2,8 @@
 
 A technical report on convolution arithmetic in the context of deep learning.
 
-The code and/or the images of this tutorial are free to use for non-commercial
-purposes with proper attribution:
+The code and the images of this tutorial are free to use as regulated by the 
+licence and subject to proper attribution:
 
 * \[1\] Vincent Dumoulin, Francesco Visin - [A guide to convolution arithmetic
   for deep learning](https://arxiv.org/abs/1603.07285)
