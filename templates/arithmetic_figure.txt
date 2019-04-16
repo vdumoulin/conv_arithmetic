@@ -1,8 +1,8 @@
 \documentclass[class=minimal,border=10pt]{{standalone}}
 \usepackage{{tikz}}
 \usepackage{{xcolor}}
-\definecolor{{blue}}{{RGB}}{{38,139,210}}
-\definecolor{{cyan}}{{RGB}}{{42,161,152}}
+\definecolor{{input_color}}{{RGB}}{{{INPUT_COLOR}}}
+\definecolor{{output_color}}{{RGB}}{{{OUTPUT_COLOR}}}
 \definecolor{{base01}}{{RGB}}{{88,110,117}}
 \definecolor{{base02}}{{RGB}}{{7,54,66}}
 \definecolor{{base03}}{{RGB}}{{0,43,54}}
@@ -14,8 +14,8 @@
         \draw[step=10mm, base03, dashed, thick] (0,0) grid ({PADDING_TO});
         {INPUT_UNITS}
 
-        \foreach \x in {{ {INPUT_GRID_FROM_X},\number\numexpr {INPUT_GRID_FROM_X}+{DILATION},...,\number\numexpr {INPUT_GRID_TO_X}-1 }} {{
-            \foreach \y in {{ {INPUT_GRID_FROM_Y},\number\numexpr {INPUT_GRID_FROM_Y}+{DILATION},...,\number\numexpr {INPUT_GRID_TO_Y}-1 }} {{
+        \foreach \x in {{ {INPUT_GRID_FROM_X},\number\numexpr {INPUT_GRID_FROM_X}+{DILATION_X},...,\number\numexpr {INPUT_GRID_TO_X}-1 }} {{
+            \foreach \y in {{ {INPUT_GRID_FROM_Y},\number\numexpr {INPUT_GRID_FROM_Y}+{DILATION_Y},...,\number\numexpr {INPUT_GRID_TO_Y}-1 }} {{
                 \draw[fill=base02, opacity=0.4] (\x,\y) rectangle
                                         (\x+1,\y+1);
             }}
@@ -32,7 +32,7 @@
                     yslant=0.5,xslant=-0.7]
         \draw (BL) -- ({OUTPUT_BOTTOM_LEFT}) (BR) -- ({OUTPUT_BOTTOM_RIGHT})
               (TL) -- ({OUTPUT_TOP_LEFT})    (TR) -- ({OUTPUT_TOP_RIGHT});
-        \draw[fill=cyan] (0,0) rectangle ({OUTPUT_TO});
+        \draw[fill=output_color] (0,0) rectangle ({OUTPUT_TO});
         \draw[step=10mm, base03, thick] (0,0) grid ({OUTPUT_TO});
         \draw[fill=base02, opacity=0.4] ({OUTPUT_GRID_FROM}) rectangle
                                         ({OUTPUT_GRID_TO});
