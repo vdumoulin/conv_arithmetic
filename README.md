@@ -93,6 +93,8 @@ $ ./bin/generate_makefile
 ```
 ## Generating the animations
 
+_Prerequisites: Make sure you have [ImageMagick](https://imagemagick.org/) and [gifsicle](https://www.lcdf.org/gifsicle/) installed._
+
 From the repository's root directory:
 
 ``` bash
