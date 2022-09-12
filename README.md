@@ -21,10 +21,10 @@ _N.B.: Blue maps are inputs, and cyan maps are outputs._
     <td><img width="150px" src="gif/full_padding_no_strides.gif"></td>
   </tr>
   <tr>
-    <td>No padding, no strides</td>
-    <td>Arbitrary padding, no strides</td>
-    <td>Half padding, no strides</td>
-    <td>Full padding, no strides</td>
+    <td>No padding, strides=1</td>
+    <td>Arbitrary padding, strides=1</td>
+    <td>Half padding, strides=1</td>
+    <td>Full padding, strides=1</td>
   </tr>
   <tr>
     <td><img width="150px" src="gif/no_padding_strides.gif"></td>
@@ -33,9 +33,9 @@ _N.B.: Blue maps are inputs, and cyan maps are outputs._
     <td></td>
   </tr>
   <tr>
-    <td>No padding, strides</td>
-    <td>Padding, strides</td>
-    <td>Padding, strides (odd)</td>
+    <td>No padding, strides=2</td>
+    <td>Padding, strides=2</td>
+    <td>Padding, strides=2 (odd)</td>
     <td></td>
   </tr>
 </table>
@@ -52,10 +52,10 @@ _N.B.: Blue maps are inputs, and cyan maps are outputs._
     <td><img width="150px" src="gif/full_padding_no_strides_transposed.gif"></td>
   </tr>
   <tr>
-    <td>No padding, no strides, transposed</td>
-    <td>Arbitrary padding, no strides, transposed</td>
-    <td>Half padding, no strides, transposed</td>
-    <td>Full padding, no strides, transposed</td>
+    <td>No padding, strides=1, transposed</td>
+    <td>Arbitrary padding, strides=1, transposed</td>
+    <td>Half padding, strides=1, transposed</td>
+    <td>Full padding, strides=1, transposed</td>
   </tr>
   <tr>
     <td><img width="150px" src="gif/no_padding_strides_transposed.gif"></td>
@@ -64,9 +64,9 @@ _N.B.: Blue maps are inputs, and cyan maps are outputs._
     <td></td>
   </tr>
   <tr>
-    <td>No padding, strides, transposed</td>
-    <td>Padding, strides, transposed</td>
-    <td>Padding, strides, transposed (odd)</td>
+    <td>No padding, strides=2, transposed</td>
+    <td>Padding, strides=2, transposed</td>
+    <td>Padding, strides=2, transposed (odd)</td>
     <td></td>
   </tr>
 </table>
@@ -80,7 +80,7 @@ _N.B.: Blue maps are inputs, and cyan maps are outputs._
     <td><img width="150px" src="gif/dilation.gif"></td>
   </tr>
   <tr>
-    <td>No padding, no stride, dilation</td>
+    <td>No padding, strides=1, dilation</td>
   </tr>
 </table>
 
